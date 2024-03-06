@@ -11,12 +11,10 @@
    (reason :type list :initarg :reason :reader reason)))
 
 (defclass heavy-true (heavy-bool)
-  ()
-  (:default-initargs :bool t))
+  ((bool :initform t)))
 
 (defclass heavy-false (heavy-bool)
-  ()
-  (:default-initargs :bool nil))
+  ((bool :initform nil)))
 
 (defun +annotate-reasons (hb reasons)
   (make-instance (class-of hb)
@@ -44,7 +42,6 @@
   `(if (bool ,condition)
        ,consequent
        ,alternative))
-
 
 (defmacro +and (&rest clauses)
   (case (length clauses)
@@ -83,8 +80,7 @@
   `(+or ,b
         (+not ,a)))
 
-  
-(defun +annotate (hb &rest reasons)
+  (defun +annotate (hb &rest reasons)
   ;; reasons is a property list
   (+annotate-reasons hb reasons))
 
@@ -97,7 +93,6 @@
   (+if hb
        hb
        (+annotate-reasons hb reasons)))
-
 
 (defun forall (tag predicate coll)
   (reduce (lambda (hb item)
