@@ -39,7 +39,8 @@
   "heavy-bool version of `if`.  The condition must
   evaluate to a heavy-bool.  Either the consequent or
   alternative will be evaluated depending on the heavy-bool
-  value." [cond consequent alternative]
+  value."
+  [cond consequent alternative]
   `(if (+bool ~cond)
      ~consequent
      ~alternative))
@@ -76,10 +77,15 @@
               ~v
               (+or ~@tail))))))
 
-(defn +implies
+(defmacro +implies
   [a b]
-  (+or (+not a)
-       b))
+  `(+or (+not ~a)
+       ~b))
+
+(defmacro +implied-by
+  [b a]
+  `(+or ~b
+        (+not ~a)))
 
 (defn +conj
   "Conjoin an additional item to the reason list"

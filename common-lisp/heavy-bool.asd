@@ -8,7 +8,7 @@
 
 
 (asdf:defsystem :heavy-bool
-  :version (:read-file-form "0.1")
+  :version "0.1"
   :author "Jim Newton"
   :description "Implementation of heavy-booleans"
   :license "MIT"
