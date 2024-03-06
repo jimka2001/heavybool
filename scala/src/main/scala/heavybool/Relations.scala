@@ -47,12 +47,12 @@ object Relations {
   }.annotate("connected")
 
   def isStronglyConnected[T](gen:LazyList[T], rel:(T,T)=>Boolean):HeavyBool = {
-    def >(a: T, b: T) = HeavyBool(rel(a, b))
+    def hrel(a: T, b: T) = HeavyBool(rel(a, b))
 
     // forall a,b, either a relates to b or b relates to a
     forallM("a", gen){ (a:T) =>
       forallM("b", gen) {(b:T) =>
-        a > b || b > a
+        hrel(a,b) || hrel(b,a)
       }
     }
   }.annotate("strongly connected")
