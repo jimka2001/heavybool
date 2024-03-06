@@ -1,5 +1,5 @@
 (ns magma-test
-  (:require [util :refer [member]]
+  (:require [util :refer [member first-st]]
             [magma :as sut]
             [mod-p :refer [mod-p]]
             [heavy-bool :refer [+bool +not +and +or +forall +exists +conj +conj-false heavy-bool?]]
@@ -39,17 +39,19 @@
   (testing "find-identity"
     (let [[bool reason] (sut/find-identity (range 10) (fn [a b] (+ a b)) sut/default-equal)]
       (is bool)
-      (is (= 0 (:witness (first reason)))))))
+      (is (first-st r reason (= 0 (:witness r)))))))
 
 (deftest t-mod-2
   (testing "find-mod-2"
     (let [mod-2 (mod-p 2)]
-      (is (+bool (sut/is-group (:gen mod-2)
-                                       (:op mod-2)
-                                       (:ident mod-2)
-                                       (:invert mod-2)
-                                       (:member mod-2)
-                                       (:equiv mod-2)))))))
+      (is (+bool (+conj (sut/is-group (:gen mod-2)
+                               (:op mod-2)
+                               (:ident mod-2)
+                               (:invert mod-2)
+                               (:member mod-2)
+                               (:equiv mod-2)) {:testing 'mod-p
+                                                :inv ((:invert mod-2) 1)
+                                                :p 2}))))))
 
 (deftest t-mod-3
   (testing "find-mod-3"
@@ -77,8 +79,6 @@
      (is (not (prime? 6)))
      (is (prime? 7))))
 
-
-
 (deftest t-mod-prime
   (testing "find mod prime"
     (doseq [n (range 2 50)
@@ -90,7 +90,6 @@
                                   (:invert mod-n)
                                   (:member mod-n)
                                   (:equiv mod-n))))))))
-
 
 (defn test-gaussian [p]
   (let [m (gaussian-int-mod-p p)
@@ -112,5 +111,3 @@
       (if (member p [3 7])
         (is (+bool f))
         (is (+bool (+not f)))))))
-                                
-          

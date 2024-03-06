@@ -23,7 +23,7 @@
     (is (= (sut/+forall x [1 2 3] (if (> x 0) [sut/+true
                                         '({:reason "works"})]
                                       [sut/+false '({:reason "fails"})]))
-           sut/+true))))
+           [true '({:tag x})]))))
 
 
 
@@ -75,4 +75,3 @@
                        [true m2]
                        [true m2])
              [true m2])))))
-            

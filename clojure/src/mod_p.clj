@@ -21,9 +21,11 @@
               (mod (* a b) p))
             (member [a]
               {:post [(heavy-bool? %)]}
-              (+conj-false [(<= 0 a p) ()] {:reason "expecting 0 <= a < p"
-                                            :a a
-                                            :p p}))
+              (+and (+conj-false [(integer? a) ()] {:reason "expecting integer, got a"
+                                                    :a a})
+                    (+conj-false [(<= 0 a p) ()] {:reason "expecting 0 <= a < p"
+                                                  :a a
+                                                  :p p})))
             (invert [a]
               {:post [(heavy-bool? %)]}
               (+conj-false (+exists inv-a elements

@@ -80,6 +80,9 @@
           col))
 
 
+(defmacro first-st [var col & body]
+  `(first (find-if (fn [~var] ~@body) ~col)))
+
 (def ^:dynamic *time-out* (* 2 60 1000)) ;; 2 seconds
 
 (defn call-with-timeout [timeout-ms f]

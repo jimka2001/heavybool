@@ -3,3 +3,7 @@
 scala/.bsp
 scala/project/target
 scala/target
+clojure/target
+clojure/.lein-failures
+clojure/.nrepl-port
+clojure/TEST*.xml

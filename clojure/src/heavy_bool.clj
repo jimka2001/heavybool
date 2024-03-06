@@ -83,10 +83,11 @@
 
 (defn +conj
   "Conjoin an additional item to the reason list"
-  [[bool reason :as hb] item]
+  [hb item]
   {:pre [(heavy-bool? hb)]
    :post [(heavy-bool? %)]}
-  [bool (conj reason item)])
+  (let [[bool reason] hb]
+    [bool (conj reason item)]))
 
 (defn +conj-true [heavy-bool reason]
   {:pre [(heavy-bool? heavy-bool)
@@ -140,7 +141,8 @@
                     (reduced (+conj this {:witness item
                                           })))))
            +true
-           coll) {:tag tag}))
+           coll)
+   {:tag tag}))
 
 (defn +exists- 
   "Function version of +exists.

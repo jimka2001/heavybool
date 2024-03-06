@@ -82,8 +82,9 @@
                      (gaussian? b)]
                :post [(heavy-bool? %)]}
               (+annotate 
-               (+conj (= a b)
-                      {:a a :b b}) "equal"))
+               [(= a b)
+                (list {:a a :b b})]
+               "equal"))
             (member [[x y :as a]]
               {:pre [x
                      y
@@ -103,7 +104,8 @@
                       (+conj +false {:reason "y >= p"})
                       :else
                       +true)
-                {:p p :x :y}) "member"))]
+                {:p p :x :y})
+               "member"))]
       {:p p
        :gen (gen)
        :op op

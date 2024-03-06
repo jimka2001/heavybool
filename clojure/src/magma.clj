@@ -1,6 +1,6 @@
 (ns magma
-  (:require [util :refer [type-check]]            
-            [heavy-bool :refer [+bool +and +or +not +forall +exists +conj-true +conj-false heavy-bool? +annotate]]))
+  (:require [util :refer [type-check first-st]]
+            [heavy-bool :refer [+bool +and +or +not +forall +exists +conj-true +conj +conj-false heavy-bool? +annotate]]))
 
 (defn is-closed [coll * member]
   {:pre [(seq? coll)
@@ -17,8 +17,8 @@
   {:post [(heavy-bool? %)]}
   (+annotate 
    (+conj-false [(= left right) ()] {:left left
-                                     :right right}))
-  "equal")
+                                     :right right})
+   "equal"))
 
 (defn is-associative [coll * equal]
   {:pre [(seq? coll)
@@ -96,13 +96,17 @@
    :post [(heavy-bool? %)]}
   (+annotate
    (+forall a coll
-     (let [[_ reasons :as inv-a] (invert a)
-           b (:witness (first reasons))]
-       (+annotate
-        (+and inv-a
-              (member b)
-              (equal (* b a) ident)
-              (equal (* a b) ident)) "invertable")))
+            (let [[_ reasons :as inv-a] (invert a)
+                  b (:witness (first-st r reasons (:witness r)))]
+              (+conj (+annotate
+                      (+and inv-a
+                            (member b)
+                            (equal (* b a) ident)
+                            (equal (* a b) ident))
+                      "invertable")
+                     {:reasons reasons
+                      :inv-a inv-a})
+              ))
    "has inverses"))
 
 (defn is-group [coll * ident invert member equal]
