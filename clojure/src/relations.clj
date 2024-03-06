@@ -1,4 +1,4 @@
-(ns lecture.relations
+(ns relations
     (:require [heavy-bool :refer [heavy-bool? +not +if +true +exists +implies +and +forall +conj-false +annotate]]))
 
 

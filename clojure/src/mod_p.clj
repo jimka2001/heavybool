@@ -1,4 +1,4 @@
-(ns lecture.mod-p
+(ns mod-p
   (:require [heavy-bool :refer [+and +forall +exists +false +true +conj +conj-true +conj-false heavy-bool?]]))
 
 
@@ -38,6 +38,3 @@
        :member member
        :op mult
        :ident 1})))
-          
-(let [mod-3 (mod-p 3)]
-  ((:op mod-3) 2 2))

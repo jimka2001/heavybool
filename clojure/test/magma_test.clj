@@ -1,4 +1,4 @@
-(ns lecture.magma-test
+(ns magma-test
   (:require [util :refer [member]]
             [magma :as sut]
             [mod-p :refer [mod-p]]

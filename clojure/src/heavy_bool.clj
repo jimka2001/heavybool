@@ -1,4 +1,4 @@
-(ns lecture.heavy-bool
+(ns heavy-bool
   "A heavy-bool is a pair [bool reason], where bool is a truth value
   usually true or false, but may be any clojure truthy or falsy value.
   reason is a list of maps with keys such as :witness, :bool, and

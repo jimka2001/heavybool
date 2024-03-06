@@ -1,4 +1,4 @@
-(ns lecture.heavy-bool-test
+(ns heavy-bool-test
   (:require [heavy-bool :as sut]
             [clojure.test :refer [deftest testing is]]))
 
@@ -6,13 +6,14 @@
 
 (deftest t+and
   (testing "and"
-    (sut/+and (sut/+forall x (range 1 10 3) [(odd? x) '({:forall true})])
-              (sut/+exists x (range 1 10 3) [(odd? x) '({:exists true})]))))
+    (is (sut/+and (sut/+forall x (range 1 10 3) [(odd? x) '({:forall true})])
+                  (sut/+exists x (range 1 10 3) [(odd? x) '({:exists true})])))))
 
 (deftest t+or-1
   (testing "or 1"
-    (sut/+or (sut/+forall x (range 1 10 3) [(odd? x) '({:forall true})])
-             (sut/+exists x (range 1 10 3) [(odd? x) '({:exists true})]))))
+    (is
+     (sut/+or (sut/+forall x (range 1 10 3) [(odd? x) '({:forall true})])
+              (sut/+exists x (range 1 10 3) [(odd? x) '({:exists true})])))))
 
 
 

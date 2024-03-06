@@ -1,4 +1,4 @@
-(ns lecture.gaussian-int
+(ns gaussian-int
   (:require [util :refer [find-if]]
             [heavy-bool :refer [+and +forall +exists +false +true +conj +conj-true +annotate +conj-false heavy-bool?]]))
 

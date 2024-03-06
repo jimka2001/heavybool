@@ -1,4 +1,4 @@
-(ns common.util
+(ns util
   (:require  [clojure.test :refer [is testing testing-contexts-str *testing-contexts*]]
              [clojure.pprint :refer [cl-format]]))
 

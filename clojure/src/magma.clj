@@ -1,4 +1,4 @@
-(ns lecture.magma
+(ns magma
   (:require [util :refer [type-check]]            
             [heavy-bool :refer [+bool +and +or +not +forall +exists +conj-true +conj-false heavy-bool? +annotate]]))
 

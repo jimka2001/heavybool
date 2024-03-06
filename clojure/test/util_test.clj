@@ -1,4 +1,4 @@
-(ns common.util-test
+(ns util-test
   (:require [util :as sut]
             [clojure.pprint :refer [cl-format]]
             [clojure.test :refer [deftest is testing]]))

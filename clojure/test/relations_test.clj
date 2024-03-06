@@ -1,4 +1,4 @@
-(ns lecture.relations-test
+(ns relations-test
   (:require [relations :as sut]
             [heavy-bool :refer [+bool +not]]
             [clojure.test :as t]
