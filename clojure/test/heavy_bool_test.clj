@@ -15,9 +15,6 @@
      (sut/+or (sut/+forall x (range 1 10 3) [(odd? x) '({:forall true})])
               (sut/+exists x (range 1 10 3) [(odd? x) '({:exists true})])))))
 
-
-
-
 (deftest t-forall
   (testing "forall"
     (is (= (sut/+forall x [1 2 3] (if (> x 0) [sut/+true

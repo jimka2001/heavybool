@@ -32,11 +32,10 @@
   (+annotate
    (+forall x gen
      (+forall y gen
-       (+if [(rel x y) ()]
-            (+forall z gen
-              (+implies [(rel y z) ()]
-                        [(rel x z) ()]))
-            +true)))
+        (+implies (+heavy-bool (rel x y))
+                  (+forall z gen
+                           (+implies (+heavy-bool (rel y z))
+                                     (+heavy-bool (rel x z)))))))
    "transitive"))
 
 (defn is-equivalence [gen rel]

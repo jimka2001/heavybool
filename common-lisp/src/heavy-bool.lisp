@@ -18,6 +18,18 @@
 (defclass heavy-false (heavy-bool)
   ((bool :initform nil)))
 
+(defmethod print-object ((hb heavy-bool) stream)
+  (print-unreadable-object (hb stream :type t :identity nil)
+    (if (bool hb)
+        (progn (format stream "T")
+               (if (not (eq (bool hb) t))
+                   ;; if there is a true value other than t, then print it
+                   (format stream " [~A]" (bool hb))))
+        (format stream "F"))
+    (when (reason hb)
+      (format stream " ~S" (reason hb)))))
+
+
 (defun +annotate-reasons (hb reasons)
   (make-instance (class-of hb)
                  :reason (append reasons (reason hb))))
@@ -26,7 +38,9 @@
 (defgeneric heavy-bool (bool &rest reasons))
 
 (defmethod heavy-bool ((bool heavy-bool) &rest reasons)
-  (+annotate-reasons bool reasons))
+  (if reasons
+   (+annotate-reasons bool reasons)
+   bool))
 
 (defmethod heavy-bool ((bool null) &rest reasons)
   (make-instance 'heavy-false :reason reasons))
@@ -73,7 +87,7 @@
        `(let ((,v ,head))
           (+if ,v
                ,v
-               (+and ,@tail)))))))
+               (+or ,@tail)))))))
 
 (defmacro +implies (a b)
   `(+or (+not ,a) ,b))
@@ -82,7 +96,7 @@
   `(+or ,b
         (+not ,a)))
 
-  (defun +annotate (hb &rest reasons)
+(defun +annotate (hb &rest reasons)
   ;; reasons is a property list
   (+annotate-reasons hb reasons))
 

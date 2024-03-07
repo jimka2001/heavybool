@@ -11,3 +11,50 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (shadow-all-symbols :package-from :heavy-bool :package-into :heavy-bool-test))
 
+(define-test t-relations-1
+  (assert-false (bool (is-reflexive (lambda ()
+                                      (iota 10))
+                                    (lambda (a b)
+                                      (heavy-bool (< a b)))))))
+
+(define-test t-relations-2
+  (assert-true  (bool (is-reflexive (lambda ()
+                                      (iota 10))
+                                    (lambda (a b)
+                                      (heavy-bool (= a b)))))))
+
+(define-test t-relations-equivalence
+  (assert-true  (bool (is-equivalence (lambda ()
+                                        (iota 10))
+                                      (lambda (a b)
+                                        (heavy-bool (= a b))))))
+  (assert-false  (bool (is-equivalence (lambda ()
+                                         (iota 10))
+                                       (lambda (a b)
+                                         (heavy-bool (/= a b))))))
+  (assert-false  (bool (is-equivalence (lambda ()
+                                         (iota 10))
+                                       (lambda (a b)
+                                         (heavy-bool (< a b)))))))
+
+
+(define-test t-relations-strict-partial-order
+  (assert-false  (bool (is-strict-partial-order (lambda ()
+                                         (iota 10))
+                                       (lambda (a b)
+                                         (heavy-bool (= a b))))))
+  (assert-false  (bool (is-strict-partial-order (lambda ()
+                                         (iota 10))
+                                       (lambda (a b)
+                                         (heavy-bool (/= a b))))))
+  (assert-true  (bool (is-strict-partial-order (lambda ()
+                                        (iota 10))
+                                      (lambda (a b)
+                                        (heavy-bool (< a b))))))
+  (assert-false  (bool (is-strict-partial-order (lambda ()
+                                         (iota 10))
+                                       (lambda (a b)
+                                         (heavy-bool (<= a b)))))))
+
+
+
