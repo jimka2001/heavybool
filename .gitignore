@@ -7,3 +7,4 @@ clojure/target
 clojure/.lein-failures
 clojure/.nrepl-port
 clojure/TEST*.xml
+python/src/__pycache__

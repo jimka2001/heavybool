@@ -1,6 +1,6 @@
 from typing import Iterator, Any, Callable, Optional
 
-from heavybool import HeavyBool, HeavyTrue, FalseBecause, forallM
+from heavybool import HeavyBool, HeavyTrue, HeavyFalse, allM, anyM
 
 
 class Magma:
@@ -16,42 +16,43 @@ class Magma:
 
     def equiv(self, a, b) -> HeavyBool:
         if a == b:
-            return HeavyTrue(f"{a} == {b}")
+            return HeavyTrue({"reason": f"{a} == {b}",
+                              "a": a,
+                              "b": b})
         else:
-            return HeavyFalse(f"{a} != {b}")
+            return HeavyFalse({"reason": f"{a} != {b}",
+                               "a": a,
+                               "b": b})
 
     def isClosed(self) -> HeavyBool:
-        return forallM(self.gen(),
-                       lambda a: forallM(self.gen(),
-                                         lambda b: self.member(self.op(a, b))
-                                         ).mapIfFalse(lambda str: f"not closed because {str}")
-                       ) and HeavyTrue(f"{self} is closed")
+        return allM(self.member(self.op(a, b)).annotate({"a": a,
+                                                         "b": b})
+                    for a in self.gen()
+                    for b in self.gen()
+                    ).flag("closed")
 
     def isAssociative(self) -> HeavyBool:
-        return forallM(self.gen(),
-                       lambda a: forallM(self.gen(),
-                                         lambda b: forallM(self.gen(),
-                                                           lambda c: self.equiv(self.op(self.op(a, b), c),
-                                                                                self.op(a, self.op(b, c))
-                                                                                ).mapIfFalse(lambda str: f"not associative: {a}, {b}, {c} ")))
-                       ) and HeavyTrue(f"{self} is associative")
+        return allM(self.equiv(self.op(self.op(a, b), c),
+                               self.op(a, self.op(b, c))).annotate({"a", a,
+                                                                    "b", b,
+                                                                    "c", c})
+                    for a in self.gen()
+                    for b in self.gen()
+                    for c in self.gen()).flag("associative")
 
     def isAbelian(self) -> HeavyBool:
-        return forallM(self.gen(),
-                       lambda a: forallM(self.gen(),
-                                         lambda b: self.equiv(self.op(a, b),
-                                                              self.op(b, a)
-                                                              ).mapIfFalse(lambda str: f"not Abelian, e.g., {a},{b}"))
-                       ) and HeavyTrue(f"{self} is Abelian")
+        return allM(self.equiv(self.op(a, b),
+                               self.op(b, a)).annotate({"a": a, "b": b})
+                    for a in self.gen()
+                    for b in self.gen()
+                    ).flag("abelian")
 
     def isIdentity(self, z) -> HeavyBool:
-        comment = f"{z} is not an identity because"
-        return forallM(self.gen(),
-                       lambda a: (self.equiv(self.op(z, a), a
-                                             ).mapIfFalse(lambda str: f"{comment} op({a},{a}) = {self.op(z, a)}")
-                         and self.equiv(self.op(a, z), a
-                                        ).mapIfFalse(lambda str: f"{comment} op({a},{z}) = {self.op(a, z)}"))
-                       ) and HeavyTrue(f"{z} is the identity")
+        return allM(self.equiv(self.op(z, a), a).annotate({"za": self.op(z, a),
+                                                          "a": a}) and
+                    self.equiv(self.op(a, z)).annotate({"az": self.op(a, z),
+                                                       "a": a})
+                    for a in self.gen()).annotateFalse({"z": z}).flag("identity")
 
     def findIdentity(self):
         for z in self.gen():
@@ -73,28 +74,25 @@ class Magma:
         def f(a) -> HeavyBool:
             b = invert(a)
             if b is None:
-                return HeavyFalse(f"{a} has no inverse")
+                return HeavyFalse({"has no inverse": a})
             return self.member(b) and self.equiv(z, self.op(a, b)) and self.equiv(z, self.op(b, a))
 
-        return forallM(self.gen(), f) and HeavyTrue(f"{self} is invertible")
+        return allM(f(a) for a in self.gen()).flag("valid inverter")
 
     def isSemiGroup(self) -> HeavyBool:
         return (self.isClosed() and
-                self.isAssociative() and
-                HeavyTrue(f"{self} is a semigroup")
-                ).ifFalse(lambda str: HeavyFalse(f"{self} is not a semigroup because {str}"))
+                self.isAssociative()
+                ).flag("semigroup")
 
     def isMonoid(self, z) -> HeavyBool:
         return (self.isSemiGroup() and
-                self.isIdentity(z) and
-                HeavyTrue(f"{self} is a monoid")
-                ).mapIfFalse(lambda str: f"{self} is not a monoid because {str}")
+                self.isIdentity(z)
+                ).flag("monoid")
 
     def isGroup(self, z, invert) -> HeavyBool:
         return (self.isMonoid(z) and
                 self.isInverter(z, invert)
-                and HeavyTrue(f"{self} is a group")
-                ).mapIfFalse(lambda str: f"{self} is not a group because {str}")
+                ).flag("group")
 
 
 def genFinite(n: int) -> Iterator[int]:
@@ -107,8 +105,6 @@ def cayleyTable(elements, dyn_op) -> str:
     divider = '-+' + '-'.join('-' for _ in elements)
 
     def row(x):
-        return f"{x}|" + ' '.join(f"{dyn_op(x,y)}" for y in elements)
+        return f"{x}|" + ' '.join(f"{dyn_op(x, y)}" for y in elements)
 
     return '\n' + header + '\n' + divider + '\n' + '\n'.join(row(x) for x in elements)
-
-
