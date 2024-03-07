@@ -92,7 +92,7 @@ def existsM(items, p: Callable[[Any], HeavyBool]) -> HeavyBool:
         if r:
             return HeavyTrue({"witness": i})
 
-    return HeavyFalse("")
+    return HeavyFalse()
 
 
 def forallM(items, p: Callable[[Any], HeavyBool]) -> HeavyBool:
