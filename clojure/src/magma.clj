@@ -11,14 +11,14 @@
    (+forall a coll
      (+forall b coll
        (member (* a b))))
-   "closed"))
+   :closed))
                                
 (defn default-equal [left right]
   {:post [(heavy-bool? %)]}
   (+annotate 
    (+conj-false [(= left right) ()] {:left left
                                      :right right})
-   "equal"))
+   :equal))
 
 (defn is-associative [coll * equal]
   {:pre [(seq? coll)
@@ -31,7 +31,7 @@
        (+forall c coll
          (equal (* a (* b c))
                 (* (* a b) c)))))
-   "associative"))
+   :associative))
 
 (defn is-commutative [coll * equal]
   {:pre [(seq? coll)
@@ -43,7 +43,7 @@
      (+forall b coll
        (equal (* a b)
               (* b a))))
-   "commutative"))
+   :commutative))
 
 (defn is-identity [coll * ident equal]
   {:pre [(seq? coll)
@@ -55,7 +55,7 @@
      (+conj-false (equal (* ident a)
                          (* a ident))
                   {:ident ident}))
-   "identity"))
+   :identity))
 
 (defn find-identity [coll * equal]
   {:pre [(seq? coll)
@@ -73,7 +73,7 @@
    :post [(heavy-bool? %)]}
   (+annotate  (+and (is-closed coll * member)
                     (is-associative coll * equal))
-              "semigroup"))
+              :semigroup))
 
 (defn is-monoid [coll * ident member equal]
   {:pre [(seq? coll)
@@ -85,7 +85,7 @@
    (+and (member ident)
          (is-semigroup coll * member equal)
          (is-identity coll * ident equal))
-   "monoid"))
+   :monoid))
 
 (defn has-inverses [coll * ident invert member equal]
   {:pre [(seq? coll)
@@ -103,11 +103,11 @@
                             (member b)
                             (equal (* b a) ident)
                             (equal (* a b) ident))
-                      "invertable")
+                      :invertable)
                      {:reasons reasons
                       :inv-a inv-a})
               ))
-   "has inverses"))
+   :has-inverses))
 
 (defn is-group [coll * ident invert member equal]
   {:pre [(fn? *)
@@ -118,7 +118,7 @@
   (+annotate
    (+and (is-monoid coll * ident member equal)
          (has-inverses coll * ident invert member equal))
-   "group"))
+   :group))
 
 (defn is-ring [coll + * zero one +inv member equal]
   {:pre [(seq? coll)
@@ -136,10 +136,10 @@
             (+forall c coll
               (+and (+annotate (equal (* a (+ b c))
                                       (+ (* a b) (* a c)))
-                               "left distributive")
+                               :left-distributive)
                     (+annotate (equal (* (+ b c) a)
                                       (+ (* b a) (* c a)))
-                               "right distributive")))))))
+                               :right-distributive)))))))
 
 (defn is-field [coll + *
                 zero one
@@ -164,6 +164,6 @@
                  (+annotate 
                   (+and maybe-inv
                         (member (:witness (first reason))))
-                  "invertable"))))
+                  :invertable))))
         ))
         

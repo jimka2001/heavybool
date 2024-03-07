@@ -90,7 +90,8 @@
 (defn +conj
   "Conjoin an additional item to the reason list"
   [hb item]
-  {:pre [(heavy-bool? hb)]
+  {:pre [(heavy-bool? hb)
+         (map? item)]
    :post [(heavy-bool? %)]}
   (let [[bool reason] hb]
     [bool (conj reason item)]))
@@ -118,12 +119,13 @@
        (+conj-true heavy-bool true-reason)
        (+conj-false heavy-bool false-reason)))
 
-(defn +annotate [heavy-bool comment]
-  {:pre [(heavy-bool? heavy-bool)]
+(defn +annotate
+  "Conjoin the given key paired with the boolean value of the given heavy-bool"
+  [heavy-bool key]
+  {:pre [(heavy-bool? heavy-bool)
+         (keyword? key)]
    :post [(heavy-bool? %)]}
-  (+conj-false
-   (+conj-true heavy-bool {:success comment})
-   {:failure comment}))
+  (+conj heavy-bool {:key (+bool heavy-bool)}))
 
 (defn +forall-
   "Functional version of +forall.
@@ -181,20 +183,4 @@
   (if (not bool)
     (throw (ex-info (format "%s" reason) {:reason reason
                                           :bool bool}))))
-
-(defn +map [f [bool reason]]
-  [bool (f reason)])
-
-(defn +mapcat [f [bool reason]]
-  (f reason))
-
-(defn +mapcat-true [f [bool reason :as all]]
-  (if bool
-    (f reason)
-    all))
-
-(defn +mapcat-false [f [bool reason :as all]]
-  (if bool
-    all
-    (f reason)))
 

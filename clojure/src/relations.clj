@@ -1,15 +1,15 @@
 (ns relations
-    (:require [heavy-bool :refer [heavy-bool? +not +if +true +exists +implies +and +forall +conj-false +annotate]]))
+    (:require [heavy-bool :refer [heavy-bool? +heavy-bool +not +if +true +exists +implies +and +forall +conj-false +annotate]]))
 
 
 (defn is-reflexive [gen rel]
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+forall x gen
-           (+conj-false [(rel x x) ()]
-                        {:reason "not reflexive"
-                         :witness x})))
+  (+annotate (+forall x gen
+               (+conj-false (+heavy-bool (rel x x))
+                            {:witness x}))
+             :reflexive))
 
 (defn is-symmetric [gen rel]
   {:pre [(sequential? gen)
@@ -32,11 +32,11 @@
   (+annotate
    (+forall x gen
      (+forall y gen
-        (+implies (+heavy-bool (rel x y))
-                  (+forall z gen
-                           (+implies (+heavy-bool (rel y z))
-                                     (+heavy-bool (rel x z)))))))
-   "transitive"))
+       (+implies (+heavy-bool (rel x y))
+                 (+forall z gen
+                   (+implies (+heavy-bool (rel y z))
+                             (+heavy-bool (rel x z)))))))
+   :transitive))
 
 (defn is-equivalence [gen rel]
   {:pre [(sequential? gen)
@@ -45,7 +45,7 @@
   (+annotate (+and (is-symmetric gen rel)
                    (is-reflexive gen rel)
                    (is-transitive gen rel))
-             "equivalence"))
+             :equivalence))
   
 
 (defn is-asymmetric [gen rel]
@@ -58,7 +58,7 @@
                                         (+not [(rel y x) ()]))
                               {:x x
                                :y y})))
-             "assymetric"))
+             :assymetric))
 
 (defn is-irreflexive [gen rel]
   {:pre [(sequential? gen)
@@ -66,7 +66,7 @@
    :post [(heavy-bool? %)]}
   (+annotate (+not (+exists x gen
                      [(rel x x) ()]))
-             "irreflexive"))
+             :irreflexive))
 ;; 
 (defn is-strict-partial-order
   "A strict partial order is irreflexive, transitive, and asymmetric."
@@ -77,5 +77,5 @@
   (+annotate (+and (is-irreflexive gen rel)
                    (is-transitive gen rel)
                    (is-asymmetric gen rel))
-             "strict partial order"))
+             :strict-partial-order))
 

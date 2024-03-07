@@ -84,7 +84,7 @@
               (+annotate 
                [(= a b)
                 (list {:a a :b b})]
-               "equal"))
+               :equal))
             (member [[x y :as a]]
               {:pre [x
                      y
@@ -105,7 +105,7 @@
                       :else
                       +true)
                 {:p p :x :y})
-               "member"))]
+               :member))]
       {:p p
        :gen (gen)
        :op op
