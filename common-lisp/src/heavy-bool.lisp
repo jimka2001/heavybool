@@ -6,6 +6,8 @@
 ;; OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 ;; WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+(in-package :heavy-bool)
+
 (defclass heavy-bool ()
   ((bool :initarg :bool :reader bool)
    (reason :type list :initarg :reason :reader reason)))

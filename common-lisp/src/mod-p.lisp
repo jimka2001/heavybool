@@ -6,18 +6,5 @@
 ;; OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 ;; WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+(in-package :heavy-bool)
 
-(asdf:defsystem :heavy-bool
-  :version (:read-file-form "version.lisp")
-  :author "Jim Newton"
-  :description "Implementation of heavy-booleans"
-  :license "MIT"
-  :components
-  ((:module "src"
-    :components
-    ((:file "heavy-bool-package")
-     (:file "heavy-bool" :depends-on ("heavy-bool-package"))
-     (:file "magma" :depends-on ("heavy-bool"))
-     (:file "mod-p" :depends-on ("magma"))
-     (:file "relations" :depends-on ("heavy-bool"))
-     ))))
