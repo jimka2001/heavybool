@@ -8,7 +8,7 @@
 
 
 (defpackage :heavy-bool
-  (:use :cl)
+  (:use :cl :alexandria)
   (:export
    "HEAVY-BOOL"
    "HEAVY-TRUE"
