@@ -11,3 +11,18 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (shadow-all-symbols :package-from :heavy-bool :package-into :heavy-bool-test))
 
+(defun test-cayley-tables (n)
+  (visit-all-unital-cayley-tables n
+                                  (lambda (dyn-op)
+                                    (format t "~A~%" (cayley-table (gen-list-finite (1- n)) dyn-op)))))
+
+(define-test test-caley-tables-2
+  (test-cayley-tables 2))
+
+(define-test test-caley-tables-3
+  (test-cayley-tables 3))
+
+(define-test test-count-groups
+  (count-groups 2)
+  (count-groups 3))
+

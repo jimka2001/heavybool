@@ -54,7 +54,7 @@
 (defun +not (hb)
   (apply #'heavy-bool (not (bool hb)) (reason hb)))
 
-(defmacro +if (condition consequent alternative)
+(defmacro +if (condition consequent &optional alternative)
   `(if (bool ,condition)
        ,consequent
        ,alternative))
@@ -62,7 +62,7 @@
 (defmacro +and (&rest clauses)
   (case (length clauses)
     ((0)
-     *heavy-true*)
+     '*heavy-true*)
     ((1)
      (car clauses))
     (t
@@ -77,7 +77,7 @@
 (defmacro +or (&rest clauses)
   (case (length clauses)
     ((0)
-     *heavy-false*)
+     '*heavy-false*)
     ((1)
      (car clauses))
     (t
@@ -99,6 +99,9 @@
 (defun +annotate (hb &rest reasons)
   ;; reasons is a property list
   (+annotate-reasons hb reasons))
+
+(defun +tag (hb key)
+  (+annotate hb key (bool hb)))
 
 (defun +annotate-true (hb &rest reasons)
   (+if hb

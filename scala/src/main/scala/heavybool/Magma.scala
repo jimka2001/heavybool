@@ -32,6 +32,7 @@ abstract class Magma[T,C[_]:Foldable] {
                 op(a, op(b, c)))
         }}}}.annotate("associative")
 
+  // TODO rename to isCommutative
   def isAbelian(): HeavyBool = {
     forallM("a", gen()) { a:T =>
       forallM("b", gen()) { b: T =>

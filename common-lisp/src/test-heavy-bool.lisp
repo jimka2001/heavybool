@@ -21,7 +21,7 @@
 (defun test-serialize (hb)
   (cons (bool hb) (reason hb)))
 
-(heavy-bool (heavy-bool t :x 100))
+;; (heavy-bool (heavy-bool t :x 100))
 
 (define-test t-constructor
   (assert-true (eql (class-of (heavy-bool t))

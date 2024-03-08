@@ -8,3 +8,40 @@
 
 (in-package :heavy-bool)
 
+(defclass mod-p (magma)
+  ((p :initarg :p :type integer)))
+
+(defmethod gen ((mp mod-p))
+  (gen-list-finite (1- (slot-value mp 'p))))
+
+(defmethod is-equiv ((mp mod-p) a b)
+  (+tag (heavy-bool (= (mod a (slot-value mp 'p))
+                       (mod b (slot-value mp 'p)))
+                    :p (slot-value mp 'p))
+        :equiv-mod-p))
+
+(defmethod is-member ((mp mod-p) a)
+  (let ((p (slot-value mp 'p)))
+    (+tag 
+     (+annotate 
+      (+and (+annotate-false (heavy-bool (>= a 0)) :reason "a < 0")
+            (+annotate-false (heavy-bool (< a p)) :reason "a >= p"))
+      :a a  :p p)
+     :is-member)))
+
+(defclass addition-mod-p (mod-p) ())
+
+(defmethod op ((amp addition-mod-p) a b)
+  (mod (+ a b) (slot-value amp 'p)))
+
+(defclass multiplication-mod-p (mod-p) ())
+
+(defmethod gen ((mmp multiplication-mod-p))
+  (remove 0 (call-next-method)))
+
+(defmethod is-member ((mmp multiplication-mod-p) a)
+  (+and (+annotate-false (heavy-bool (< 0 a)) :reason "a <= 0")
+        (call-next-method)))
+
+(defmethod op ((mmp multiplication-mod-p) a b)
+  (mod (* a b) (slot-value mmp 'p)))

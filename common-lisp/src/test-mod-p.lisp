@@ -11,3 +11,36 @@
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (shadow-all-symbols :package-from :heavy-bool :package-into :heavy-bool-test))
 
+(define-test mod-p-primes
+  (loop :for p in '(2 3 5 7 11)
+        :do (let ((g (make-instance 'multiplication-mod-p :p p)))
+              (labels ((inv (a)
+                         (loop :for b :from 1 :below p
+                               :do (if (= 1 (mod (* a b) p))
+                                       (return-from inv (values b t))))
+                         (values nil nil)))
+                (assert-true (bool (is-group g 1 #'inv))
+                             :tag 33)))))
+
+(define-test xyzzy
+  (assert-true (= 1 3)
+               :tag 123))
+
+(define-test xyzzy2
+  (assert-true (= 1 3)))
+
+(define-test xyzzy3
+  (assert-false (= 1 1) :tag 789))
+
+
+(define-test mod-p-composites
+  (loop :for p in '(4 6 8 9 10)
+        :do (let ((g (make-instance 'multiplication-mod-p :p p)))
+              (labels ((inv (a)
+                         (loop :for b :from 1 :below p
+                               :do (if (= 1 (mod (* a b) p))
+                                       (return-from inv (values b t))))
+                         (values nil nil)))
+                (assert-true (bool (+not (is-group g 1 #'inv)))
+                             :tag 33)))))
+                       
