@@ -26,3 +26,7 @@
   (count-groups 2)
   (count-groups 3))
 
+(define-test test-find-groups
+  (find-groups-m 2)
+  (find-groups-m 3)
+  (find-groups-m 4))

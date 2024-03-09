@@ -294,6 +294,27 @@
     (format t "semigroups: ~A commutative ~A~%" semigroups commutative-semigroups)
     (format t "monoids:    ~A commutative ~A~%" monoids commutative-monoids)
     (format t "groups:     ~A commutative ~A~%" groups abelain-groups)))
+
+(defun find-groups-m (n)
+  (let ((elements (gen-list-finite (1- n)))
+        (groups 0)
+        (tries 0))
+    (visit-all-unital-cayley-tables
+     n (lambda (add)
+         (incf tries)
+         (let* ((dm (make-instance 'dyn-magma
+                                  :is-member (lambda (a)
+                                               (member a elements))
+                                  :op add
+                                  :gen (constantly elements)))
+                (ig (is-group dm 0 (lambda (x)
+                                     (find-inverse-from-ident dm x 0)))))
+           (+if ig
+                (let ((table (cayley-table elements add)))
+                  (incf groups)
+                  (format t "found a group ~A: ~A%" table ig))))))
+    (format t "groups: ~A/~A~%" groups tries)))
+           
     
                                             
                                  
