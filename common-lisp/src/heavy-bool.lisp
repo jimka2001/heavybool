@@ -29,6 +29,15 @@
     (when (reason hb)
       (format stream " ~S" (reason hb)))))
 
+(defun +lift (pred)
+  (declare (type (function (t &rest t) t) pred))
+  "+lifts takes a Boolean predicate, pred, (pred returns true/false)
+  and returns a lifted predicate, which takes the same arguments,
+  but returns a heavy-bool"
+  (lambda (&rest args)
+    (heavy-bool (apply pred args)
+                :args args)))
+           
 
 (defun +annotate-reasons (hb reasons)
   (make-instance (class-of hb)

@@ -10,59 +10,136 @@
 
 
 (defun is-reflexive (gen <)
-  (+annotate
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (+tag
    (+forall x (funcall gen)
-     (+annotate-false (funcall < x x)
-                      :x x
-                      :reason "not symmetric"))
-   :tag "reflexive"))
+     (funcall (+lift <) x x))
+   :reflexive))
+
+(defun is-irreflexive (gen <)
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (+tag (+not (+exists x (funcall gen)
+                (funcall (+lift <) x x)))
+        :irreflexive))
+
 
 (defun is-symmetric (gen <)
-  (+annotate
-   (+forall x (funcall gen)
-     (+forall y (funcall gen)
-       (+annotate-false (+implies (funcall < x y)
-                                  (funcall < y x))
-                        :x x
-                        :y y
-                        :reason "not symmetric")))
-   :tag "symmetric"))
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (flet ((rel (a b)
+           (heavy-bool (funcall < a b)
+                       :a a
+                       :b b)))
+    ;; a < b ==> b < a
+    (+tag
+     (+forall x (funcall gen)
+       (+forall y (funcall gen)
+         (+implies (rel x y)
+                   (rel y x))))
+     :symmetric)))
+
+(defun is-asymmetric (gen <)
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (flet ((rel (a b)
+           (heavy-bool (funcall < a b)
+                       :a a
+                       :b b)))
+    (+tag
+     (+forall x (funcall gen)
+       (+forall y (funcall gen)
+         (+implies (rel x y)
+                   (+not (rel y x)))))
+     :assymmetric)))
+
+(defun is-antisymmetric (gen <)
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (flet ((rel (a b)
+           (heavy-bool (funcall < a b)
+                       :a a
+                       :b b)))
+    (+tag
+     (+forall x (funcall gen)
+       (+forall y (funcall gen)
+         (+implies (+and (rel x y)
+                         (rel y x))
+                   (heavy-bool (equal x y)))))
+     :antisymmetric)))
+
+(defun is-connected (gen <)
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (flet ((rel (a b)
+           (heavy-bool (funcall < a b)
+                       :a a
+                       :b b)))
+    (+tag
+     (+forall a (funcall gen)
+       (+forall b (funcall gen)
+         (+implies (heavy-bool (not (equal a b)))
+                   (+or (rel a b)
+                        (rel b a)))))
+     :connected)))
+
+(defun is-strongly-connected (gen <)
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (flet ((rel (a b)
+           (heavy-bool (funcall < a b)
+                       :a a
+                       :b b)))
+    (+tag
+     (+forall a (funcall gen)
+       (+forall b (funcall gen)
+         (+or (rel a b)
+              (rel b a))))
+     :strongly-connected)))
+
 
 (defun is-transitive (gen <)
-  (+annotate
-   (+forall x (funcall gen)
-     (+forall y (funcall gen)
-       (+implies (funcall < x y)
-                 (+forall z (funcall gen)
-                   (+implies (funcall < y z)
-                             (funcall < x z))))))
-   :tag "transitive"))
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (flet ((rel (a b)
+           (heavy-bool (funcall < a b)
+                       :a a
+                       :b b)))
+
+    (+tag
+     (+forall x (funcall gen)
+       (+forall y (funcall gen)
+         (+implies (rel x y)
+                   (+forall z (funcall gen)
+                     (+implies (rel y z)
+                               (rel x z))))))
+     :transitive)))
 
 (defun is-equivalence (gen =)
-  (+annotate
+  (declare (type (function () t) gen)
+           (type (function (t t) t) =))
+  (+tag
    (+and (is-reflexive gen =)
          (is-symmetric gen =)
          (is-transitive gen =))
-   :tag "equivalence"))
+   :equivalence))
 
-(defun is-asymmetric (gen <)
-  (+annotate
-   (+forall x (funcall gen)
-     (+forall y (funcall gen)
-       (+annotate-false (+implies (funcall < x y)
-                                  (+not (funcall < y x)))
-                        :x x
-                        :y y)))
-   :tag "symmetric"))
-
-(defun is-irreflexive (gen <)
-  (+annotate (+not (+exists x (funcall gen)
-                     (funcall < x x)))
-             :tag "irreflexive"))
+(defun is-partial-order  (gen <)
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (+tag
+   (+and (is-reflexive gen <)
+         (is-antisymmetric gen <)
+         (is-transitive gen <))
+   :partial-order))
 
 (defun is-strict-partial-order (gen <)
-  (+annotate (+and (is-irreflexive gen <)
+  (declare (type (function () t) gen)
+           (type (function (t t) t) <))
+  (+tag
+   (+and (is-irreflexive gen <)
                    (is-transitive gen <)
                    (is-asymmetric gen <))
-             :tag "strict partial order"))
+   :strict-partial-order))
 
