@@ -22,17 +22,6 @@
                 (assert-true (bool (is-group g 1 #'inv))
                              :tag 33)))))
 
-(define-test xyzzy
-  (assert-true (= 1 3)
-               :tag 123))
-
-(define-test xyzzy2
-  (assert-true (= 1 3)))
-
-(define-test xyzzy3
-  (assert-false (= 1 1) :tag 789))
-
-
 (define-test mod-p-composites
   (loop :for p in '(4 6 8 9 10)
         :do (let ((g (make-instance 'multiplication-mod-p :p p)))

@@ -12,8 +12,15 @@
 (defgeneric gen (magma))
 (defgeneric op (magma a b))
 (defgeneric is-equiv (magma a b))
+(defmethod is-equiv ((magma magma) a b)
+  (+tag (heavy-bool (= a b)
+                    :a a
+                    :b b)
+        :is-equiv))
+
 (defgeneric is-member (magma a))
 (defgeneric is-closed (magma))
+
 (defmethod is-closed ((magma magma))
   (+tag (+forall a (gen magma)
           (+forall b (gen magma)
@@ -33,7 +40,8 @@
 (defmethod is-commutative ((magma magma))
   (+tag (+forall a (gen magma)
           (+forall b (gen magma)
-            (is-equiv magma (op magma a b)
+            (is-equiv magma
+                      (op magma a b)
                       (op magma b a))))
         :commutative))
 
@@ -109,9 +117,9 @@
 
 
 (defclass dyn-magma (magma)
-  ((gen :initarg :gen)
-   (op :initarg :op)
-   (is-member :initarg :is-member)))
+  ((gen :initarg :gen :type (function () t))
+   (op :initarg :op :type (function (t t) t))
+   (is-member :initarg :is-member :type (function (t) t))))
 
 (defmethod gen ((md dyn-magma))
   (funcall (slot-value md 'gen)))
@@ -120,8 +128,8 @@
   (funcall (slot-value md 'op) a b))
 
 (defmethod is-member ((md dyn-magma) a)
-  (+tag (+annotate (funcall (slot-value md 'is-member) a)
-                   :a a)
+  (+tag (heavy-bool (funcall (slot-value md 'is-member) a)
+                    :a a)
         :member))
 
 (defun gen-list-finite (n)
@@ -314,7 +322,3 @@
                   (incf groups)
                   (format t "found a group ~A: ~A%" table ig))))))
     (format t "groups: ~A/~A~%" groups tries)))
-           
-    
-                                            
-                                 
