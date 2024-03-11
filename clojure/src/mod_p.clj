@@ -1,5 +1,5 @@
 (ns mod-p
-  (:require [heavy-bool :refer [+and +forall +exists +false +true +conj +conj-true +conj-false heavy-bool?]]))
+  (:require [heavy-bool :refer [+and +forall +exists +false +true +annotate +annotate-true +annotate-false heavy-bool?]]))
 
 
 (defn mod-p
@@ -14,25 +14,26 @@
               {:post [(heavy-bool? %)]}
               (if (= a b)
                 +true
-                (+conj +false {:a a
-                               :b b
-                               :reason "not equal"})))
+                (+annotate +false
+                           :a a
+                           :b b
+                           :reason "not equal")))
             (mult [a b]
               (mod (* a b) p))
             (member [a]
               {:post [(heavy-bool? %)]}
-              (+and (+conj-false [(integer? a) ()] {:reason "expecting integer, got a"
-                                                    :a a})
-                    (+conj-false [(<= 0 a p) ()] {:reason "expecting 0 <= a < p"
+              (+and (+annotate-false [(integer? a) ()] :reason "expecting integer, got a"
+                                                    :a a)
+                    (+annotate-false [(<= 0 a p) ()] :reason "expecting 0 <= a < p"
                                                   :a a
-                                                  :p p})))
+                                                  :p p)))
             (invert [a]
               {:post [(heavy-bool? %)]}
-              (+conj-false (+exists inv-a elements
+              (+annotate-false (+exists inv-a elements
                                     (+and (equiv ident (mult a inv-a))
                                           (equiv ident (mult inv-a a))))
-                           {:reason "cannot compute inverse of"
-                            :a a}))]
+                               :reason "cannot compute inverse of"
+                               :a a))]
       {:p p
        :gen elements
        :equiv equiv

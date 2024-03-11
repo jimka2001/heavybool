@@ -2,7 +2,7 @@
   (:require [util :refer [member first-st]]
             [magma :as sut]
             [mod-p :refer [mod-p]]
-            [heavy-bool :refer [+bool +not +and +or +forall +exists +conj +conj-false heavy-bool?]]
+            [heavy-bool :refer [+bool +not +and +or +forall +exists +conj +annotate +annotate-false heavy-bool?]]
             [gaussian-int :refer [gaussian-int-mod-p]]
             [clojure.math :refer [sqrt ceil]]
             [clojure.test :refer [deftest testing is]]))
@@ -11,12 +11,14 @@
   (testing "is-closed"
     (let [hb (sut/is-closed (range 10)
                             (fn [a b] (+ a b))
-                            (fn [a] (+conj-false [(< a 100) ()] {:a a :reason ">= 100"})))]
+                            (fn [a] (+annotate-false [(< a 100) ()]
+                                                     :a a :reason ">= 100")))]
       (is (heavy-bool? hb))
       (is (+bool hb)))
     (let [hb (sut/is-closed (range 10)
                             (fn [a b] (+ a b))
-                            (fn [a] (+conj-false [(< a 10) ()] {:a a :reason ">= 10"})))]
+                            (fn [a] (+annotate-false [(< a 10) ()]
+                                                     :a a :reason ">= 10")))]
       (is (heavy-bool? hb))
       (is (not (+bool hb))))))
 
@@ -93,16 +95,16 @@
 
 (defn test-gaussian [p]
   (let [m (gaussian-int-mod-p p)
-        f (+conj-false (sut/is-field (:gen m)
-                                     (:add m)
-                                     (:mult m)
-                                     (:zero m)
-                                     (:one m)
-                                     (:add-inv m)
-                                     (:mult-inv m)
-                                     (:member m)
-                                     (:equiv m)) {:reason "not a field"})]
-    (+conj f {:p p})))
+        f (sut/is-field (:gen m)
+                        (:add m)
+                        (:mult m)
+                        (:zero m)
+                        (:one m)
+                        (:add-inv m)
+                        (:mult-inv m)
+                        (:member m)
+                        (:equiv m))]
+    (+annotate f :p p)))
 
 (deftest t-gaussian
   (testing "gaussian int"

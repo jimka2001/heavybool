@@ -1,6 +1,6 @@
 (ns gaussian-int
   (:require [util :refer [find-if]]
-            [heavy-bool :refer [+and +forall +exists +false +true +conj +conj-true +annotate +conj-false heavy-bool?]]))
+            [heavy-bool :refer [+and +forall +exists +false +true +annotate +conj +tag heavy-bool?]]))
 
 (defn gaussian? [g]
   (and (vector? g)
@@ -40,9 +40,9 @@
             (add-inv [a]
               {:pre [(gaussian? a)]
                :post [(heavy-bool? %)]}
-              (+conj +true {:witness (subtract zero a)
-                            :zero zero
-                            :a a}))
+              (+annotate +true :witness (subtract zero a)
+                         :zero zero
+                         :a a))
             (mult [[x y :as a]
                    [u v :as b]]
               {:pre [(gaussian? a)
@@ -56,17 +56,20 @@
               (let [denom (gmod (+ (* a a)
                                    (* b b)))]
                 (if (= 0 denom)
-                  (+conj +false {:reason "gaussian integer ab not invertible mod p"
-                                 :p p
-                                 :ab ab})
+                  (+annotate +false
+                             :reason "gaussian integer ab not invertible mod p"
+                             :p p
+                             :ab ab)
                   (let [[z :as found] (find-if (fn [z] (= 1 (gmod (* z denom))))
                                                (range 1 (inc p)))]
                     (if found
-                      (+conj +true {:witness (gmod (* a z) (- (* b z)))
-                                    :z z})
-                      (+conj +false {:reason "gaussian integer ab not invertible mod p"
-                                     :p p
-                                     :ab ab}))))))
+                      (+annotate +true
+                                 :witness (gmod (* a z) (- (* b z)))
+                                 :z z)
+                      (+annotate +false
+                                 :reason "gaussian integer ab not invertible mod p"
+                                 :p p
+                                 :ab ab))))))
             (op [a b]
               {:pre [(gaussian? a)
                      (gaussian? b)]
@@ -81,7 +84,7 @@
               {:pre [(gaussian? a)
                      (gaussian? b)]
                :post [(heavy-bool? %)]}
-              (+annotate 
+              (+tag
                [(= a b)
                 (list {:a a :b b})]
                :equal))
@@ -92,16 +95,16 @@
                      (int? y)
                      (gaussian? a)]
                :post [(heavy-bool? %)]}
-              (+annotate 
+              (+tag
                (+conj 
                 (cond (< x 0)
-                      (+conj +false {:reason "x < 0"})
+                      (+annotate +false :reason "x < 0")
                       (< y 0)
-                      (+conj +false {:reason "y < 0"})
+                      (+annotate +false :reason "y < 0")
                       (>= x p)
-                      (+conj +false {:reason "x >= p"})
+                      (+annotate +false :reason "x >= p")
                       (>= y p)
-                      (+conj +false {:reason "y >= p"})
+                      (+annotate +false :reason "y >= p")
                       :else
                       +true)
                 {:p p :x :y})

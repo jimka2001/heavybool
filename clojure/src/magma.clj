@@ -1,13 +1,13 @@
 (ns magma
   (:require [util :refer [type-check first-st]]
-            [heavy-bool :refer [+bool +and +or +not +forall +exists +conj-true +conj +conj-false heavy-bool? +annotate]]))
+            [heavy-bool :refer [+bool +and +or +not +forall +exists +annotate +conj +annotate-false heavy-bool? +tag]]))
 
 (defn is-closed [coll * member]
   {:pre [(seq? coll)
          (fn? *)
          (fn? member)]
    :post [(heavy-bool? %)]}
-  (+annotate
+  (+tag
    (+forall a coll
      (+forall b coll
        (member (* a b))))
@@ -15,9 +15,10 @@
                                
 (defn default-equal [left right]
   {:post [(heavy-bool? %)]}
-  (+annotate 
-   (+conj-false [(= left right) ()] {:left left
-                                     :right right})
+  (+tag
+   (+annotate-false [(= left right) ()]
+                    :left left
+                    :right right)
    :equal))
 
 (defn is-associative [coll * equal]
@@ -25,7 +26,7 @@
          (fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+annotate
+  (+tag
    (+forall a coll
      (+forall b coll
        (+forall c coll
@@ -38,7 +39,7 @@
          (fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+annotate 
+  (+tag
    (+forall a coll
      (+forall b coll
        (equal (* a b)
@@ -50,11 +51,11 @@
          (fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+annotate
+  (+tag
    (+forall a coll
-     (+conj-false (equal (* ident a)
+     (+annotate-false (equal (* ident a)
                          (* a ident))
-                  {:ident ident}))
+                      :ident ident))
    :identity))
 
 (defn find-identity [coll * equal]
@@ -71,7 +72,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+annotate  (+and (is-closed coll * member)
+  (+tag  (+and (is-closed coll * member)
                     (is-associative coll * equal))
               :semigroup))
 
@@ -81,7 +82,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+annotate
+  (+tag
    (+and (member ident)
          (is-semigroup coll * member equal)
          (is-identity coll * ident equal))
@@ -94,18 +95,18 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+annotate
+  (+tag
    (+forall a coll
             (let [[_ reasons :as inv-a] (invert a)
                   b (:witness (first-st r reasons (:witness r)))]
-              (+conj (+annotate
-                      (+and inv-a
-                            (member b)
-                            (equal (* b a) ident)
-                            (equal (* a b) ident))
-                      :invertable)
-                     {:reasons reasons
-                      :inv-a inv-a})
+              (+annotate (+tag
+                          (+and inv-a
+                                (member b)
+                                (equal (* b a) ident)
+                                (equal (* a b) ident))
+                          :invertable)
+                         :reasons reasons
+                         :inv-a inv-a)
               ))
    :has-inverses))
 
@@ -115,7 +116,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+annotate
+  (+tag
    (+and (is-monoid coll * ident member equal)
          (has-inverses coll * ident invert member equal))
    :group))
@@ -134,10 +135,10 @@
         (+forall a coll
           (+forall b coll
             (+forall c coll
-              (+and (+annotate (equal (* a (+ b c))
+              (+and (+tag (equal (* a (+ b c))
                                       (+ (* a b) (* a c)))
                                :left-distributive)
-                    (+annotate (equal (* (+ b c) a)
+                    (+tag (equal (* (+ b c) a)
                                       (+ (* b a) (* c a)))
                                :right-distributive)))))))
 
@@ -154,14 +155,14 @@
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+and (+not (equal one zero))
-        (+conj-false (is-ring coll + * zero one +inv member equal)
-                     {:zero zero
-                      :one one})
+        (+annotate-false (is-ring coll + * zero one +inv member equal)
+                         :zero zero
+                         :one one)
         (is-commutative coll * equal)
         (+forall x coll
           (+or (equal x zero)
                (let [[_ reason :as maybe-inv] (*inv x)]
-                 (+annotate 
+                 (+tag
                   (+and maybe-inv
                         (member (:witness (first reason))))
                   :invertable))))

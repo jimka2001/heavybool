@@ -17,14 +17,11 @@
        (every? map? (second heavy-bool))))
 
 
-(defn +lift
-  "takes a boolean predicate and promotes to a predicate returning a heavy-bool
-  with reason providing a witness value"
-  [f]
-  (fn [x] [(f x) (list {:witness x
-                        :predicate f})]))
-
-(defn +not [[bool reason]]
+(defn +not 
+  "logically negate the given heavy-bool"
+  [[bool reason :as hb]]
+  {:pre [(heavy-bool? hb)]
+   :post [(heavy-bool? %)]}
   [(not bool) reason])
 
 (defn +heavy-bool [hb]
@@ -32,7 +29,9 @@
     hb
     [hb ()]))
 
-(defn +bool "convert heavy-bool to bool" [[bool reason]]
+(defn +bool "convert heavy-bool to bool"
+  [[bool reason :as hb]]
+  {:pre [(heavy-bool? hb)]}
   bool)
 
 (defmacro +if
@@ -78,11 +77,15 @@
               (+or ~@tail))))))
 
 (defmacro +implies
+  "Determine whether a logically implies b.
+  b is not evaluated unless a is heavy-true"
   [a b]
   `(+or (+not ~a)
        ~b))
 
 (defmacro +implied-by
+  "Determine whether a logically implies b.
+  a is not evaluated unless b is heavy-false"
   [b a]
   `(+or ~b
         (+not ~a)))
@@ -96,36 +99,43 @@
   (let [[bool reason] hb]
     [bool (conj reason item)]))
 
-(defn +conj-true [heavy-bool reason]
+(defn +annotate 
+  "Eg. (+annotate hb :x x :y y)
+  to add {:x x :y y} as annotation on the given heavy-bool"
+  [heavy-bool & key-vals]
   {:pre [(heavy-bool? heavy-bool)
-         (map? reason)]
+         (or (if (not          (even? (count key-vals)))
+           (println [:key-vals key-vals])) true)
+         (even? (count key-vals))
+         (every? (fn [n] (keyword? (nth key-vals n)))
+                 (range 0 (count key-vals) 2))]
    :post [(heavy-bool? %)]}
-  (+and heavy-bool
-       (+conj heavy-bool reason)))
+  (+conj heavy-bool (into {} (map (fn [x] (into [] x))
+                                  (partition 2 key-vals)))))
 
-(defn +conj-false [heavy-bool reason]
-  {:pre [(heavy-bool? heavy-bool)
-         (map? reason)]
-   :post [(heavy-bool? %)]}
-  (+or heavy-bool
-       (+conj heavy-bool reason)))
-
-(defn +conj-if [heavy-bool true-reason false-reason]
-  {:pre [(heavy-bool? heavy-bool)
-         (map? true-reason)
-         (map? false-reason)]
-   :post [(heavy-bool? %)]}
+(defn +annotate-true 
+  "Eg. (+annotate-true hb :x x :y y)
+  to add {:x x :y y} as annotation on the given heavy-bool only if it has true semantics."
+  [heavy-bool & key-vals]
   (+if heavy-bool
-       (+conj-true heavy-bool true-reason)
-       (+conj-false heavy-bool false-reason)))
+       (apply +annotate heavy-bool key-vals)
+       heavy-bool))
 
-(defn +annotate
+(defn +annotate-false 
+  "Eg. (+annotate-true hb :x x :y y)
+  to add {:x x :y y} as annotation on the given heavy-bool only if it has false semantics."
+  [heavy-bool & key-vals]
+  (+if heavy-bool
+       heavy-bool
+       (apply +annotate heavy-bool key-vals)))
+
+(defn +tag
   "Conjoin the given key paired with the boolean value of the given heavy-bool"
   [heavy-bool key]
   {:pre [(heavy-bool? heavy-bool)
          (keyword? key)]
    :post [(heavy-bool? %)]}
-  (+conj heavy-bool {:key (+bool heavy-bool)}))
+  (+annotate heavy-bool :key (+bool heavy-bool)))
 
 (defn +forall-
   "Functional version of +forall.
@@ -140,17 +150,16 @@
   {:pre [(fn? f)
          (sequential? coll)]
    :post [(heavy-bool? %)]}
-  (+conj 
+  (+annotate 
    (reduce (fn [hb item]
              (assert (heavy-bool? hb))
              (let [this (+heavy-bool (f item))]
                (+if this
                     hb
-                    (reduced (+conj this {:witness item
-                                          })))))
+                    (reduced (+annotate this :witness item)))))
            +true
            coll)
-   {:tag tag}))
+   :tag tag))
 
 (defn +exists- 
   "Function version of +exists.

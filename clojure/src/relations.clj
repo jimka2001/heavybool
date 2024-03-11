@@ -1,27 +1,28 @@
 (ns relations
-    (:require [heavy-bool :refer [heavy-bool? +heavy-bool +not +if +true +exists +implies +and +forall +conj-false +annotate]]))
+    (:require [heavy-bool :refer [heavy-bool? +heavy-bool +not +if +true +exists +implies +and +forall +annotate-false +tag]]))
 
 
 (defn is-reflexive [gen rel]
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+annotate (+forall x gen
-               (+conj-false (+heavy-bool (rel x x))
-                            {:witness x}))
+  (+tag (+forall x gen
+               (+annotate-false (+heavy-bool (rel x x))
+                                :witness x))
              :reflexive))
 
 (defn is-symmetric [gen rel]
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+forall x gen
-           (+forall y gen
-                    (+conj-false (+implies [(rel x y) ()]
-                                           [(rel y x) ()])
-                                 {:x x
-                                  :y y
-                                  :reason "not symmetric"}))))
+  (+tag 
+   (+forall x gen
+            (+forall y gen
+                     (+annotate-false (+implies [(rel x y) ()]
+                                                [(rel y x) ()])
+                                      :x x
+                                      :y y)))
+   :symmetric))
 
 (defn is-transitive
   "rel is a binary function which returns a Boolean"
@@ -29,7 +30,7 @@
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+annotate
+  (+tag
    (+forall x gen
      (+forall y gen
        (+implies (+heavy-bool (rel x y))
@@ -42,7 +43,7 @@
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+annotate (+and (is-symmetric gen rel)
+  (+tag (+and (is-symmetric gen rel)
                    (is-reflexive gen rel)
                    (is-transitive gen rel))
              :equivalence))
@@ -52,19 +53,19 @@
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+annotate (+forall x gen
+  (+tag (+forall x gen
                (+forall y gen
-                 (+conj-false (+implies [(rel x y) ()]
+                 (+annotate-false (+implies [(rel x y) ()]
                                         (+not [(rel y x) ()]))
-                              {:x x
-                               :y y})))
+                                  :x x
+                                  :y y)))
              :assymetric))
 
 (defn is-irreflexive [gen rel]
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+annotate (+not (+exists x gen
+  (+tag (+not (+exists x gen
                      [(rel x x) ()]))
              :irreflexive))
 ;; 
@@ -74,7 +75,7 @@
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+annotate (+and (is-irreflexive gen rel)
+  (+tag (+and (is-irreflexive gen rel)
                    (is-transitive gen rel)
                    (is-asymmetric gen rel))
              :strict-partial-order))
