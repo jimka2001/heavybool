@@ -20,8 +20,6 @@
                                       [sut/+false '({:reason "fails"})]))
            [true '({:tag x})]))))
 
-
-
 (deftest t+or-2
   (testing "or 2"
     (let [m1 '({:reason 1})
