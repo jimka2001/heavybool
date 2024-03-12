@@ -102,32 +102,26 @@
 (defn +annotate 
   "Eg. (+annotate hb :x x :y y)
   to add {:x x :y y} as annotation on the given heavy-bool"
-  [heavy-bool & key-vals]
-  {:pre [(heavy-bool? heavy-bool)
-         (or (if (not          (even? (count key-vals)))
-           (println [:key-vals key-vals])) true)
-         (even? (count key-vals))
-         (every? (fn [n] (keyword? (nth key-vals n)))
-                 (range 0 (count key-vals) 2))]
+  [heavy-bool & {:as key-vals}]
+  {:pre [(heavy-bool? heavy-bool)]
    :post [(heavy-bool? %)]}
-  (+conj heavy-bool (into {} (map (fn [x] (into [] x))
-                                  (partition 2 key-vals)))))
+  (+conj heavy-bool key-vals))
 
 (defn +annotate-true 
   "Eg. (+annotate-true hb :x x :y y)
   to add {:x x :y y} as annotation on the given heavy-bool only if it has true semantics."
-  [heavy-bool & key-vals]
+  [heavy-bool & {:as key-vals}]
   (+if heavy-bool
-       (apply +annotate heavy-bool key-vals)
+       (+conj heavy-bool key-vals)
        heavy-bool))
 
 (defn +annotate-false 
   "Eg. (+annotate-true hb :x x :y y)
   to add {:x x :y y} as annotation on the given heavy-bool only if it has false semantics."
-  [heavy-bool & key-vals]
+  [heavy-bool & {:as key-vals}]
   (+if heavy-bool
        heavy-bool
-       (apply +annotate heavy-bool key-vals)))
+       (+conj heavy-bool key-vals)))
 
 (defn +tag
   "Conjoin the given key paired with the boolean value of the given heavy-bool"
