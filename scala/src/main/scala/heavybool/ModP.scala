@@ -13,7 +13,7 @@ abstract class ModP(p: Int) extends Magma[Int, List] {
       HTrue +| s"$a equiv $b"
     else
       HFalse +| s"$a not equiv $b"
-  }.annotate(s"equiv mod $p")
+  }.tag(s"equiv mod $p")
 
   override def member(a: Int): HeavyBool = {
     if (a < 0)
@@ -22,7 +22,7 @@ abstract class ModP(p: Int) extends Magma[Int, List] {
       HFalse +| s"$a is not a member because $a >= $p"
     else
       HTrue +| s"0 <= $a < $p"
-  }.annotate("member")
+  }.tag("member")
 }
 
 class AdditionModP(p: Int) extends ModP(p) {
@@ -47,7 +47,7 @@ class MultiplicationModP(p: Int) extends ModP(p) {
       HFalse +| s"$a <= 0"
     else
       super.member(a)
-  }.annotate("member")
+  }.tag("member")
 
   override def op(a: Int, b: Int): Int = (a * b) % p
 }

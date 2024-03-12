@@ -5,19 +5,19 @@ object Relations {
   def isReflexive[T](gen:LazyList[T], rel:(T,T)=>Boolean) = {
     // every element relates to itself
     forallM("x", gen){(x:T) => HeavyBool(rel(x,x))}
-      .annotate("reflexive")
+      .tag("reflexive")
   }
   def isIrreflexive[T](gen:LazyList[T], rel:(T,T)=>Boolean) = {
     // every no element relates to itself
     forallM("x", gen){(x:T) => !HeavyBool(rel(x,x))}
-      .annotate("irreflexive")
+      .tag("irreflexive")
   }
   def isSymmetric[T](gen:LazyList[T], rel:(T,T)=>Boolean) = {
     def hrel(a: T, b: T) = HeavyBool(rel(a, b))
 
     forallM("x", gen) { (x: T) =>
       forallM("y", gen) { (y: T) => hrel(x, y) ==> hrel(y, x) }
-    }.annotate("symmetric")
+    }.tag("symmetric")
   }
   def isAsymmetric[T](gen:LazyList[T], rel:(T,T)=>Boolean) = {
     // if a relates to b, then b does not relate to a
@@ -25,7 +25,7 @@ object Relations {
 
     forallM("x", gen) { (x: T) =>
       forallM("y", gen) { (y: T) => hrel(x, y) ==> !hrel(y, x) }
-    }.annotate("assymmetric")
+    }.tag("assymmetric")
   }
   def isAntisymmetric[T](gen:LazyList[T], rel:(T,T)=>Boolean) = {
     // if a relates to b, and b relates to a, then a == b
@@ -34,7 +34,7 @@ object Relations {
     forallM("x", gen) { (x: T) =>
       forallM("y", gen) { (y: T) =>
         (hrel(x, y) && hrel(y, x)) ==> HeavyBool(x==y) }
-    }.annotate("antisymetric")
+    }.tag("antisymetric")
   }
 
   def isConnected[T](gen:LazyList[T], rel:(T,T)=>Boolean):HeavyBool = {
@@ -44,7 +44,7 @@ object Relations {
         HeavyBool(a != b) ==> (hrel(a,b) || hrel(b,a))
       }
     }
-  }.annotate("connected")
+  }.tag("connected")
 
   def isStronglyConnected[T](gen:LazyList[T], rel:(T,T)=>Boolean):HeavyBool = {
     def hrel(a: T, b: T) = HeavyBool(rel(a, b))
@@ -55,7 +55,7 @@ object Relations {
         hrel(a,b) || hrel(b,a)
       }
     }
-  }.annotate("strongly connected")
+  }.tag("strongly connected")
 
   def isTransitive[T](gen:LazyList[T], rel:(T,T)=>Boolean):HeavyBool = {
     def hrel(a:T, b:T) = HeavyBool(rel(a,b))
@@ -67,20 +67,20 @@ object Relations {
           }
         else
           HTrue
-      }}}.annotate("transitive")
+      }}}.tag("transitive")
   }
 
   def isEquivalence[T](gen:LazyList[T], rel:(T,T)=>Boolean):HeavyBool = {
     isSymmetric(gen,rel) && isReflexive(gen,rel) && isTransitive(gen,rel)
-  }.annotate("equivalence")
+  }.tag("equivalence")
 
   def isPartialOrder[T](gen:LazyList[T], rel:(T,T)=>Boolean):HeavyBool = {
     isReflexive(gen,rel) && isAntisymmetric(gen,rel)  && isTransitive(gen,rel)
-  }.annotate("partial order")
+  }.tag("partial order")
 
   def isStrictPartialOrder[T](gen:LazyList[T], rel:(T,T)=>Boolean):HeavyBool = {
     isIrreflexive(gen,rel) && isAsymmetric(gen,rel)  && isTransitive(gen,rel)
-  }.annotate("strict partial order")
+  }.tag("strict partial order")
 
 
 

@@ -37,11 +37,11 @@ class ModPSuite extends MyFunSuite {
          } {
       assertM(add.isMonoid(0))
 
-      add.isGroup(0, (a: Int) => Some((p - a) % p)).annotate(s"addition mod $p") match {
+      add.isGroup(0, (a: Int) => Some((p - a) % p)).tag(s"addition mod $p") match {
         case hb@HeavyFalse(_) => println(hb)
         case _ => println(s"$add is a group")
       }
-      mult.isGroup(1, a => (1 until p).find(b => (a * b) % p == 1)).annotate(s"multiplication mod $p") match {
+      mult.isGroup(1, a => (1 until p).find(b => (a * b) % p == 1)).tag(s"multiplication mod $p") match {
         case hb@HeavyFalse(_) => println(hb)
         case _ => println(s"$mult is a group")
       }

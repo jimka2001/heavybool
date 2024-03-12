@@ -72,10 +72,10 @@ sealed abstract class HeavyBool(val because:Reason) {
 
   def +| (reason:String): HeavyBool = this ++ Map("reason" -> reason)
 
-  def annotate(reason:String): HeavyBool = {
-    this
-      .conjTrue(Map{"success" -> reason})
-      .conjFalse(Map("failure" -> reason))
+  def tag(reason:String): HeavyBool = {
+    this ++ Map(
+      reason -> this.toBoolean
+    )
   }
 
   def conjTrue(another: Map[String,Any]): HeavyBool = {

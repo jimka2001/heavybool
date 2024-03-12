@@ -16,13 +16,13 @@ abstract class Magma[T,C[_]:Foldable] {
       HTrue
     else
       HFalse
-  }.annotate("equivalent") ++ Map("a" -> a, "b" -> b)
+  }.tag("equivalent") ++ Map("a" -> a, "b" -> b)
 
   def isClosed(): HeavyBool = {
     forallM("a", gen()){ a:T =>
       forallM("b", gen()) { b: T =>
         member(op(a, b)) ++ Map("op(a,b)" -> op(a, b))
-      }}}.annotate("closed")
+      }}}.tag("closed")
 
   def isAssociative(): HeavyBool = {
     forallM("a", gen()) { a:T =>
@@ -30,19 +30,19 @@ abstract class Magma[T,C[_]:Foldable] {
         forallM("c", gen()) { c:T =>
           equiv(op(op(a, b), c),
                 op(a, op(b, c)))
-        }}}}.annotate("associative")
+        }}}}.tag("associative")
 
   // TODO rename to isCommutative
   def isAbelian(): HeavyBool = {
     forallM("a", gen()) { a:T =>
       forallM("b", gen()) { b: T =>
         equiv(op(a, b), op(b, a))
-      }}}.annotate("commutative")
+      }}}.tag("commutative")
 
   def isIdentity(z: T): HeavyBool = {
     forallM("a", gen()) { a:T =>
       equiv(op(a, z), a) && equiv(op(z, a), a)
-    }}.annotate("identity") ++ Map("z" -> z)
+    }}.tag("identity") ++ Map("z" -> z)
 
   def findIdentity(): Option[T] = {
     gen().find(z => isIdentity(z) match {
@@ -70,19 +70,19 @@ abstract class Magma[T,C[_]:Foldable] {
           member(b) &&
             equiv(z, op(a, b)) &&
             equiv(z, op(b, a))
-      }}}.annotate("find inverter") ++ Map("z" -> z)
+      }}}.tag("find inverter") ++ Map("z" -> z)
 
   def isSemiGroup(): HeavyBool = {
     (isClosed() && isAssociative())
-  }.annotate("semigroup")
+  }.tag("semigroup")
 
   def isMonoid(z: T): HeavyBool = {
     (isSemiGroup() && isIdentity(z))
-  }.annotate("monoid")
+  }.tag("monoid")
 
   def isGroup(z: T, invert: T => Option[T]): HeavyBool = {
     (isMonoid(z) && isInverter(z, invert))
-  }.annotate("group")
+  }.tag("group")
 }
 
 object Magma {

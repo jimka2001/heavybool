@@ -87,7 +87,7 @@ class GaussianIntModP(p: Int) extends Magma[(Int,Int), LazyList] {
       HFalse +| s"$y >= $p"
     else
       HTrue +| s"0 <= $x < $p and 0 <= $y < $p"
-  } ++ Map("a" -> a)).annotate("member")
+  } ++ Map("a" -> a)).tag("member")
 
 }
 
