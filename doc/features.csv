@@ -1,0 +1,39 @@
+Language, Scala, Python, Common Lisp, Clojure,
+constructor,HeavyBool,,,heavy-bool
+true,HeavyTrue,,,+true
+false,HeavyFalse,,,+false
+if,heavyIf,,,+if
+not,!,,,+not
+and,&&,,,+and
+or,||,,,+or
+implies,==>,,,+implies
+implied by,<==,,,+implied-by
+forall,forallM,,,+forall
+exists,existsM,,,+exists
+to Boolean,toBoolean,,,+bool
+annotate for user,,,,+annotate
+annotate programmatic,++,annotate,annotate,+conj
+tag,tag,tag,tag,+tag
+assert,AssertM,,,+assert
+magma,
+is-semigroup,
+is-monoid,
+is-group,
+is-ring,
+is-field,
+addition-mod-p,
+multiplication-mod-p,
+dyn-magma,
+is-reflexive,
+is-irreflexive,
+is-symmetric,
+is-asymmetric,
+is-antisymmetric,
+is-transitive,
+is-equivalence,
+is-asymmetric,
+is-strict-partial-order,
+is-partial-order,
+is-connected,
+is-strongly-connected,
+is-equivalence,
