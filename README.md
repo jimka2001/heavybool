@@ -9,8 +9,8 @@ The motivating example is to implement universal and existential
 quantifiers.
 
 For example:
-There exists an x in A such that
-   there exists a y in A such that
+There exists x in A such that
+   there exists y in A such that
       for every z in A, p(x,y,z) holds
 
 If this statement is false, then there is some triple (x,y,z) which
