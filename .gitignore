@@ -8,3 +8,7 @@ clojure/.lein-failures
 clojure/.nrepl-port
 clojure/TEST*.xml
 python/src/__pycache__
+clojure/.DS_Store
+python/.DS_Store
+scala/.DS_Store
+.DS_Store
