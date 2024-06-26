@@ -70,6 +70,7 @@ tempted to rewrite the code as follows.
                                        polynomials)) 
                              polynomials)) 
                    polynomials)
+           ;; regretably, p1, p2, and p3 are out of scope
            "WHAT TEXT TO PUT HERE?"))))
 ```
 
