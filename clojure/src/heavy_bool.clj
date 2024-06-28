@@ -146,16 +146,16 @@
   {:pre [(fn? f)
          (sequential? coll)]
    :post [(heavy-bool? %)]}
-  (+annotate 
+  (+annotate-true
    (reduce (fn [hb item]
              (assert (heavy-bool? hb))
              (let [this (+heavy-bool (f item))]
                (+if this
                     hb
-                    (reduced (+annotate this :witness item)))))
+                    (reduced (+annotate this :witness item :var tag)))))
            +true
            coll)
-   :tag tag))
+   :var tag))
 
 (defn +exists- 
   "Function version of +exists.
