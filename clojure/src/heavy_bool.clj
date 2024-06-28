@@ -1,6 +1,6 @@
 (ns heavy-bool
   "A heavy-bool is a pair [bool reason], where bool is a truth value
-  usually true or false, but may be any clojure truthy or falsy value.
+  usually true or false, but may be any clojure truthy or falsey value.
   reason is a list of maps with keys such as :witness, :bool, and
   :predicate etc.  A heavy-bool answers a predicate question with either
   yes-because or no-because")
@@ -24,7 +24,9 @@
    :post [(heavy-bool? %)]}
   [(not bool) reason])
 
-(defn +heavy-bool [hb]
+(defn +heavy-bool
+  "convert bool to heavy-bool"
+  [hb]
   (if (heavy-bool? hb)
     hb
     [hb ()]))
@@ -109,7 +111,7 @@
 
 (defn +annotate-true 
   "Eg. (+annotate-true hb :x x :y y)
-  to add {:x x :y y} as annotation on the given heavy-bool only if it has true semantics."
+  to add {:x x :y y} as annotation on the given heavy-bool if and only if it has true semantics."
   [heavy-bool & {:as key-vals}]
   (+if heavy-bool
        (+conj heavy-bool key-vals)
@@ -117,7 +119,7 @@
 
 (defn +annotate-false 
   "Eg. (+annotate-true hb :x x :y y)
-  to add {:x x :y y} as annotation on the given heavy-bool only if it has false semantics."
+  to add {:x x :y y} as annotation on the given heavy-bool if and only if it has false semantics."
   [heavy-bool & {:as key-vals}]
   (+if heavy-bool
        heavy-bool
@@ -134,7 +136,7 @@
 (defn +forall-
   "Functional version of +forall.
   Traverses the given collection until 1) either an item is found
-  which is heavy-false and returned (with a new reason conjoined),
+  which is heavy-false and return it (with a new reason conjoined),
   or 2) else +true is returned.
   If some value in the collection causes the predicate to return
   heavy-false, then a reason will be specified which provides
@@ -158,7 +160,7 @@
 (defn +exists- 
   "Function version of +exists.
   Traverses the given collection until 1) either an item is found
-  which is heavy-true and returned (with a new reason conjoined),
+  which is heavy-true and return it (with a new reason conjoined),
   or 2) else returns explicitly +false.
   If some value in the collection causes the predicate to return
   heavy-true, then a reason will be specified which provides
