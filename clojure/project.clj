@@ -5,7 +5,6 @@
                  [org.clojure/tools.trace "0.7.11"] ;; DOCKER OMIT
                  ]
   :plugins [[lein-exec "0.3.7"]]
-  :main ^:skip-aot heavy-bool.core
   :target-path "target/%s"
   :jvm-opts [ 
              "-Xms1500m", "-Xmx1500m"
