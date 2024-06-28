@@ -20,6 +20,4 @@
              ]
   :profiles {:test {:plugins [[lein-test-report-junit-xml "0.2.0"]]
                     :test-report-junit-xml {:output-dir "."}
-                    }
-             :uberjar {:aot :all
-                       :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}})
+                    }})
