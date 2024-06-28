@@ -18,7 +18,7 @@
     (is (= (sut/+forall [x [1 2 3]] (if (> x 0) [sut/+true
                                         '({:reason "works"})]
                                       [sut/+false '({:reason "fails"})]))
-           [true '({:tag x})]))))
+           [true '({:var x})]))))
 
 (deftest t+or-2
   (testing "or 2"
