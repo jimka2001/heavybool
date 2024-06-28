@@ -173,62 +173,52 @@
   (+not (+forall- tag (fn [x] (+not (f x))) coll)))
 
 
+(defn assert-heavy-bool [hb]
+  (assert (heavy-bool? hb) (format "expecting heavy-bool, got %s" hb))
+  true)
 
-;; TODO also handle :let and :when
-(defmacro +exists
-  "Existential quantifier syntax.  body is expected to evaluate
-  to a heavy-bool"
-  [[var coll & others :as var-coll] & body]
-
+(defn expand-quantifier [var coll others var-coll body
+                         macro-name f-name ident]
   (cond (empty? var-coll)
         `(do ~@body)
 
         (= var :let)
         `(let ~coll
-           (+exists [~@others]
+           (~macro-name [~@others]
                ~@body))
 
         (= var :when)
         `(if ~coll
-           (+exists [~@others]
+           (~macro-name [~@others]
                ~@body)
-           +false)
-
-        (empty? others)
-        `(+exists- '~var (fn [~var] ~@body) ~coll)
-
-        :else
-        `(+exists [~var ~coll]
-             (+exists [~@others]
-                 ~@body))))
-
-
-;; TODO also handle :let and :when
-(defmacro +forall 
-  "Universal quantifier syntax.  body is expected to evaluate
-  to a heavy-bool"
-  [[var coll & others :as var-coll] & body]
-  (cond (empty? var-coll)
-        `(do ~@body)
-
-        (= var :let)
-        `(let ~coll
-           (+forall [~@others]
-               ~@body))
-
-        (= var :when)
-        `(if ~coll
-           (+forall [~@others]
-               ~@body)
-           +true)
+           ~ident)
         
         (empty? others)
-        `(+forall- '~var (fn [~var] ~@body) ~coll)
+        `(~f-name '~var
+          (fn [~var] {:post [(assert-heavy-bool ~'%)]}
+                     ~@body)
+          ~coll)
 
         :else
-        `(+forall [~var ~coll]
-             (+forall [~@others]
+        `(~macro-name [~var ~coll]
+             (~macro-name [~@others]
                  ~@body))))
+
+(defmacro +exists
+  "Existential quantifier syntax.  body is expected to evaluate
+  to a heavy-bool.  The syntax is similar to `for` and `doseq`
+  with :let and :when modifiers being supported but not :while."
+  [[v coll & others :as var-coll] & body]
+  (expand-quantifier v coll others var-coll body
+                     `+exists `+exists- `+false))
+
+(defmacro +forall 
+  "Universal quantifier syntax.  body is expected to evaluate
+  to a heavy-bool.    The syntax is similar to `for` and `doseq`
+  with :let and :when modifiers being supported but not :while."
+  [[v coll & others :as var-coll] & body]
+  (expand-quantifier v coll others var-coll body
+                     `+forall `+forall- `+true))
 
 (defn +assert [[bool reason :as hb]]
   {:pre [(heavy-bool? hb)]}

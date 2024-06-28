@@ -20,6 +20,61 @@
                                       [sut/+false '({:reason "fails"})]))
            [true '({:var x})]))))
 
+(deftest t-forall-syntax
+  (testing "forall syntax"
+    (is (sut/+bool (sut/+forall [a (range 10)
+                                 b (range 10)
+                                 :when (> a 5)
+                                 :when (> b a)]
+                     (sut/+heavy-bool (> b 5)))))
+    (is (sut/+bool (sut/+forall [a (range 10)
+                                 b (range 10)
+                                 :let [c (+ a b)]]
+                     (sut/+heavy-bool (>= c a)))))
+    (is (sut/+bool (sut/+forall [a (range 10)
+                                 :when (> a 2)
+                                 b (range 10)
+                                 :let [c (+ a b)]]
+                     (sut/+heavy-bool (>= c a)))))
+    ))
+
+(deftest t-exists-syntax
+  (testing "exists syntax"
+    (is (sut/+bool (sut/+exists [a (range 10)
+                                 b (range 10)
+                                 :when (> a 5)
+                                 :when (> b a)]
+                     (sut/+heavy-bool (> b 5)))))
+    (is (sut/+bool (sut/+exists [a (range 10)
+                                 b (range 10)
+                                 :let [c (+ a b)]]
+                     (sut/+heavy-bool (>= c a)))))
+    (is (sut/+bool (sut/+exists [a (range 10)
+                                 :when (> a 2)
+                                 b (range 10)
+                                 :let [c (+ a b)]]
+                     (sut/+heavy-bool (>= c a)))))
+))
+    
+
+    
+
+
+(sut/+forall [a (range 10)
+              b (range 10)
+              :when (> a 5)
+              :when (> b a)]
+  (sut/+heavy-bool (> b 5)))
+
+
+
+(sut/+forall [a (range 10)
+                         b (range 10)
+                         :when (> a 5)
+                         :when (> b a)]
+             (sut/+heavy-bool (> b 5)))
+
+
 (deftest t+or-2
   (testing "or 2"
     (let [m1 '({:reason 1})
