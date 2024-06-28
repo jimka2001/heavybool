@@ -172,25 +172,63 @@
    :post [(heavy-bool? %)]}
   (+not (+forall- tag (fn [x] (+not (f x))) coll)))
 
+
+
+;; TODO also handle :let and :when
 (defmacro +exists
   "Existential quantifier syntax.  body is expected to evaluate
   to a heavy-bool"
-  [[var coll & others] & body]
-  (if (empty? others)
-    `(+exists- '~var (fn [~var] ~@body) ~coll)
-    `(+exists [~var ~coll]
-         (+exists [~@others]
-             ~@body))))
+  [[var coll & others :as var-coll] & body]
 
+  (cond (empty? var-coll)
+        `(do ~@body)
+
+        (= var :let)
+        `(let ~coll
+           (+exists [~@others]
+               ~@body))
+
+        (= var :when)
+        `(if ~coll
+           (+exists [~@others]
+               ~@body)
+           +false)
+
+        (empty? others)
+        `(+exists- '~var (fn [~var] ~@body) ~coll)
+
+        :else
+        `(+exists [~var ~coll]
+             (+exists [~@others]
+                 ~@body))))
+
+
+;; TODO also handle :let and :when
 (defmacro +forall 
   "Universal quantifier syntax.  body is expected to evaluate
   to a heavy-bool"
-  [[var coll & others] & body]
-  (if (empty? others)
-    `(+forall- '~var (fn [~var] ~@body) ~coll)
-    `(+forall [~var ~coll]
-         (+forall [~@others]
-             ~@body))))
+  [[var coll & others :as var-coll] & body]
+  (cond (empty? var-coll)
+        `(do ~@body)
+
+        (= var :let)
+        `(let ~coll
+           (+forall [~@others]
+               ~@body))
+
+        (= var :when)
+        `(if ~coll
+           (+forall [~@others]
+               ~@body)
+           +true)
+        
+        (empty? others)
+        `(+forall- '~var (fn [~var] ~@body) ~coll)
+
+        :else
+        `(+forall [~var ~coll]
+             (+forall [~@others]
+                 ~@body))))
 
 (defn +assert [[bool reason :as hb]]
   {:pre [(heavy-bool? hb)]}
