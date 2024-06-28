@@ -6,7 +6,7 @@
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+tag (+forall x gen
+  (+tag (+forall [x gen]
                (+annotate-false (+heavy-bool (rel x x))
                                 :witness x))
              :reflexive))
@@ -16,8 +16,8 @@
          (fn? rel)]
    :post [(heavy-bool? %)]}
   (+tag 
-   (+forall x gen
-            (+forall y gen
+   (+forall [x gen]
+            (+forall [y gen]
                      (+annotate-false (+implies [(rel x y) ()]
                                                 [(rel y x) ()])
                                       :x x
@@ -31,10 +31,10 @@
          (fn? rel)]
    :post [(heavy-bool? %)]}
   (+tag
-   (+forall x gen
-     (+forall y gen
+   (+forall [x gen]
+     (+forall [y gen]
        (+implies (+heavy-bool (rel x y))
-                 (+forall z gen
+                 (+forall [z gen]
                    (+implies (+heavy-bool (rel y z))
                              (+heavy-bool (rel x z)))))))
    :transitive))
@@ -53,8 +53,8 @@
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+tag (+forall x gen
-               (+forall y gen
+  (+tag (+forall [x gen]
+               (+forall [y gen]
                  (+annotate-false (+implies [(rel x y) ()]
                                         (+not [(rel y x) ()]))
                                   :x x
@@ -65,7 +65,7 @@
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
-  (+tag (+not (+exists x gen
+  (+tag (+not (+exists [x gen]
                      [(rel x x) ()]))
              :irreflexive))
 ;; 

@@ -8,8 +8,8 @@
          (fn? member)]
    :post [(heavy-bool? %)]}
   (+tag
-   (+forall a coll
-     (+forall b coll
+   (+forall [a coll]
+     (+forall [b coll]
        (member (* a b))))
    :closed))
                                
@@ -27,11 +27,11 @@
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
-   (+forall a coll
-     (+forall b coll
-       (+forall c coll
-         (equal (* a (* b c))
-                (* (* a b) c)))))
+   (+forall [a coll
+             b coll
+             c coll]
+            (equal (* a (* b c))
+                   (* (* a b) c)))
    :associative))
 
 (defn is-commutative [coll * equal]
@@ -40,10 +40,10 @@
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
-   (+forall a coll
-     (+forall b coll
-       (equal (* a b)
-              (* b a))))
+   (+forall [a coll
+             b coll]
+            (equal (* a b)
+                   (* b a)))
    :commutative))
 
 (defn is-identity [coll * ident equal]
@@ -52,7 +52,7 @@
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
-   (+forall a coll
+   (+forall [a coll]
      (+annotate-false (equal (* ident a)
                          (* a ident))
                       :ident ident))
@@ -63,7 +63,7 @@
          (fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+exists e coll 
+  (+exists [e coll ]
     (is-identity coll * e equal)))
 
 (defn is-semigroup [coll * member equal]
@@ -96,7 +96,7 @@
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
-   (+forall a coll
+   (+forall [a coll]
             (let [[_ reasons :as inv-a] (invert a)
                   b (:witness (first-st r reasons (:witness r)))]
               (+annotate (+tag
@@ -132,15 +132,15 @@
   (+and (is-group coll + zero +inv member equal)
         (is-commutative coll + equal)
         (is-monoid coll * one member equal)
-        (+forall a coll
-          (+forall b coll
-            (+forall c coll
+        (+forall [a coll
+                  b coll
+                  c coll]
               (+and (+tag (equal (* a (+ b c))
                                       (+ (* a b) (* a c)))
                                :left-distributive)
                     (+tag (equal (* (+ b c) a)
                                       (+ (* b a) (* c a)))
-                               :right-distributive)))))))
+                               :right-distributive)))))
 
 (defn is-field [coll + *
                 zero one
@@ -159,7 +159,7 @@
                          :zero zero
                          :one one)
         (is-commutative coll * equal)
-        (+forall x coll
+        (+forall [x coll]
           (+or (equal x zero)
                (let [[_ reason :as maybe-inv] (*inv x)]
                  (+tag

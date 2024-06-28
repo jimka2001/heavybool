@@ -29,7 +29,7 @@
                                                   :p p)))
             (invert [a]
               {:post [(heavy-bool? %)]}
-              (+annotate-false (+exists inv-a elements
+              (+annotate-false (+exists [inv-a elements]
                                     (+and (equiv ident (mult a inv-a))
                                           (equiv ident (mult inv-a a))))
                                :reason "cannot compute inverse of"

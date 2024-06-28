@@ -175,13 +175,22 @@
 (defmacro +exists
   "Existential quantifier syntax.  body is expected to evaluate
   to a heavy-bool"
-  [var coll & body]
-  `(+exists- '~var (fn [~var] ~@body) ~coll))
+  [[var coll & others] & body]
+  (if (empty? others)
+    `(+exists- '~var (fn [~var] ~@body) ~coll)
+    `(+exists [~var ~coll]
+         (+exists [~@others]
+             ~@body))))
 
-(defmacro +forall [var coll & body]
+(defmacro +forall 
   "Universal quantifier syntax.  body is expected to evaluate
   to a heavy-bool"
-  `(+forall- '~var (fn [~var] ~@body) ~coll))
+  [[var coll & others] & body]
+  (if (empty? others)
+    `(+forall- '~var (fn [~var] ~@body) ~coll)
+    `(+forall [~var ~coll]
+         (+forall [~@others]
+             ~@body))))
 
 (defn +assert [[bool reason :as hb]]
   {:pre [(heavy-bool? hb)]}

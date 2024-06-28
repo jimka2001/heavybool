@@ -4,18 +4,18 @@
 
 (deftest t+and
   (testing "and"
-    (is (sut/+and (sut/+forall x (range 1 10 3) [(odd? x) '({:forall true})])
-                  (sut/+exists x (range 1 10 3) [(odd? x) '({:exists true})])))))
+    (is (sut/+and (sut/+forall [x (range 1 10 3)] [(odd? x) '({:forall true})])
+                  (sut/+exists [x (range 1 10 3)] [(odd? x) '({:exists true})])))))
 
 (deftest t+or-1
   (testing "or 1"
     (is
-     (sut/+or (sut/+forall x (range 1 10 3) [(odd? x) '({:forall true})])
-              (sut/+exists x (range 1 10 3) [(odd? x) '({:exists true})])))))
+     (sut/+or (sut/+forall [x (range 1 10 3)] [(odd? x) '({:forall true})])
+              (sut/+exists [x (range 1 10 3)] [(odd? x) '({:exists true})])))))
 
 (deftest t-forall
   (testing "forall"
-    (is (= (sut/+forall x [1 2 3] (if (> x 0) [sut/+true
+    (is (= (sut/+forall [x [1 2 3]] (if (> x 0) [sut/+true
                                         '({:reason "works"})]
                                       [sut/+false '({:reason "fails"})]))
            [true '({:tag x})]))))
