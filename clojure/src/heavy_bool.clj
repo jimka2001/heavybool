@@ -131,7 +131,7 @@
   {:pre [(heavy-bool? heavy-bool)
          (keyword? key)]
    :post [(heavy-bool? %)]}
-  (+annotate heavy-bool :key (+bool heavy-bool)))
+  (+annotate heavy-bool key (+bool heavy-bool)))
 
 (defn +forall-
   "Functional version of +forall.
