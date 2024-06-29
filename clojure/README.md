@@ -47,7 +47,7 @@ of success values of the expression continues for some time after the first
 Here is a simpler example which shows that the `(doseq ... :while ....)` loop does
 not abort on the first failure.
 
-<img src="img/test-1.png" width="40" alt="Test Case">
+<img src="img/test-1.png" width="400" alt="Test Case">
 
 <img src="img/failure-1.png" width="400" alt="Failures">
 
