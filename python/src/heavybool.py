@@ -3,8 +3,6 @@ from typing import Callable, Any, TypeVar, Iterable, Optional, Tuple, Generator
 
 class HeavyBool:
     def __init__(self, parity, because=[]):
-        if isinstance(because, dict):
-            because = [because]
         if parity:
             self.__class__ = HeavyTrue
         else:
@@ -26,10 +24,13 @@ class HeavyBool:
         return other.because == self.because
 
     def Not(self) -> 'HeavyBool':
-        raise NotImplementedError
+        raise NotImplementedError  # implemented in subclass
 
     def __add__(self, other) -> 'HeavyBool':
-        raise NotImplementedError
+        raise NotImplementedError  # implemented in subclass
+
+    def __bool__(self) -> 'HeavyBool':
+        raise NotImplementedError  # implemented in subclass
 
     def annotate(self, because: dict):
         assert isinstance(because, dict)
