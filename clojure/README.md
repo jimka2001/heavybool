@@ -1,6 +1,9 @@
 # Clojure implementation of [HeavyBool](../README.md)
 
 
+## Documentation
+[API](API.md)
+
 ## Motivation
 
 Here is an example.  Consider the following test case which uses the `clojure.test` API.
