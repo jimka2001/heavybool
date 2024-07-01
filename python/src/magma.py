@@ -1,6 +1,6 @@
 from typing import Iterator, Any, Callable, Optional
 
-from heavybool import HeavyBool, HeavyTrue, HeavyFalse, allM, anyM
+from src.heavybool import HeavyBool, HeavyTrue, HeavyFalse, allM
 
 
 class Magma:
@@ -33,9 +33,9 @@ class Magma:
 
     def isAssociative(self) -> HeavyBool:
         return allM(self.equiv(self.op(self.op(a, b), c),
-                               self.op(a, self.op(b, c))).annotate({"a", a,
-                                                                    "b", b,
-                                                                    "c", c})
+                               self.op(a, self.op(b, c))).annotate({"a": a,
+                                                                    "b": b,
+                                                                    "c": c})
                     for a in self.gen()
                     for b in self.gen()
                     for c in self.gen()).flag("associative")
@@ -49,9 +49,9 @@ class Magma:
 
     def isIdentity(self, z) -> HeavyBool:
         return allM(self.equiv(self.op(z, a), a).annotate({"za": self.op(z, a),
-                                                          "a": a}) and
-                    self.equiv(self.op(a, z)).annotate({"az": self.op(a, z),
-                                                       "a": a})
+                                                           "a": a}) and
+                    self.equiv(self.op(a, z), a).annotate({"az": self.op(a, z),
+                                                           "a": a})
                     for a in self.gen()).annotateFalse({"z": z}).flag("identity")
 
     def findIdentity(self):

@@ -1,5 +1,6 @@
 from typing import Callable, Any, TypeVar, Iterable, Optional, Tuple
-
+from src.magma import Magma
+from src.heavybool import HeavyBool, HeavyTrue, HeavyFalse
 
 class ModP (Magma):
     def __init__(self, p: int):
@@ -8,7 +9,7 @@ class ModP (Magma):
     def __repr__(self):
         return f"ModP({self}.p"
 
-    def gen(self) -> Iterator[int]:
+    def gen(self) -> Iterable[int]:
         return range(self.p)
 
     def equiv(self, a: int, b: int) -> HeavyBool:
@@ -38,7 +39,7 @@ class MultiplicationModP(ModP):
     def __repr__(self):
         return f"MultiplicationModP({self.p})"
 
-    def gen(self) -> Iterator[int]:
+    def gen(self) -> Iterable[int]:
         for i in super().gen():
             if i != 0:
                 yield i

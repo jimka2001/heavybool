@@ -2,8 +2,14 @@ from typing import Callable, Any, TypeVar, Iterable, Optional, Tuple, Generator
 
 
 class HeavyBool:
-    def __init__(self, because=None):
-        if because is None:
+    def __init__(self, parity, because=[]):
+        if isinstance(because, dict):
+            because = [because]
+        if parity:
+            self.__class__ = HeavyTrue
+        else:
+            self.__class__ = HeavyFalse
+        if not because:
             self.because = []
         elif isinstance(because, list):
             for m in because:
@@ -11,6 +17,10 @@ class HeavyBool:
             self.because = because
         elif isinstance(because, dict):
             self.because = [because]
+        elif isinstance(because, str):
+            self.because = [{'reason': because}]
+        else:
+            raise RuntimeError(f"invalid type of {because=} type={type(because)}")
 
     def __eq__(self, other):
         return other.because == self.because
@@ -36,6 +46,9 @@ class HeavyBool:
 
 
 class HeavyTrue(HeavyBool):
+    def __init__(self, because=[]):
+        super().__init__(True, because)
+
     def __eq__(self, other):
         return isinstance(other, HeavyTrue) and super().__eq__(other)
 
@@ -52,7 +65,6 @@ class HeavyTrue(HeavyBool):
         assert isinstance(because, dict)
         return HeavyTrue(self.because + [because])
 
-
     def annotateTrue(self, because: dict):
         if self:
             return self.annotate(because)
@@ -61,6 +73,9 @@ class HeavyTrue(HeavyBool):
 
 
 class HeavyFalse(HeavyBool):
+    def __init__(self, because=[]):
+        super().__init__(False, because)
+
     def __eq__(self, other):
         return isinstance(other, HeavyTrue) and super().__eq__(other)
 
@@ -83,15 +98,6 @@ class HeavyFalse(HeavyBool):
         else:
             return self.annotate(because)
 
-
-def makeHeavyBool(parity, because=None):
-    if parity:
-        hb = HeavyTrue()
-    else:
-        hb = HeavyFalse()
-    if because is not None:
-        hb.annotate(because)
-    return hb
 
 def existsM(items, p: Callable[[Any], HeavyBool]) -> HeavyBool:
     for i in items:
@@ -118,4 +124,3 @@ def allM(gen: Generator[HeavyBool, None, None]) -> HeavyBool:
         if not hb:
             return hb
     return HeavyTrue()
-
