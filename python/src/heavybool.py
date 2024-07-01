@@ -16,13 +16,14 @@ class HeavyBool:
         return other.because == self.because
 
     def Not(self) -> 'HeavyBool':
-        raise NotImplemented
+        raise NotImplementedError
 
     def __add__(self, other) -> 'HeavyBool':
-        raise NotImplemented
+        raise NotImplementedError
 
-    def annotate(self, because: dict) -> 'HeavyBool':
-        raise NotImplemented
+    def annotate(self, because: dict):
+        assert isinstance(because, dict)
+        return self + because
 
     def annotateTrue(self, because: dict) -> 'HeavyBool':
         return self
@@ -51,9 +52,6 @@ class HeavyTrue(HeavyBool):
         assert isinstance(because, dict)
         return HeavyTrue(self.because + [because])
 
-    def annotate(self, because: dict):
-        assert isinstance(because, dict)
-        return self + because
 
     def annotateTrue(self, because: dict):
         if self:

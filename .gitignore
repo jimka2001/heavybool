@@ -13,3 +13,4 @@ python/.DS_Store
 scala/.DS_Store
 .DS_Store
 clojure/pom.xml
+python/tests/__pycache__
