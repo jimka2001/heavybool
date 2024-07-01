@@ -12,7 +12,7 @@
     -  [`+conj`](#heavy-bool/+conj) - Conjoin an additional item to the reason list.
     -  [`+exists`](#heavy-bool/+exists) - Existential quantifier syntax.
     -  [`+exists-`](#heavy-bool/+exists-) - Function version of <code>+exists</code>.
-    -  [`+false`](#heavy-bool/+false)
+    -  [`+false`](#heavy-bool/+false) - Standard false heavy-bool value.
     -  [`+forall`](#heavy-bool/+forall) - Universal quantifier syntax.
     -  [`+forall-`](#heavy-bool/+forall-) - Functional version of <code>+forall</code>.
     -  [`+heavy-bool`](#heavy-bool/+heavy-bool) - convert bool to heavy-bool.
@@ -22,7 +22,7 @@
     -  [`+not`](#heavy-bool/+not) - logically negate the given heavy-bool.
     -  [`+or`](#heavy-bool/+or) - Logical OR of heavy-bools which evaluates to a heavy-bool.
     -  [`+tag`](#heavy-bool/+tag) - Conjoin the given key paired with the boolean value of the given heavy-bool.
-    -  [`+true`](#heavy-bool/+true)
+    -  [`+true`](#heavy-bool/+true) - Standard true heavy-bool value.
     -  [`assert-heavy-bool`](#heavy-bool/assert-heavy-bool) - Assert that a given object is a heavy-bool.
     -  [`expand-quantifier`](#heavy-bool/expand-quantifier) - Helper function used in the macro expansion of <code>+exists</code> and <code>+forall</code>.
     -  [`heavy-bool?`](#heavy-bool/heavy-bool?) - Predicate returning true if the given object is a <code>heavy-bool</code>.
@@ -210,6 +210,8 @@ Function version of [`+exists`](#heavy-bool/+exists).
 
 
 
+
+Standard false heavy-bool value.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L10-L10">Source</a></sub></p>
 
 ## <a name="heavy-bool/+forall">`+forall`</a><a name="heavy-bool/+forall"></a>
@@ -324,6 +326,8 @@ Conjoin the given key paired with the boolean value of the given heavy-bool
 
 
 
+
+Standard true heavy-bool value.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L9-L9">Source</a></sub></p>
 
 ## <a name="heavy-bool/assert-heavy-bool">`assert-heavy-bool`</a><a name="heavy-bool/assert-heavy-bool"></a>
