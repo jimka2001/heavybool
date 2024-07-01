@@ -86,6 +86,15 @@ class HeavyFalse(HeavyBool):
             return self.annotate(because)
 
 
+def makeHeavyBool(parity, because=None):
+    if parity:
+        hb = HeavyTrue()
+    else:
+        hb = HeavyFalse()
+    if because is not None:
+        hb.annotate(because)
+    return hb
+
 def existsM(items, p: Callable[[Any], HeavyBool]) -> HeavyBool:
     for i in items:
         r = p(i)
@@ -112,10 +121,3 @@ def allM(gen: Generator[HeavyBool, None, None]) -> HeavyBool:
             return hb
     return HeavyTrue()
 
-
-print(HeavyTrue().flag("x") or HeavyFalse().flag("y"))
-print(HeavyFalse().flag("x") or HeavyTrue().flag("y"))
-print(HeavyTrue().flag("x") and HeavyFalse().flag("y"))
-print(HeavyFalse().flag("x") and HeavyTrue().flag("y"))
-
-print(anyM(i for i in [HeavyTrue().flag("x"), HeavyFalse().flag("y")]))
