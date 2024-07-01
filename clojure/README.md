@@ -18,10 +18,12 @@ Here is an example.  Consider the following test case which uses the `clojure.te
                 p1 p2 p3))))
 ```
 
-The test tries to find an example (counter example) where the function `poly-plus` fails
-to be associative.  If such is found, the call to `is` registers the counter example,
+The test tries to find an example (counter example) where the function `sut/+` fails
+to be associative.  If such is found, the side-effecting call to `is` registers the counter example,
 but the `doseq` loop continues.  Thus, if N is the length of `polynomials`, then worst case
 the loop will report N-cubed many violations.
+
+## `:while` First Vain Attempted Fix
 
 The first attempt to fix this problem is to evoke the `:while` modifier.
 
@@ -40,9 +42,11 @@ The first attempt to fix this problem is to evoke the `:while` modifier.
 ```
 
 This attempt works somewhat, but `:while` does not exactly stop the iteration.
-Instead, perhaps because of the semi-laziness of clojure, the computation
+Instead, the `:while` modifier causes the inner most loop `p3` to exit,
+evoking the next iteration of `p2`.  The computation
 of success values of the expression continues for some time after the first
-`false` value of `(is ...)`.
+`false` value of `(is ...)`.   The end effect is that we'll have N-squared rather than N-cubed
+many failures.
 
 Here is a simpler example which shows that the `(doseq ... :while ....)` loop does
 not abort on the first failure.
@@ -51,6 +55,8 @@ not abort on the first failure.
 
 <img src="img/failure-1.png" width="400" alt="Failures">
 
+
+## `every?` Second Vain Attempted Fix
 
 If we wish the test to simply fail on the first violation, we might be
 tempted to rewrite the code as follows.
@@ -75,10 +81,13 @@ tempted to rewrite the code as follows.
       "WHAT TEXT TO PUT HERE?"))))
 ```
 
-By pulling the `is` outside the loop, the test will fails early, as
+By pulling the `is` outside the loop, the test will fail early, as
 soon as it discovers one failure.  However, there is no way to
 construct the second argument of `is` which should indicate the values
 of `p1`, `p2`, and `p3` which constitute the counterexample.
+
+
+## `heavy-bool` As Fix
 
 Using the `heavy-bool` library, we can write this test as follows:
 
@@ -99,7 +108,7 @@ Using the `heavy-bool` library, we can write this test as follows:
 
 If this test fails, we'll see a message such as the following.  Cryptic, but all the information is there.
 
-The `acutal:` tag of the error message indicates that when `p1 = {0 1}` and `p2 = {}` and `p3 = {0 1}` the associativity fails `:associative false`.
+The `:bar` and `:witness` tags of the error message indicates that when `p1 = {0 1}` and `p2 = {}` and `p3 = {0 1}` the associativity fails `:associative false`.
 
 ```
 Fail in t-plus-associative-b
