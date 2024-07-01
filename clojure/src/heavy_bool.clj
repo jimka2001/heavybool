@@ -49,7 +49,7 @@
      ~alternative))
 
 (defmacro +and
-  "Logical OR of heavy-bools which evaluates to a heavy-bool.
+  "Logical AND of heavy-bools which evaluates to a heavy-bool.
   Expands to code which evaluates to the left-most heavy-bool value
   in the argument list, otherwise evaluates to the right-most
   value.  If the argument list is empty, evaluates explicitly to
