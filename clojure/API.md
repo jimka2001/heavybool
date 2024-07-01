@@ -3,7 +3,7 @@
     -  [`gaussian-int-mod-p`](#gaussian-int/gaussian-int-mod-p)
     -  [`gaussian?`](#gaussian-int/gaussian?)
 -  [`heavy-bool`](#heavy-bool)  - A heavy-bool is a pair [bool reason], where bool is a truth value usually true or false, but may be any clojure truthy or falsey value.
-    -  [`+and`](#heavy-bool/+and) - Logical OR of heavy-bools which evaluates to a heavy-bool.
+    -  [`+and`](#heavy-bool/+and) - Logical AND of heavy-bools which evaluates to a heavy-bool.
     -  [`+annotate`](#heavy-bool/+annotate) - Eg.
     -  [`+annotate-false`](#heavy-bool/+annotate-false) - Eg.
     -  [`+annotate-true`](#heavy-bool/+annotate-true) - Eg.
@@ -105,7 +105,7 @@ A heavy-bool is a pair [bool reason], where bool is a truth value
 ```
 Function.
 
-Logical OR of heavy-bools which evaluates to a heavy-bool.
+Logical AND of heavy-bools which evaluates to a heavy-bool.
   Expands to code which evaluates to the left-most heavy-bool value
   in the argument list, otherwise evaluates to the right-most
   value.  If the argument list is empty, evaluates explicitly to
