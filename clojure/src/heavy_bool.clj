@@ -6,8 +6,8 @@
   yes-because or no-because")
 
 
-(def +true [true ()])
-(def +false [false ()])
+(def +true "Standard true heavy-bool value." [true ()])
+(def +false "Standard false heavy-bool value." [false ()])
 
 (defn heavy-bool? 
   "Predicate returning true if the given object is a `heavy-bool`" 
