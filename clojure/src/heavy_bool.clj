@@ -1,15 +1,17 @@
 (ns heavy-bool
   "A heavy-bool is a pair [bool reason], where bool is a truth value
   usually true or false, but may be any clojure truthy or falsey value.
-  reason is a list of maps with keys such as :witness, :bool, and
-  :predicate etc.  A heavy-bool answers a predicate question with either
+  reason is a list of maps with keys such as `:witness`, `:bool`, and
+  `:predicate` etc.  A heavy-bool answers a predicate question with either
   yes-because or no-because")
 
 
 (def +true [true ()])
 (def +false [false ()])
 
-(defn heavy-bool? [heavy-bool]
+(defn heavy-bool? 
+  "Predicate returning true if the given object is a `heavy-bool`" 
+  [heavy-bool]
   (and (vector? heavy-bool)
        (not-empty heavy-bool)
        (= 2 (count heavy-bool))
@@ -47,7 +49,8 @@
      ~alternative))
 
 (defmacro +and
-  "Exapands to code which evaluates to the left-most heavy-bool value
+  "Logical OR of heavy-bools which evaluates to a heavy-bool.
+  Expands to code which evaluates to the left-most heavy-bool value
   in the argument list, otherwise evaluates to the right-most
   value.  If the argument list is empty, evaluates explicitly to
   +true"
@@ -63,7 +66,8 @@
               ~v)))))
 
 (defmacro +or
-  "Exapands to code which evaluates to the left-most heavy-bool value
+  "Logical OR of heavy-bools which evaluates to a heavy-bool.
+  Expands to code which evaluates to the left-most heavy-bool value
   in the argument list, otherwise evaluates to the left-most
   value.  If the argument list is empty, evaluates explicitly to
   +false"
@@ -79,15 +83,15 @@
               (+or ~@tail))))))
 
 (defmacro +implies
-  "Determine whether a logically implies b.
-  b is not evaluated unless a is heavy-true"
+  "Determine whether heavy-bool `a` logically implies heavy-bool `b`.
+  `b` is not evaluated unless `a` is heavy-true"
   [a b]
   `(+or (+not ~a)
        ~b))
 
 (defmacro +implied-by
-  "Determine whether a logically implies b.
-  a is not evaluated unless b is heavy-false"
+  "Determine whether heavy-bool `a` logically implies heavy-bool `b`.
+  `a` is not evaluated unless `b` is heavy-false"
   [b a]
   `(+or ~b
         (+not ~a)))
@@ -102,24 +106,24 @@
     [bool (conj reason item)]))
 
 (defn +annotate 
-  "Eg. (+annotate hb :x x :y y)
-  to add {:x x :y y} as annotation on the given heavy-bool"
+  "Eg. `(+annotate hb :x x :y y)`
+  to add `{:x x :y y}` as annotation on the given heavy-bool"
   [heavy-bool & {:as key-vals}]
   {:pre [(heavy-bool? heavy-bool)]
    :post [(heavy-bool? %)]}
   (+conj heavy-bool key-vals))
 
 (defn +annotate-true 
-  "Eg. (+annotate-true hb :x x :y y)
-  to add {:x x :y y} as annotation on the given heavy-bool if and only if it has true semantics."
+  "Eg. `(+annotate-true hb :x x :y y)`
+  to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has true semantics."
   [heavy-bool & {:as key-vals}]
   (+if heavy-bool
        (+conj heavy-bool key-vals)
        heavy-bool))
 
 (defn +annotate-false 
-  "Eg. (+annotate-true hb :x x :y y)
-  to add {:x x :y y} as annotation on the given heavy-bool if and only if it has false semantics."
+  "Eg. `(+annotate-true hb :x x :y y)`
+  to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has false semantics."
   [heavy-bool & {:as key-vals}]
   (+if heavy-bool
        heavy-bool
@@ -134,14 +138,14 @@
   (+annotate heavy-bool key (+bool heavy-bool)))
 
 (defn +forall-
-  "Functional version of +forall.
+  "Functional version of `+forall`.
   Traverses the given collection until 1) either an item is found
   which is heavy-false and return it (with a new reason conjoined),
-  or 2) else +true is returned.
+  or 2) else `+true` is returned.
   If some value in the collection causes the predicate to return
   heavy-false, then a reason will be specified which provides
-  the :witness value (the counter-example) which caused the predicate
-  to fail.  The :predicate is also given in the reason."
+  the `:witness` value (the counter-example) which caused the predicate
+  to fail.  The `:predicate` is also given in the reason."
   [tag f coll]
   {:pre [(fn? f)
          (sequential? coll)]
@@ -158,14 +162,14 @@
    :var tag))
 
 (defn +exists- 
-  "Function version of +exists.
+  "Function version of `+exists`.
   Traverses the given collection until 1) either an item is found
   which is heavy-true and return it (with a new reason conjoined),
-  or 2) else returns explicitly +false.
+  or 2) else returns explicitly `+false`.
   If some value in the collection causes the predicate to return
   heavy-true, then a reason will be specified which provides
-  the :witness value (the example) which caused the predicate
-  to succeed.  The :predicate is also given in the reason."
+  the `:witness` value (the example) which caused the predicate
+  to succeed.  The `:predicate` is also given in the reason."
   [tag f coll]
   {:pre [(fn? f)
          (sequential? coll)]
@@ -173,11 +177,15 @@
   (+not (+forall- tag (fn [x] (+not (f x))) coll)))
 
 
-(defn assert-heavy-bool [hb]
+(defn assert-heavy-bool
+  "Assert that a given object is a heavy-bool"
+  [hb]
   (assert (heavy-bool? hb) (format "expecting heavy-bool, got %s" hb))
   true)
 
-(defn expand-quantifier [var coll others var-coll body
+(defn expand-quantifier
+  "Helper function used in the macro expansion of `+exists` and `+forall`"
+  [var coll others var-coll body
                          macro-name f-name ident]
   (cond (empty? var-coll)
         `(do ~@body)
@@ -205,22 +213,24 @@
                  ~@body))))
 
 (defmacro +exists
-  "Existential quantifier syntax.  body is expected to evaluate
+  "Existential quantifier syntax.  `body` is expected to evaluate
   to a heavy-bool.  The syntax is similar to `for` and `doseq`
-  with :let and :when modifiers being supported but not :while."
+  with `:let` and `:when` modifiers being supported but not `:while`."
   [[v coll & others :as var-coll] & body]
   (expand-quantifier v coll others var-coll body
                      `+exists `+exists- `+false))
 
 (defmacro +forall 
-  "Universal quantifier syntax.  body is expected to evaluate
+  "Universal quantifier syntax.  `body` is expected to evaluate
   to a heavy-bool.    The syntax is similar to `for` and `doseq`
-  with :let and :when modifiers being supported but not :while."
+  with `:let` and `:when` modifiers being supported but not `:while`."
   [[v coll & others :as var-coll] & body]
   (expand-quantifier v coll others var-coll body
                      `+forall `+forall- `+true))
 
-(defn +assert [[bool reason :as hb]]
+(defn +assert 
+  "Assert that the given heavy-bool object is logically true"
+  [[bool reason :as hb]]
   {:pre [(heavy-bool? hb)]}
   (if (not bool)
     (throw (ex-info (format "%s" reason) {:reason reason

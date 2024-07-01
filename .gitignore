@@ -14,3 +14,5 @@ scala/.DS_Store
 .DS_Store
 clojure/pom.xml
 python/tests/__pycache__
+.clj-kondo/.cache
+.lsp/.cache
