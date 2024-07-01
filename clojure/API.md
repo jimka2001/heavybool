@@ -76,6 +76,7 @@
 
 (gaussian-int-mod-p p)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/gaussian_int.clj#L11-L122">Source</a></sub></p>
 
 ## <a name="gaussian-int/gaussian?">`gaussian?`</a><a name="gaussian-int/gaussian?"></a>
@@ -83,6 +84,7 @@
 
 (gaussian? g)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/gaussian_int.clj#L5-L9">Source</a></sub></p>
 
 -----
@@ -103,7 +105,7 @@ A heavy-bool is a pair [bool reason], where bool is a truth value
 
 (+and & rest)
 ```
-Function.
+Macro.
 
 Logical AND of heavy-bools which evaluates to a heavy-bool.
   Expands to code which evaluates to the left-most heavy-bool value
@@ -117,6 +119,7 @@ Logical AND of heavy-bools which evaluates to a heavy-bool.
 
 (+annotate heavy-bool & {:as key-vals})
 ```
+Function.
 
 Eg. `(+annotate hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool
@@ -127,6 +130,7 @@ Eg. `(+annotate hb :x x :y y)`
 
 (+annotate-false heavy-bool & {:as key-vals})
 ```
+Function.
 
 Eg. `(+annotate-true hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has false semantics.
@@ -137,6 +141,7 @@ Eg. `(+annotate-true hb :x x :y y)`
 
 (+annotate-true heavy-bool & {:as key-vals})
 ```
+Function.
 
 Eg. `(+annotate-true hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has true semantics.
@@ -147,6 +152,7 @@ Eg. `(+annotate-true hb :x x :y y)`
 
 (+assert [bool reason :as hb])
 ```
+Function.
 
 Assert that the given heavy-bool object is logically true
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L231-L237">Source</a></sub></p>
@@ -156,6 +162,7 @@ Assert that the given heavy-bool object is logically true
 
 (+bool [bool reason :as hb])
 ```
+Function.
 
 convert heavy-bool to bool
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L36-L39">Source</a></sub></p>
@@ -165,6 +172,7 @@ convert heavy-bool to bool
 
 (+conj hb item)
 ```
+Function.
 
 Conjoin an additional item to the reason list
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L99-L106">Source</a></sub></p>
@@ -174,7 +182,7 @@ Conjoin an additional item to the reason list
 
 (+exists [v coll & others :as var-coll] & body)
 ```
-Function.
+Macro.
 
 Existential quantifier syntax.  `body` is expected to evaluate
   to a heavy-bool.  The syntax is similar to `for` and `doseq`
@@ -186,6 +194,7 @@ Existential quantifier syntax.  `body` is expected to evaluate
 
 (+exists- tag f coll)
 ```
+Function.
 
 Function version of [`+exists`](#heavy-bool/+exists).
   Traverses the given collection until 1) either an item is found
@@ -208,7 +217,7 @@ Function version of [`+exists`](#heavy-bool/+exists).
 
 (+forall [v coll & others :as var-coll] & body)
 ```
-Function.
+Macro.
 
 Universal quantifier syntax.  `body` is expected to evaluate
   to a heavy-bool.    The syntax is similar to `for` and `doseq`
@@ -220,6 +229,7 @@ Universal quantifier syntax.  `body` is expected to evaluate
 
 (+forall- tag f coll)
 ```
+Function.
 
 Functional version of [`+forall`](#heavy-bool/+forall).
   Traverses the given collection until 1) either an item is found
@@ -236,6 +246,7 @@ Functional version of [`+forall`](#heavy-bool/+forall).
 
 (+heavy-bool hb)
 ```
+Function.
 
 convert bool to heavy-bool
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L29-L34">Source</a></sub></p>
@@ -245,7 +256,7 @@ convert bool to heavy-bool
 
 (+if cond consequent alternative)
 ```
-Function.
+Macro.
 
 heavy-bool version of `if`.  The condition must
   evaluate to a heavy-bool.  Either the consequent or
@@ -258,7 +269,7 @@ heavy-bool version of `if`.  The condition must
 
 (+implied-by b a)
 ```
-Function.
+Macro.
 
 Determine whether heavy-bool `a` logically implies heavy-bool `b`.
   `a` is not evaluated unless `b` is heavy-false
@@ -269,7 +280,7 @@ Determine whether heavy-bool `a` logically implies heavy-bool `b`.
 
 (+implies a b)
 ```
-Function.
+Macro.
 
 Determine whether heavy-bool `a` logically implies heavy-bool `b`.
   `b` is not evaluated unless `a` is heavy-true
@@ -280,6 +291,7 @@ Determine whether heavy-bool `a` logically implies heavy-bool `b`.
 
 (+not [bool reason :as hb])
 ```
+Function.
 
 logically negate the given heavy-bool
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L22-L27">Source</a></sub></p>
@@ -289,7 +301,7 @@ logically negate the given heavy-bool
 
 (+or & rest)
 ```
-Function.
+Macro.
 
 Logical OR of heavy-bools which evaluates to a heavy-bool.
   Expands to code which evaluates to the left-most heavy-bool value
@@ -303,6 +315,7 @@ Logical OR of heavy-bools which evaluates to a heavy-bool.
 
 (+tag heavy-bool key)
 ```
+Function.
 
 Conjoin the given key paired with the boolean value of the given heavy-bool
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L132-L138">Source</a></sub></p>
@@ -318,6 +331,7 @@ Conjoin the given key paired with the boolean value of the given heavy-bool
 
 (assert-heavy-bool hb)
 ```
+Function.
 
 Assert that a given object is a heavy-bool
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L180-L184">Source</a></sub></p>
@@ -327,6 +341,7 @@ Assert that a given object is a heavy-bool
 
 (expand-quantifier var coll others var-coll body macro-name f-name ident)
 ```
+Function.
 
 Helper function used in the macro expansion of [`+exists`](#heavy-bool/+exists) and [`+forall`](#heavy-bool/+forall)
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L186-L213">Source</a></sub></p>
@@ -336,6 +351,7 @@ Helper function used in the macro expansion of [`+exists`](#heavy-bool/+exists) 
 
 (heavy-bool? heavy-bool)
 ```
+Function.
 
 Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/heavy_bool.clj#L12-L19">Source</a></sub></p>
@@ -353,6 +369,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (default-equal left right)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L16-L22">Source</a></sub></p>
 
 ## <a name="magma/find-identity">`find-identity`</a><a name="magma/find-identity"></a>
@@ -360,6 +377,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (find-identity coll * equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L61-L67">Source</a></sub></p>
 
 ## <a name="magma/has-inverses">`has-inverses`</a><a name="magma/has-inverses"></a>
@@ -367,6 +385,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (has-inverses coll * ident invert member equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L91-L111">Source</a></sub></p>
 
 ## <a name="magma/is-associative">`is-associative`</a><a name="magma/is-associative"></a>
@@ -374,6 +393,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (is-associative coll * equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L24-L35">Source</a></sub></p>
 
 ## <a name="magma/is-closed">`is-closed`</a><a name="magma/is-closed"></a>
@@ -381,6 +401,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (is-closed coll * member)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L5-L14">Source</a></sub></p>
 
 ## <a name="magma/is-commutative">`is-commutative`</a><a name="magma/is-commutative"></a>
@@ -388,6 +409,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (is-commutative coll * equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L37-L47">Source</a></sub></p>
 
 ## <a name="magma/is-field">`is-field`</a><a name="magma/is-field"></a>
@@ -395,6 +417,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (is-field coll + * zero one +inv *inv member equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L145-L169">Source</a></sub></p>
 
 ## <a name="magma/is-group">`is-group`</a><a name="magma/is-group"></a>
@@ -402,6 +425,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (is-group coll * ident invert member equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L113-L122">Source</a></sub></p>
 
 ## <a name="magma/is-identity">`is-identity`</a><a name="magma/is-identity"></a>
@@ -409,6 +433,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (is-identity coll * ident equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L49-L59">Source</a></sub></p>
 
 ## <a name="magma/is-monoid">`is-monoid`</a><a name="magma/is-monoid"></a>
@@ -416,6 +441,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (is-monoid coll * ident member equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L79-L89">Source</a></sub></p>
 
 ## <a name="magma/is-ring">`is-ring`</a><a name="magma/is-ring"></a>
@@ -423,6 +449,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (is-ring coll + * zero one +inv member equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L124-L143">Source</a></sub></p>
 
 ## <a name="magma/is-semigroup">`is-semigroup`</a><a name="magma/is-semigroup"></a>
@@ -430,6 +457,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (is-semigroup coll * member equal)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/magma.clj#L69-L77">Source</a></sub></p>
 
 -----
@@ -445,6 +473,7 @@ Predicate returning true if the given object is a [`heavy-bool`](#heavy-bool)
 
 (mod-p p)
 ```
+Function.
 
 The non-zero elements of the integers mod p (for prime p)
   is a group under multiplication.
@@ -463,6 +492,7 @@ The non-zero elements of the integers mod p (for prime p)
 
 (is-asymmetric gen rel)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/relations.clj#L52-L62">Source</a></sub></p>
 
 ## <a name="relations/is-equivalence">`is-equivalence`</a><a name="relations/is-equivalence"></a>
@@ -470,6 +500,7 @@ The non-zero elements of the integers mod p (for prime p)
 
 (is-equivalence gen rel)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/relations.clj#L42-L49">Source</a></sub></p>
 
 ## <a name="relations/is-irreflexive">`is-irreflexive`</a><a name="relations/is-irreflexive"></a>
@@ -477,6 +508,7 @@ The non-zero elements of the integers mod p (for prime p)
 
 (is-irreflexive gen rel)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/relations.clj#L64-L70">Source</a></sub></p>
 
 ## <a name="relations/is-reflexive">`is-reflexive`</a><a name="relations/is-reflexive"></a>
@@ -484,6 +516,7 @@ The non-zero elements of the integers mod p (for prime p)
 
 (is-reflexive gen rel)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/relations.clj#L5-L12">Source</a></sub></p>
 
 ## <a name="relations/is-strict-partial-order">`is-strict-partial-order`</a><a name="relations/is-strict-partial-order"></a>
@@ -491,6 +524,7 @@ The non-zero elements of the integers mod p (for prime p)
 
 (is-strict-partial-order gen rel)
 ```
+Function.
 
 A strict partial order is irreflexive, transitive, and asymmetric.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/relations.clj#L72-L81">Source</a></sub></p>
@@ -500,6 +534,7 @@ A strict partial order is irreflexive, transitive, and asymmetric.
 
 (is-symmetric gen rel)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/relations.clj#L14-L25">Source</a></sub></p>
 
 ## <a name="relations/is-transitive">`is-transitive`</a><a name="relations/is-transitive"></a>
@@ -507,6 +542,7 @@ A strict partial order is irreflexive, transitive, and asymmetric.
 
 (is-transitive gen rel)
 ```
+Function.
 
 rel is a binary function which returns a Boolean
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/relations.clj#L27-L40">Source</a></sub></p>
@@ -530,6 +566,7 @@ rel is a binary function which returns a Boolean
 
 (almost-equal tolerance)
 ```
+Function.
 
 Returns a binary function which can be used to test whether two
   given arguments are within a given tolerance of each other.
@@ -540,6 +577,7 @@ Returns a binary function which can be used to test whether two
 
 (almost-equal-seq tolerance)
 ```
+Function.
 
 Returns a binary function which can be used to test whether two
   given sequence arguments are element-wise within a given tolerance of each other.
@@ -550,6 +588,7 @@ Returns a binary function which can be used to test whether two
 
 (call-with-timeout timeout-ms f)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/util.clj#L88-L100">Source</a></sub></p>
 
 ## <a name="util/find-if">`find-if`</a><a name="util/find-if"></a>
@@ -557,6 +596,7 @@ Returns a binary function which can be used to test whether two
 
 (find-if f col)
 ```
+Function.
 
 Find the first element in the sequence which makes the predicate true.
   If such an item is found, a singleton list of the item is returned,
@@ -569,7 +609,7 @@ Find the first element in the sequence which makes the predicate true.
 
 (first-st var col & body)
 ```
-Function.
+Macro.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/util.clj#L83-L84">Source</a></sub></p>
 
 ## <a name="util/member">`member`</a><a name="util/member"></a>
@@ -577,6 +617,7 @@ Function.
 
 (member target items)
 ```
+Function.
 
 Determines whether the given target is an element of the given sequence (or given set).
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/util.clj#L23-L34">Source</a></sub></p>
@@ -586,6 +627,7 @@ Determines whether the given target is an element of the given sequence (or give
 
 (re-chunk n xs)
 ```
+Function.
 
 Given a lazy sequence, change the chunking buffer size to n.
   This code was taken directory from
@@ -597,6 +639,7 @@ Given a lazy sequence, change the chunking buffer size to n.
 
 (tails coll)
 ```
+Function.
 
 Return a lazy list of tails of the given collection.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/util.clj#L5-L10">Source</a></sub></p>
@@ -606,7 +649,7 @@ Return a lazy list of tails of the given collection.
 
 (testing-with-timeout msg & body)
 ```
-Function.
+Macro.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/util.clj#L102-L106">Source</a></sub></p>
 
 ## <a name="util/time-call">`time-call`</a><a name="util/time-call"></a>
@@ -614,6 +657,7 @@ Function.
 
 (time-call thunk)
 ```
+Function.
 
 Evaluates thunk and returns a 2-vector [value elapsed-time]
   where value is the return value of the thunk and elapsed-time
@@ -625,4 +669,5 @@ Evaluates thunk and returns a 2-vector [value elapsed-time]
 
 (type-check f x)
 ```
+Function.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/src/util.clj#L108-L110">Source</a></sub></p>
