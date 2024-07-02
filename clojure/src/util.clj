@@ -33,7 +33,6 @@
                                (reduced true)
                                false)) false items))))
 
-
 (defn almost-equal 
   "Returns a binary function which can be used to test whether two
   given arguments are within a given tolerance of each other."
@@ -54,7 +53,6 @@
     (fn [x-seq y-seq]
       (and (= (count x-seq) (count y-seq))
            (every? true? (map ae x-seq y-seq))))))
-
 
 (defn re-chunk 
   "Given a lazy sequence, change the chunking buffer size to n.
@@ -80,12 +78,25 @@
           col))
 
 
-(defmacro first-st [var col & body]
+(defmacro first-st
+  "Return the first element of a collection which causes the `body`
+  to be true.  `find-if` is used to attempt prevent the expression
+  from evaluating more times than necessary."
+  [var col & body]
   `(first (find-if (fn [~var] ~@body) ~col)))
 
-(def ^:dynamic *time-out* (* 2 60 1000)) ;; 2 seconds
+(def ^:dynamic *time-out*
+  "Dynamic variable controling the default number of milliseconds
+  is used as the time-out used by `testing-with-timeout`."
+  (* 2 60 1000)) ;; 2 seconds
 
-(defn call-with-timeout [timeout-ms f]
+(defn call-with-timeout
+  "Call the given 0-arty function in a separate thread (via `future`)
+  and dereference it with `timeout-ms` as the time-out.
+  This function is intended to be called withint a `clojure.test` test
+  case (defined by `deftest`). If such a test times out, a test failure
+  is registered, by a side-effecing call to `(is ...)`"
+  [timeout-ms f]
   (let [timeout-val ::test-timeout
         fut         (future (f))
         val         (deref fut timeout-ms timeout-val)]
@@ -99,12 +110,18 @@
                                    timeout-ms))))
       val)))
 
-(defmacro testing-with-timeout [msg & body]
+(defmacro testing-with-timeout
+  "Similar to the `clojure.test` macro `testing` but limits
+  a time-out to `*time-out*`."
+  [msg & body]
   `(testing ~msg
      (call-with-timeout *time-out*
                         (fn []
                           ~@body))))
 
-(defn type-check [f x]
+(defn type-check 
+  "Evaluates to the value of `x` but with a pre-condition
+  that (f x) is true."
+  [f x]
   {:pre [(f x)]}
   x)

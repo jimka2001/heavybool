@@ -27,7 +27,7 @@
   [(not bool) reason])
 
 (defn +heavy-bool
-  "Constructor (factor function) for heavy-bool.
+  "Constructor (factor function) for `heavy-bool`.
   convert bool to heavy-bool"
   [hb]
   (if (heavy-bool? hb)
@@ -44,8 +44,8 @@
 
 (defmacro +if
   "heavy-bool version of `if`.  The condition must
-  evaluate to a heavy-bool.  Either the consequent or
-  alternative will be evaluated depending on the heavy-bool
+  evaluate to a `heavy-bool`.  Either the consequent or
+  alternative will be evaluated depending on the `heavy-bool`
   value."
   [cond consequent alternative]
   `(if (+bool ~cond)
@@ -53,11 +53,11 @@
      ~alternative))
 
 (defmacro +and
-  "Logical AND of heavy-bools which evaluates to a heavy-bool.
-  Expands to code which evaluates to the left-most heavy-bool value
+  "Logical AND of heavy-bools which evaluates to a `heavy-bool`.
+  Expands to code which evaluates to the left-most `heavy-bool` value
   in the argument list, otherwise evaluates to the right-most
   value.  If the argument list is empty, evaluates explicitly to
-  +true"
+  `+true`"
   [& rest]
   (case (count rest)
     (0) +true
@@ -70,11 +70,11 @@
               ~v)))))
 
 (defmacro +or
-  "Logical OR of heavy-bools which evaluates to a heavy-bool.
-  Expands to code which evaluates to the left-most heavy-bool value
+  "Logical OR of heavy-bools which evaluates to a `heavy-bool`.
+  Expands to code which evaluates to the left-most `heavy-bool` value
   in the argument list, otherwise evaluates to the left-most
   value.  If the argument list is empty, evaluates explicitly to
-  +false"
+  `+false`"
   [& rest]
   (case (count rest)
     (0) +false
@@ -110,7 +110,8 @@
     [bool (conj reason item)]))
 
 (defn +annotate 
-  "Eg. `(+annotate hb :x x :y y)`
+  "Add key/value pairs as annotation to a heavy-bool.
+  Eg. `(+annotate hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool"
   [heavy-bool & {:as key-vals}]
   {:pre [(heavy-bool? heavy-bool)]
@@ -118,7 +119,8 @@
   (+conj heavy-bool key-vals))
 
 (defn +annotate-true 
-  "Eg. `(+annotate-true hb :x x :y y)`
+  "Add key/value pairs as annotation to a true heavy-bool.
+  Eg. `(+annotate-true hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has true semantics."
   [heavy-bool & {:as key-vals}]
   (+if heavy-bool
@@ -126,7 +128,8 @@
        heavy-bool))
 
 (defn +annotate-false 
-  "Eg. `(+annotate-true hb :x x :y y)`
+  "Add key/value pairs as annotation to a false heavy-bool.
+  Eg. `(+annotate-true hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has false semantics."
   [heavy-bool & {:as key-vals}]
   (+if heavy-bool
@@ -134,7 +137,7 @@
        (+conj heavy-bool key-vals)))
 
 (defn +tag
-  "Conjoin the given key paired with the boolean value of the given heavy-bool"
+  "Conjoin the given key paired with the Boolean value of the given heavy-bool"
   [heavy-bool key]
   {:pre [(heavy-bool? heavy-bool)
          (keyword? key)]
@@ -182,12 +185,12 @@
 
 
 (defn assert-heavy-bool
-  "Assert that a given object is a heavy-bool"
+  "Assert that a given object is a `heavy-bool`."
   [hb]
   (assert (heavy-bool? hb) (format "expecting heavy-bool, got %s" hb))
   true)
 
-(defn expand-quantifier
+(defn- expand-quantifier
   "Helper function used in the macro expansion of `+exists` and `+forall`"
   [var coll others var-coll body
                          macro-name f-name ident]
