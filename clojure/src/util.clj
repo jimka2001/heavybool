@@ -125,3 +125,15 @@
   [f x]
   {:pre [(f x)]}
   x)
+(defn power-set 
+  "Given a set of items, `base-set` return a set containing
+  all subsets of `base-set`."
+  [base-set]
+  {:pre [(set? base-set)]}
+  (reduce (fn [set-of-sets item]
+            (concat set-of-sets
+                    (into #{} (for [s set-of-sets]
+                                (conj s item)))))
+
+          #{#{}}
+          base-set))
