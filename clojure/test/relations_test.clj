@@ -35,7 +35,7 @@
     (is (+bool (sut/is-irreflexive (range 100) hb-not=)))
     
     ;; is coprime to on the integers larger than 1
-    (is (+bool (sut/is-irreflexive (range 100) hb-coprime)))
+    (is (+bool (sut/is-irreflexive (range 2 100) hb-coprime)))
 
     ;; is a proper subset of
     (is (+bool (sut/is-irreflexive (power-set (into #{} (range 10))) hb-proper-subset?)))
@@ -103,5 +103,5 @@
     (is (+bool (sut/is-connected (range 100) hb->=)))
     (is (+bool (+not (sut/is-connected (power-set (into #{} (range 8))) hb-proper-subset?))))
     (is (+bool (+not (sut/is-connected (power-set (into #{} (range 8))) hb-subset?))))
-    (is (+bool (+not (sut/is-connected (range 100) hb-divides))))
+    (is (+bool (+not (sut/is-connected (range 1 100) hb-divides))))
     ))
