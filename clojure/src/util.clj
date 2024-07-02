@@ -158,3 +158,14 @@
 
         :else
         (* b (power b (dec p)))))
+
+(defn gcd
+  "Euclidean algorithm to compute greatest common divisor"
+  [a b]
+  (cond (= b 0)
+        b
+
+        :else
+        (recur b (mod a b))))
+
+        
