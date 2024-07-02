@@ -31,9 +31,8 @@ is-asymmetric,,,,is-asymmetric
 is-antisymmetric,,,,is-antisymmetric
 is-transitive,,,,is-transitive
 is-equivalence,,,,is-equivalence
-is-asymmetric,
 is-strict-partial-order,,,,is-strict-partial-order
-is-partial-order,
+is-partial-order,,,,is-partial-order
 is-connected,
 is-strongly-connected,
 

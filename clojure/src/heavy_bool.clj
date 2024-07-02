@@ -18,7 +18,6 @@
        (list? (second heavy-bool))
        (every? map? (second heavy-bool))))
 
-
 (defn +not 
   "logically negate the given heavy-bool"
   [[bool reason :as hb]]
@@ -41,6 +40,7 @@
    :post [(boolean? %)]
    }
   (boolean bool))
+
 
 (defmacro +if
   "heavy-bool version of `if`.  The condition must

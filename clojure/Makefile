@@ -17,3 +17,6 @@ API-examples.md:
 
 clean:
 	rm -f API.md API-examples.md
+
+test:
+	lein test
