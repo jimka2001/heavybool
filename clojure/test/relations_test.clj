@@ -1,6 +1,6 @@
 (ns relations-test
   (:require [relations :as sut]
-            [util :refer [power-set]]
+            [util :refer [power-set gcd]]
             [heavy-bool :refer [+bool +not +tag +heavy-bool]]
             [clojure.test :as t]
             [clojure.set :refer [subset?]]
@@ -16,6 +16,7 @@
 (def hb-proper-subset? (sut/lift-relation (fn [a b] (and (not= a b)
                                                          (subset? a b)))))
 (def hb-divides (fn [a b] (hb-= (mod a b) 0)))
+(def hb-coprime (fn [a b] (hb-= 1 (gcd a b))))
 
 (deftest t-reflexive
   (testing "reflexive"
@@ -27,6 +28,24 @@
     (is (+bool (sut/is-reflexive (power-set (into #{} (range 10))) hb-subset?)))
     (is (+bool (+not (sut/is-reflexive (power-set (into #{} (range 10))) hb-proper-subset?))))
     (is (+bool (sut/is-reflexive (range 1 100) hb-divides)))))
+
+(deftest t-irreflexive
+  (testing "irreflexive"
+    ;; is not equal to
+    (is (+bool (sut/is-irreflexive (range 100) hb-not=)))
+    
+    ;; is coprime to on the integers larger than 1
+    (is (+bool (sut/is-irreflexive (range 100) hb-coprime)))
+
+    ;; is a proper subset of
+    (is (+bool (sut/is-irreflexive (power-set (into #{} (range 10))) hb-proper-subset?)))
+
+    ;; is greater than
+    (is (+bool (sut/is-irreflexive (range 1 100) hb->)))
+
+    ;; is less than
+    (is (+bool (sut/is-irreflexive (range 1 100) hb-<)))))
+
 
 (deftest t-asymmetric
   (testing "asymmetric"
