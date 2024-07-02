@@ -24,15 +24,15 @@ is-field,,
 addition-mod-p,,AdditionModP()
 multiplication-mod-p,,MultiplicationModP()
 dyn-magma,,DynMagma()
-is-reflexive,,,,is-reflexive
-is-irreflexive,,,,is-irreflexive
-is-symmetric,,,,is-symmetric
-is-asymmetric,,,,is-asymmetric
 is-antisymmetric,,,,is-antisymmetric
-is-transitive,,,,is-transitive
+is-asymmetric,,,,is-asymmetric
+is-connected,,,,is-connected
 is-equivalence,,,,is-equivalence
-is-strict-partial-order,,,,is-strict-partial-order
+is-irreflexive,,,,is-irreflexive
 is-partial-order,,,,is-partial-order
-is-connected,
-is-strongly-connected,
+is-reflexive,,,,is-reflexive
+is-strict-partial-order,,,,is-strict-partial-order
+is-strongly-connected,,,,is-strongly-connected
+is-symmetric,,,,is-symmetric
+is-transitive,,,,is-transitive
 
