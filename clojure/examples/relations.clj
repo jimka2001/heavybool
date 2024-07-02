@@ -53,7 +53,7 @@
   "An equivalence relation is symmetric, reflexive, and transitive.
   `gen` is a collection
   `hb-rel` is a binary function returning a heavy-bool"
-[gen hb-rel]
+  [gen hb-rel]
   {:pre [(sequential? gen)
          (fn? hb-rel)]
    :post [(heavy-bool? %)]}
