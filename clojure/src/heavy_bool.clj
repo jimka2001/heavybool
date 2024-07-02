@@ -27,7 +27,8 @@
   [(not bool) reason])
 
 (defn +heavy-bool
-  "convert bool to heavy-bool"
+  "Constructor (factor function) for heavy-bool.
+  convert bool to heavy-bool"
   [hb]
   (if (heavy-bool? hb)
     hb

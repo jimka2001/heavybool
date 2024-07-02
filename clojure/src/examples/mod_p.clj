@@ -1,4 +1,8 @@
-(ns mod-p
+(ns examples.mod-p
+  "Example usage of `heavy-bool`.
+  This namespace implements an algebraic structure `mod-p`.
+  This structure is useful for testing the `examples.magma/is-group` function.
+  "
   (:require [heavy-bool :refer [+and +forall +exists +false +true +annotate +annotate-true +annotate-false heavy-bool?]]))
 
 

@@ -1,5 +1,8 @@
-(ns relations
-    (:require [heavy-bool :refer [heavy-bool? +heavy-bool +not +if +true +exists +implies +and +forall +annotate-false +tag]]))
+(ns examples.relations
+  "Example usage of `heavy-bool`.
+  This namespace defines several relations such as reflexive, symmetric, and antisymmetric.
+  "
+  (:require [heavy-bool :refer [heavy-bool? +heavy-bool +not +if +true +exists +implies +and +forall +annotate-false +tag]]))
 
 
 (defn is-reflexive [gen rel]
@@ -49,7 +52,9 @@
              :equivalence))
   
 
-(defn is-asymmetric [gen rel]
+(defn is-asymmetric 
+  "Test for asymmetric relation"
+[gen rel]
   {:pre [(sequential? gen)
          (fn? rel)]
    :post [(heavy-bool? %)]}
@@ -60,6 +65,19 @@
                                   :x x
                                   :y y)))
              :assymetric))
+
+(defn is-antisymmetric [gen rel]
+  "Test for antisymmetric relation:
+  ((a R b) and (b R a)) => (a = b)"
+  {:pre [(sequential? gen)
+         (fn? rel)]
+   :post [(heavy-bool? %)]}
+  (+tag (+forall [a gen
+                  b gen]
+                 (+implies (+and (rel a b)
+                                 (rel b a))
+                           (+heavy-bool (= a b))))
+     :antisymmetric))
 
 (defn is-irreflexive [gen rel]
   {:pre [(sequential? gen)

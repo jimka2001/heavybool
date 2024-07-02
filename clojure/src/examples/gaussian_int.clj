@@ -1,4 +1,7 @@
-(ns gaussian-int
+(ns examples.gaussian-int
+  "Example usage of `heavy-bool`.
+  This namespace implements Gaussian Integers [Gaussian integer](https://en.wikipedia.org/wiki/Gaussian_integer)
+  but restricted to integers modulo some prime, p."
   (:require [util :refer [find-if]]
             [heavy-bool :refer [+and +forall +exists +false +true +annotate +conj +tag heavy-bool?]]))
 

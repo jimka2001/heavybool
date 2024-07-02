@@ -1,4 +1,10 @@
-(ns magma
+(ns examples.magma
+  "Example usage of `heavy-bool`.
+  This namespace implements tests for certain finite algebraic structures including:
+  magma, semigroup, monoid, group, ring, and field.
+  In each case we assume that the elements of the algebraic structures form a finite
+  set.  Thus we may test the axioms, such as closure, associativity, and identity,
+  using exhaustive seach."
   (:require [util :refer [type-check first-st]]
             [heavy-bool :refer [+bool +and +or +not +forall +exists +annotate +conj +annotate-false heavy-bool? +tag]]))
 

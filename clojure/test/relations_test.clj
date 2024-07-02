@@ -1,6 +1,6 @@
 (ns relations-test
-  (:require [relations :as sut]
-            [heavy-bool :refer [+bool +not]]
+  (:require [examples.relations :as sut]
+            [heavy-bool :refer [+bool +not +tag +heavy-bool]]
             [clojure.test :as t]
             [clojure.test :refer [deftest is testing]]))
 
@@ -16,3 +16,9 @@
     (is (+bool (+not (sut/is-strict-partial-order (range 1 10) <=))))
     (is (+bool (+not (sut/is-strict-partial-order (range 1 10) =))))
     ))
+
+(deftest t-antisymmetric
+  (testing "antisymmetric"
+    (let [population (range 1 1000)
+          rel (fn [a b] (+heavy-bool (= 0 (mod a b))))]
+      (is (sut/is-antisymmetric population rel)))))
