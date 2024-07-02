@@ -2,7 +2,8 @@
 
 
 ## Documentation
-[API](API.md)
+  - [API](API.md)
+  - [examples](API-examples.md)
 
 ## Motivation
 
