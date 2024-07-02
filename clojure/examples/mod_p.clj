@@ -1,4 +1,4 @@
-(ns examples.mod-p
+(ns mod-p
   "Example usage of `heavy-bool`.
   This namespace implements an algebraic structure `mod-p`.
   This structure is useful for testing the `examples.magma/is-group` function.

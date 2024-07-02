@@ -1,4 +1,4 @@
-(ns examples.relations
+(ns relations
   "Example usage of `heavy-bool`.
   This namespace defines several relations such as reflexive, symmetric, and antisymmetric.
   "
@@ -66,12 +66,14 @@
                                   :y y)))
              :assymetric))
 
-(defn is-antisymmetric [gen rel]
+(defn is-antisymmetric 
   "Test for antisymmetric relation:
   ((a R b) and (b R a)) => (a = b)"
+  [gen rel]
   {:pre [(sequential? gen)
          (fn? rel)]
-   :post [(heavy-bool? %)]}
+   :post [(heavy-bool? %)]
+   }
   (+tag (+forall [a gen
                   b gen]
                  (+implies (+and (rel a b)
@@ -97,4 +99,3 @@
                    (is-transitive gen rel)
                    (is-asymmetric gen rel))
              :strict-partial-order))
-

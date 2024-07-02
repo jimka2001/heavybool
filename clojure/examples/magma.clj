@@ -1,4 +1,4 @@
-(ns examples.magma
+(ns magma
   "Example usage of `heavy-bool`.
   This namespace implements tests for certain finite algebraic structures including:
   magma, semigroup, monoid, group, ring, and field.

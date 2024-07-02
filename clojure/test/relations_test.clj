@@ -1,5 +1,5 @@
 (ns relations-test
-  (:require [examples.relations :as sut]
+  (:require [relations :as sut]
             [heavy-bool :refer [+bool +not +tag +heavy-bool]]
             [clojure.test :as t]
             [clojure.test :refer [deftest is testing]]))

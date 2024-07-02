@@ -1,9 +1,9 @@
 (ns magma-test
   (:require [util :refer [member first-st]]
-            [examples.magma :as sut]
-            [examples.mod-p :refer [mod-p]]
+            [magma :as sut]
+            [mod-p :refer [mod-p]]
             [heavy-bool :refer [+bool +not +and +or +forall +exists +conj +annotate +annotate-false heavy-bool?]]
-            [examples.gaussian-int :refer [gaussian-int-mod-p]]
+            [gaussian-int :refer [gaussian-int-mod-p]]
             [clojure.math :refer [sqrt ceil]]
             [clojure.test :refer [deftest testing is]]))
 

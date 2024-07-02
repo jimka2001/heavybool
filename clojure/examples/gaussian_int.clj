@@ -1,4 +1,4 @@
-(ns examples.gaussian-int
+(ns gaussian-int
   "Example usage of `heavy-bool`.
   This namespace implements Gaussian Integers [Gaussian integer](https://en.wikipedia.org/wiki/Gaussian_integer)
   but restricted to integers modulo some prime, p."

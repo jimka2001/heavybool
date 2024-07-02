@@ -6,6 +6,7 @@
                  ]
   :plugins [[lein-exec "0.3.7"]]
   :target-path "target/%s"
+  :source-paths ["src" "examples"]
   :jvm-opts [ 
              "-Xms1500m", "-Xmx1500m"
              ;; MAC only
