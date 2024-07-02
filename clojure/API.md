@@ -29,7 +29,10 @@
     -  [`call-with-timeout`](#util/call-with-timeout) - Call the given 0-arty function in a separate thread (via <code>future</code>) and dereference it with <code>timeout-ms</code> as the time-out.
     -  [`find-if`](#util/find-if) - Find the first element in the sequence which makes the predicate true.
     -  [`first-st`](#util/first-st) - Return the first element of a collection which causes the <code>body</code> to be true.
+    -  [`gcd`](#util/gcd) - Euclidean algorithm to compute greatest common divisor.
     -  [`member`](#util/member) - Determines whether the given target is an element of the given sequence (or given set).
+    -  [`power`](#util/power) - compute the base <code>b</code> raised to the power <code>p</code>.
+    -  [`power-set`](#util/power-set) - Given a set of items, <code>base-set</code> return a set containing all subsets of <code>base-set</code>.
     -  [`re-chunk`](#util/re-chunk) - Given a lazy sequence, change the chunking buffer size to n.
     -  [`tails`](#util/tails) - Return a lazy list of tails of the given collection.
     -  [`testing-with-timeout`](#util/testing-with-timeout) - Similar to the <code>clojure.test</code> macro <code>testing</code> but limits a time-out to <code>*time-out*</code>.
@@ -117,7 +120,7 @@ Assert that the given heavy-bool object is logically true
 Function.
 
 convert a [`heavy-bool`](#heavy-bool) to explictly `true` or `false`.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L37-L43">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L36-L42">Source</a></sub></p>
 
 ## <a name="heavy-bool/+conj">`+conj`</a><a name="heavy-bool/+conj"></a>
 ``` clojure
@@ -204,7 +207,7 @@ Function.
 
 Constructor (factor function) for [`heavy-bool`](#heavy-bool).
   convert bool to heavy-bool
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L29-L35">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L28-L34">Source</a></sub></p>
 
 ## <a name="heavy-bool/+if">`+if`</a><a name="heavy-bool/+if"></a>
 ``` clojure
@@ -249,7 +252,7 @@ Determine whether heavy-bool `a` logically implies heavy-bool `b`.
 Function.
 
 logically negate the given heavy-bool
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L22-L27">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L21-L26">Source</a></sub></p>
 
 ## <a name="heavy-bool/+or">`+or`</a><a name="heavy-bool/+or"></a>
 ``` clojure
@@ -381,6 +384,16 @@ Return the first element of a collection which causes the `body`
   from evaluating more times than necessary.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/util.clj#L81-L86">Source</a></sub></p>
 
+## <a name="util/gcd">`gcd`</a><a name="util/gcd"></a>
+``` clojure
+
+(gcd a b)
+```
+Function.
+
+Euclidean algorithm to compute greatest common divisor
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/util.clj#L162-L169">Source</a></sub></p>
+
 ## <a name="util/member">`member`</a><a name="util/member"></a>
 ``` clojure
 
@@ -390,6 +403,27 @@ Function.
 
 Determines whether the given target is an element of the given sequence (or given set).
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/util.clj#L23-L34">Source</a></sub></p>
+
+## <a name="util/power">`power`</a><a name="util/power"></a>
+``` clojure
+
+(power b p)
+```
+Function.
+
+compute the base `b` raised to the power `p`
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/util.clj#L141-L160">Source</a></sub></p>
+
+## <a name="util/power-set">`power-set`</a><a name="util/power-set"></a>
+``` clojure
+
+(power-set base-set)
+```
+Function.
+
+Given a set of items, `base-set` return a set containing
+  all subsets of `base-set`.
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/util.clj#L129-L140">Source</a></sub></p>
 
 ## <a name="util/re-chunk">`re-chunk`</a><a name="util/re-chunk"></a>
 ``` clojure

@@ -18,14 +18,18 @@
 -  [`mod-p`](#mod-p)  - Example usage of <code>heavy-bool</code>.
     -  [`mod-p`](#mod-p/mod-p) - The non-zero elements of the integers mod p (for prime p) is a group under multiplication.
 -  [`relations`](#relations)  - Example usage of <code>heavy-bool</code>.
-    -  [`is-antisymmetric`](#relations/is-antisymmetric) - Test for antisymmetric relation: ((a R b) and (b R a)) => (a = b).
+    -  [`is-antisymmetric`](#relations/is-antisymmetric) - Test for antisymmetric relation: ((a R b) and (b R a)) => (a = b) <code>gen</code> is a collection <code>hb-rel</code> is a binary function returning a heavy-bool.
     -  [`is-asymmetric`](#relations/is-asymmetric) - Test for asymmetric relation.
-    -  [`is-equivalence`](#relations/is-equivalence)
-    -  [`is-irreflexive`](#relations/is-irreflexive)
-    -  [`is-reflexive`](#relations/is-reflexive)
+    -  [`is-connected`](#relations/is-connected) - A connected relation means that if x!=y then (x R y) or (y R x) <code>gen</code> is a collection <code>hb-rel</code> is a binary function returning a heavy-bool.
+    -  [`is-equivalence`](#relations/is-equivalence) - An equivalence relation is symmetric, reflexive, and transitive.
+    -  [`is-irreflexive`](#relations/is-irreflexive) - An irreflexive relation is a relation for which (x R x) is always false <code>gen</code> is a collection <code>hb-rel</code> is a binary function returning a heavy-bool.
+    -  [`is-partial-order`](#relations/is-partial-order) - A partial order (or weak partial order) relation is reflexive, antisymmetric, and transitive.
+    -  [`is-reflexive`](#relations/is-reflexive) - A reflexive relation is a relation for (a R a) always <code>gen</code> is a collection <code>hb-rel</code> is a binary function returning a heavy-bool.
     -  [`is-strict-partial-order`](#relations/is-strict-partial-order) - A strict partial order is irreflexive, transitive, and asymmetric.
-    -  [`is-symmetric`](#relations/is-symmetric)
-    -  [`is-transitive`](#relations/is-transitive) - rel is a binary function which returns a Boolean.
+    -  [`is-strongly-connected`](#relations/is-strongly-connected) - A strongly connected relation means that (x R y) or (y R x) <code>gen</code> is a collection <code>hb-rel</code> is a binary function returning a heavy-bool.
+    -  [`is-symmetric`](#relations/is-symmetric) - A symmetric relation means that (a R b) => (b R a).
+    -  [`is-transitive`](#relations/is-transitive) - hb-rel is a binary function which returns a <code>heavy-bool</code> <code>gen</code> is a collection <code>hb-rel</code> is a binary function returning a heavy-bool.
+    -  [`lift-relation`](#relations/lift-relation) - Accepts a relation, a binary predicate returning a boolean, and returns a binary predicate returning a heavy-boolean.
 
 -----
 # <a name="gaussian-int">gaussian-int</a>
@@ -201,72 +205,144 @@ Example usage of `heavy-bool`.
 ## <a name="relations/is-antisymmetric">`is-antisymmetric`</a><a name="relations/is-antisymmetric"></a>
 ``` clojure
 
-(is-antisymmetric gen rel)
+(is-antisymmetric gen hb-rel)
 ```
 Function.
 
 Test for antisymmetric relation:
   ((a R b) and (b R a)) => (a = b)
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L69-L82">Source</a></sub></p>
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L80-L95">Source</a></sub></p>
 
 ## <a name="relations/is-asymmetric">`is-asymmetric`</a><a name="relations/is-asymmetric"></a>
 ``` clojure
 
-(is-asymmetric gen rel)
+(is-asymmetric gen hb-rel)
 ```
 Function.
 
-Test for asymmetric relation
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L55-L67">Source</a></sub></p>
+Test for asymmetric relation. (a R b) => (not (b R a))
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L66-L78">Source</a></sub></p>
+
+## <a name="relations/is-connected">`is-connected`</a><a name="relations/is-connected"></a>
+``` clojure
+
+(is-connected gen hb-rel)
+```
+Function.
+
+A connected relation means that if x!=y then (x R y) or (y R x)
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L136-L149">Source</a></sub></p>
 
 ## <a name="relations/is-equivalence">`is-equivalence`</a><a name="relations/is-equivalence"></a>
 ``` clojure
 
-(is-equivalence gen rel)
+(is-equivalence gen hb-rel)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L45-L52">Source</a></sub></p>
+
+An equivalence relation is symmetric, reflexive, and transitive.
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L52-L63">Source</a></sub></p>
 
 ## <a name="relations/is-irreflexive">`is-irreflexive`</a><a name="relations/is-irreflexive"></a>
 ``` clojure
 
-(is-irreflexive gen rel)
+(is-irreflexive gen hb-rel)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L84-L90">Source</a></sub></p>
+
+An irreflexive relation is a relation for which (x R x) is always false
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L97-L107">Source</a></sub></p>
+
+## <a name="relations/is-partial-order">`is-partial-order`</a><a name="relations/is-partial-order"></a>
+``` clojure
+
+(is-partial-order gen hb-rel)
+```
+Function.
+
+A partial order (or weak partial order) relation is
+  reflexive, antisymmetric, and transitive.
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool.
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L109-L121">Source</a></sub></p>
 
 ## <a name="relations/is-reflexive">`is-reflexive`</a><a name="relations/is-reflexive"></a>
 ``` clojure
 
-(is-reflexive gen rel)
+(is-reflexive gen hb-rel)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L8-L15">Source</a></sub></p>
+
+A reflexive relation is a relation for (a R a) always
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L8-L18">Source</a></sub></p>
 
 ## <a name="relations/is-strict-partial-order">`is-strict-partial-order`</a><a name="relations/is-strict-partial-order"></a>
 ``` clojure
 
-(is-strict-partial-order gen rel)
+(is-strict-partial-order gen hb-rel)
 ```
 Function.
 
 A strict partial order is irreflexive, transitive, and asymmetric.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L92-L101">Source</a></sub></p>
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L123-L134">Source</a></sub></p>
+
+## <a name="relations/is-strongly-connected">`is-strongly-connected`</a><a name="relations/is-strongly-connected"></a>
+``` clojure
+
+(is-strongly-connected gen hb-rel)
+```
+Function.
+
+A strongly connected relation means that (x R y) or (y R x)
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L151-L163">Source</a></sub></p>
 
 ## <a name="relations/is-symmetric">`is-symmetric`</a><a name="relations/is-symmetric"></a>
 ``` clojure
 
-(is-symmetric gen rel)
+(is-symmetric gen hb-rel)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L17-L28">Source</a></sub></p>
+
+A symmetric relation means that (a R b) => (b R a).
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L20-L33">Source</a></sub></p>
 
 ## <a name="relations/is-transitive">`is-transitive`</a><a name="relations/is-transitive"></a>
 ``` clojure
 
-(is-transitive gen rel)
+(is-transitive gen hb-rel)
 ```
 Function.
 
-rel is a binary function which returns a Boolean
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L30-L43">Source</a></sub></p>
+hb-rel is a binary function which returns a `heavy-bool`
+  `gen` is a collection
+  `hb-rel` is a binary function returning a heavy-bool
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L35-L50">Source</a></sub></p>
+
+## <a name="relations/lift-relation">`lift-relation`</a><a name="relations/lift-relation"></a>
+``` clojure
+
+(lift-relation rel)
+```
+Function.
+
+Accepts a relation, a binary predicate returning a boolean,
+  and returns a binary predicate returning a heavy-boolean.
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/relations.clj#L165-L170">Source</a></sub></p>
