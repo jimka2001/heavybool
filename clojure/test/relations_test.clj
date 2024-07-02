@@ -1,7 +1,9 @@
 (ns relations-test
   (:require [relations :as sut]
+            [util :refer [power-set]]
             [heavy-bool :refer [+bool +not +tag +heavy-bool]]
             [clojure.test :as t]
+            [clojure.set :refer [subset?]]
             [clojure.test :refer [deftest is testing]]))
 
 (def hb-< (sut/lift-relation <))
@@ -10,6 +12,21 @@
 (def hb-not= (sut/lift-relation not=))
 (def hb->= (sut/lift-relation >=))
 (def hb-<= (sut/lift-relation <=))
+(def hb-subset? (sut/lift-relation subset?))
+(def hb-proper-subset? (sut/lift-relation (fn [a b] (and (not= a b)
+                                                         (subset? a b)))))
+(def hb-divides (fn [a b] (hb-= (mod a b) 0)))
+
+(deftest t-reflexive
+  (testing "reflexive"
+    (is (+bool (sut/is-reflexive (range 1 100) hb-=)))
+    (is (+bool (sut/is-reflexive (range 1 100) hb-<=)))
+    (is (+bool (sut/is-reflexive (range 1 100) hb->=)))
+    (is (+bool (+not (sut/is-reflexive (range 1 100) hb-<))))
+    (is (+bool (+not (sut/is-reflexive (range 1 100) hb->))))
+    (is (+bool (sut/is-reflexive (power-set (into #{} (range 10))) hb-subset?)))
+    (is (+bool (+not (sut/is-reflexive (power-set (into #{} (range 10))) hb-proper-subset?))))
+    (is (+bool (sut/is-reflexive (range 1 100) hb-divides)))))
 
 (deftest t-asymmetric
   (testing "asymmetric"
