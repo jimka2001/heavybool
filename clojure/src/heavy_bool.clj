@@ -144,7 +144,7 @@
    :post [(heavy-bool? %)]}
   (+annotate heavy-bool key (+bool heavy-bool)))
 
-(defn +forall-
+(defn +forall-impl
   "Functional version of `+forall`.
   Traverses the given collection until 1) either an item is found
   which is heavy-false and return it (with a new reason conjoined),
@@ -168,7 +168,7 @@
            coll)
    :var tag))
 
-(defn +exists- 
+(defn +exists-impl
   "Function version of `+exists`.
   Traverses the given collection until 1) either an item is found
   which is heavy-true and return it (with a new reason conjoined),
@@ -181,7 +181,7 @@
   {:pre [(fn? f)
          (sequential? coll)]
    :post [(heavy-bool? %)]}
-  (+not (+forall- tag (fn [x] (+not (f x))) coll)))
+  (+not (+forall-impl tag (fn [x] (+not (f x))) coll)))
 
 
 (defn assert-heavy-bool
@@ -193,7 +193,7 @@
 (defn- expand-quantifier
   "Helper function used in the macro expansion of `+exists` and `+forall`"
   [var coll others var-coll body
-                         macro-name f-name ident]
+   macro-name f-name ident]
   (cond (empty? var-coll)
         `(do ~@body)
 
@@ -225,7 +225,7 @@
   with `:let` and `:when` modifiers being supported but not `:while`."
   [[v coll & others :as var-coll] & body]
   (expand-quantifier v coll others var-coll body
-                     `+exists `+exists- `+false))
+                     `+exists `+exists-impl `+false))
 
 (defmacro +forall 
   "Universal quantifier syntax.  `body` is expected to evaluate
@@ -233,7 +233,7 @@
   with `:let` and `:when` modifiers being supported but not `:while`."
   [[v coll & others :as var-coll] & body]
   (expand-quantifier v coll others var-coll body
-                     `+forall `+forall- `+true))
+                     `+forall `+forall-impl `+true))
 
 (defn +assert 
   "Assert that the given heavy-bool object is logically true"

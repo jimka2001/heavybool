@@ -8,10 +8,10 @@
     -  [`+bool`](#heavy-bool/+bool) - convert a <code>heavy-bool</code> to explictly <code>true</code> or <code>false</code>.
     -  [`+conj`](#heavy-bool/+conj) - Conjoin an additional item to the reason list.
     -  [`+exists`](#heavy-bool/+exists) - Existential quantifier syntax.
-    -  [`+exists-`](#heavy-bool/+exists-) - Function version of <code>+exists</code>.
+    -  [`+exists-impl`](#heavy-bool/+exists-impl) - Function version of <code>+exists</code>.
     -  [`+false`](#heavy-bool/+false) - Standard false heavy-bool value.
     -  [`+forall`](#heavy-bool/+forall) - Universal quantifier syntax.
-    -  [`+forall-`](#heavy-bool/+forall-) - Functional version of <code>+forall</code>.
+    -  [`+forall-impl`](#heavy-bool/+forall-impl) - Functional version of <code>+forall</code>.
     -  [`+heavy-bool`](#heavy-bool/+heavy-bool) - Constructor (factor function) for <code>heavy-bool</code>.
     -  [`+if`](#heavy-bool/+if) - heavy-bool version of <code>if</code>.
     -  [`+implied-by`](#heavy-bool/+implied-by) - Determine whether heavy-bool <code>a</code> logically implies heavy-bool <code>b</code>.
@@ -141,10 +141,10 @@ Existential quantifier syntax.  `body` is expected to evaluate
   with `:let` and `:when` modifiers being supported but not `:while`.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L222-L228">Source</a></sub></p>
 
-## <a name="heavy-bool/+exists-">`+exists-`</a><a name="heavy-bool/+exists-"></a>
+## <a name="heavy-bool/+exists-impl">`+exists-impl`</a><a name="heavy-bool/+exists-impl"></a>
 ``` clojure
 
-(+exists- tag f coll)
+(+exists-impl tag f coll)
 ```
 Function.
 
@@ -178,10 +178,10 @@ Universal quantifier syntax.  `body` is expected to evaluate
   with `:let` and `:when` modifiers being supported but not `:while`.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L230-L236">Source</a></sub></p>
 
-## <a name="heavy-bool/+forall-">`+forall-`</a><a name="heavy-bool/+forall-"></a>
+## <a name="heavy-bool/+forall-impl">`+forall-impl`</a><a name="heavy-bool/+forall-impl"></a>
 ``` clojure
 
-(+forall- tag f coll)
+(+forall-impl tag f coll)
 ```
 Function.
 
