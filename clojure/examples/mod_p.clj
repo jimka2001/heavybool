@@ -3,12 +3,22 @@
   This namespace implements an algebraic structure `mod-p`.
   This structure is useful for testing the `examples.magma/is-group` function.
   "
-  (:require [heavy-bool :refer [+and +forall +exists +false +true +annotate +annotate-true +annotate-false heavy-bool?]]))
+  (:require [heavy-bool :refer [+and +forall +exists +false +true +annotate +annotate-true +annotate-false
+                                +heavy-bool heavy-bool?]]))
 
 
 (defn mod-p
   "The non-zero elements of the integers mod p (for prime p)
-  is a group under multiplication."
+  is a group under multiplication.
+  This function returns a map with the keys:
+    :p  -- positive integer for which the operation is performed modulo p
+    :gen -- a collection of integers from 1 to p-1
+    :equiv -- a heavy-boolean relation (binary function returning a `heavy-bool`)
+    :invert -- 
+    :member
+    :op
+    :ident
+  "
   [p]
   {:pre [(int? p) (> p 1)]
    :post [(map? %)]}
@@ -26,16 +36,15 @@
               (mod (* a b) p))
             (member [a]
               {:post [(heavy-bool? %)]}
-              (+and (+annotate-false [(integer? a) ()] :reason "expecting integer, got a"
-                                                    :a a)
-                    (+annotate-false [(<= 0 a p) ()] :reason "expecting 0 <= a < p"
-                                                  :a a
-                                                  :p p)))
+              (+and (+annotate-false (+heavy-bool (integer? a) :a a :p p)
+                                     :reason "expecting integer, got a")
+                    (+annotate-false (+heavy-bool (<= 0 a p) :a a :p p)
+                                     :reason "expecting 0 <= a < p")))
             (invert [a]
               {:post [(heavy-bool? %)]}
               (+annotate-false (+exists [inv-a elements]
-                                    (+and (equiv ident (mult a inv-a))
-                                          (equiv ident (mult inv-a a))))
+                                 (+and (equiv ident (mult a inv-a))
+                                       (equiv ident (mult inv-a a))))
                                :reason "cannot compute inverse of"
                                :a a))]
       {:p p

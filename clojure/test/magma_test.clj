@@ -46,14 +46,15 @@
 (deftest t-mod-2
   (testing "find-mod-2"
     (let [mod-2 (mod-p 2)]
-      (is (+bool (+conj (sut/is-group (:gen mod-2)
-                               (:op mod-2)
-                               (:ident mod-2)
-                               (:invert mod-2)
-                               (:member mod-2)
-                               (:equiv mod-2)) {:testing 'mod-p
-                                                :inv ((:invert mod-2) 1)
-                                                :p 2}))))))
+      (is (+bool (+annotate (sut/is-group (:gen mod-2)
+                                          (:op mod-2)
+                                          (:ident mod-2)
+                                          (:invert mod-2)
+                                          (:member mod-2)
+                                          (:equiv mod-2))
+                            :testing 'mod-p
+                            :inv ((:invert mod-2) 1)
+                            :p 2))))))
 
 (deftest t-mod-3
   (testing "find-mod-3"

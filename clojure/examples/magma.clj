@@ -6,7 +6,8 @@
   set.  Thus we may test the axioms, such as closure, associativity, and identity,
   using exhaustive seach."
   (:require [util :refer [type-check first-st]]
-            [heavy-bool :refer [+bool +and +or +not +forall +exists +annotate +conj +annotate-false heavy-bool? +tag]]))
+            [heavy-bool :refer [+bool +and +or +not +forall +exists +annotate
+                                +conj +annotate-false heavy-bool? +tag find-reason]]))
 
 (defn is-closed [coll * member]
   {:pre [(seq? coll)
@@ -102,18 +103,16 @@
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
-   (+forall [a coll]
-            (let [[_ reasons :as inv-a] (invert a)
-                  b (:witness (first-st r reasons (:witness r)))]
-              (+annotate (+tag
-                          (+and inv-a
-                                (member b)
-                                (equal (* b a) ident)
-                                (equal (* a b) ident))
-                          :invertable)
-                         :reasons reasons
-                         :inv-a inv-a)
-              ))
+   (+forall [a coll
+             :let [inv-a (invert a)
+                   b (find-reason inv-a :witness)]]
+     (+annotate (+tag
+                 (+and inv-a
+                       (member b)
+                       (equal (* b a) ident)
+                       (equal (* a b) ident))
+                 :invertable)
+                :inv-a inv-a))
    :has-inverses))
 
 (defn is-group [coll * ident invert member equal]

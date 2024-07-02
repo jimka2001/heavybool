@@ -78,7 +78,7 @@ Example usage of `heavy-bool`.
 (default-equal left right)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L22-L28">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L23-L29">Source</a></sub></p>
 
 ## <a name="magma/find-identity">`find-identity`</a><a name="magma/find-identity"></a>
 ``` clojure
@@ -86,7 +86,7 @@ Function.
 (find-identity coll * equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L67-L73">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L68-L74">Source</a></sub></p>
 
 ## <a name="magma/has-inverses">`has-inverses`</a><a name="magma/has-inverses"></a>
 ``` clojure
@@ -94,7 +94,7 @@ Function.
 (has-inverses coll * ident invert member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L97-L117">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L98-L116">Source</a></sub></p>
 
 ## <a name="magma/is-associative">`is-associative`</a><a name="magma/is-associative"></a>
 ``` clojure
@@ -102,7 +102,7 @@ Function.
 (is-associative coll * equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L30-L41">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L31-L42">Source</a></sub></p>
 
 ## <a name="magma/is-closed">`is-closed`</a><a name="magma/is-closed"></a>
 ``` clojure
@@ -110,7 +110,7 @@ Function.
 (is-closed coll * member)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L11-L20">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L12-L21">Source</a></sub></p>
 
 ## <a name="magma/is-commutative">`is-commutative`</a><a name="magma/is-commutative"></a>
 ``` clojure
@@ -118,7 +118,7 @@ Function.
 (is-commutative coll * equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L43-L53">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L44-L54">Source</a></sub></p>
 
 ## <a name="magma/is-field">`is-field`</a><a name="magma/is-field"></a>
 ``` clojure
@@ -126,7 +126,7 @@ Function.
 (is-field coll + * zero one +inv *inv member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L151-L175">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L150-L174">Source</a></sub></p>
 
 ## <a name="magma/is-group">`is-group`</a><a name="magma/is-group"></a>
 ``` clojure
@@ -134,7 +134,7 @@ Function.
 (is-group coll * ident invert member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L119-L128">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L118-L127">Source</a></sub></p>
 
 ## <a name="magma/is-identity">`is-identity`</a><a name="magma/is-identity"></a>
 ``` clojure
@@ -142,7 +142,7 @@ Function.
 (is-identity coll * ident equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L55-L65">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L56-L66">Source</a></sub></p>
 
 ## <a name="magma/is-monoid">`is-monoid`</a><a name="magma/is-monoid"></a>
 ``` clojure
@@ -150,7 +150,7 @@ Function.
 (is-monoid coll * ident member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L85-L95">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L86-L96">Source</a></sub></p>
 
 ## <a name="magma/is-ring">`is-ring`</a><a name="magma/is-ring"></a>
 ``` clojure
@@ -158,7 +158,7 @@ Function.
 (is-ring coll + * zero one +inv member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L130-L149">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L129-L148">Source</a></sub></p>
 
 ## <a name="magma/is-semigroup">`is-semigroup`</a><a name="magma/is-semigroup"></a>
 ``` clojure
@@ -166,7 +166,7 @@ Function.
 (is-semigroup coll * member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L75-L83">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L76-L84">Source</a></sub></p>
 
 -----
 # <a name="mod-p">mod-p</a>
@@ -189,7 +189,16 @@ Function.
 
 The non-zero elements of the integers mod p (for prime p)
   is a group under multiplication.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/mod_p.clj#L9-L47">Source</a></sub></p>
+  This function returns a map with the keys:
+    :p  -- positive integer for which the operation is performed modulo p
+    :gen -- a collection of integers from 1 to p-1
+    :equiv -- a heavy-boolean relation (binary function returning a `heavy-bool`)
+    :invert -- 
+    :member
+    :op
+    :ident
+  
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/mod_p.clj#L10-L56">Source</a></sub></p>
 
 -----
 # <a name="relations">relations</a>

@@ -25,13 +25,43 @@
    :post [(heavy-bool? %)]}
   [(not bool) reason])
 
+(defn +conj
+  "Conjoin an additional item to the reason list"
+  [hb item]
+  {:pre [(heavy-bool? hb)
+         (map? item)]
+   :post [(heavy-bool? %)]}
+  (let [[bool reason] hb]
+    [bool (conj reason item)]))
+
 (defn +heavy-bool
   "Constructor (factor function) for `heavy-bool`.
   convert bool to heavy-bool"
-  [hb]
-  (if (heavy-bool? hb)
-    hb
-    [hb ()]))
+  ([arg]
+   (if (heavy-bool? arg)
+     arg
+     [arg ()]))
+  ([arg & {:as key-vals}]
+   (if (heavy-bool? arg)
+     (+conj arg key-vals)
+     (+conj (+heavy-bool arg) key-vals))))
+
+(defn find-reason
+  "Search the reasons (each a map) within a heavy-bool for the first
+  one that has the given key.  When found, return the value of the key."
+  [hb key]
+  {:pre [(keyword? key)
+         (heavy-bool? hb)]}
+  (loop [[reason-1 & other-reasons :as reasons] (second hb)]
+    (cond (empty? reasons)
+          nil
+
+          (contains? reason-1 key)
+          (key reason-1)
+
+          :else
+          (recur other-reasons))))
+
 
 (defn +bool
   "convert a `heavy-bool` to explictly `true` or `false`."
@@ -99,15 +129,6 @@
   [b a]
   `(+or ~b
         (+not ~a)))
-
-(defn +conj
-  "Conjoin an additional item to the reason list"
-  [hb item]
-  {:pre [(heavy-bool? hb)
-         (map? item)]
-   :post [(heavy-bool? %)]}
-  (let [[bool reason] hb]
-    [bool (conj reason item)]))
 
 (defn +annotate 
   "Add key/value pairs as annotation to a heavy-bool.
