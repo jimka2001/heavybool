@@ -60,24 +60,48 @@
 
 (deftest t-partial-order
   (testing "partial order"
-    (is (+bool (sut/is-strict-partial-order (range 1 10) hb-<)))
     (is (+bool (+not (sut/is-strict-partial-order (range 1 10) hb-<=))))
     (is (+bool (+not (sut/is-strict-partial-order (range 1 10) hb-=))))
-    ))
-
-(deftest t-partial-order
-  (testing "partial order"
-    (is (+bool (sut/is-strict-partial-order (range 1 10) hb-<)))
-    (is (+bool (sut/is-strict-partial-order (range 1 10) hb->)))
+    (is (+bool (+not (sut/is-strict-partial-order (range 1 10) hb->=))))
     (is (+bool (sut/is-partial-order (range 1 10) hb-<=)))
     (is (+bool (sut/is-partial-order (range 1 10) hb->=)))
-    (is (+bool (+not (sut/is-strict-partial-order (range 1 10) hb-<=))))
-    (is (+bool (+not (sut/is-strict-partial-order (range 1 10) hb->=))))
-    (is (+bool (+not (sut/is-strict-partial-order (range 1 10) hb-=))))
+    (is (+bool (sut/is-strict-partial-order (range 1 10) hb-<)))
+    (is (+bool (sut/is-strict-partial-order (range 1 10) hb->)))
     ))
 
 (deftest t-antisymmetric
   (testing "antisymmetric"
-    (let [population (range 1 1000)
-          hb-rel (fn [a b] (hb-= 0 (mod a b)))]
-      (is (sut/is-antisymmetric population hb-rel)))))
+    (let [population (range 1 1000)]
+      (is (sut/is-antisymmetric population hb-divides)))))
+
+(deftest t-symmetric
+  (testing "symmetric"
+    (is (+bool (sut/is-symmetric (range 100) hb-=)))
+    (is (+bool (+not (sut/is-symmetric (range 100) hb-<))))
+    (is (+bool (+not (sut/is-symmetric (range 100) hb->))))
+    (is (+bool (+not (sut/is-symmetric (range 100) hb->=))))
+    (is (+bool (+not (sut/is-symmetric (range 100) hb->=))))
+    (is (+bool (+not (sut/is-symmetric (power-set (into #{} (range 10))) hb-proper-subset?))))))
+
+
+(deftest t-transitive
+  (testing "transitive"
+    (is (+bool (sut/is-transitive (range 100) hb-=)))
+    (is (+bool (sut/is-transitive (range 100) hb-<)))
+    (is (+bool (sut/is-transitive (range 100) hb->)))
+    (is (+bool (+not (sut/is-transitive (range 100) hb-not=))))
+    (is (+bool (+not (sut/is-transitive (range 100) hb-coprime))))
+    (is (+bool (sut/is-transitive (power-set (into #{} (range 6))) hb-proper-subset?)))
+    (is (+bool (sut/is-transitive (power-set (into #{} (range 6))) hb-subset?)))
+    (is (+bool (sut/is-transitive (range 1 1000) hb-divides)))))
+
+(deftest t-connected
+  (testing "connected"
+    (is (+bool (sut/is-connected (range 100) hb-<)))
+    (is (+bool (sut/is-connected (range 100) hb->)))
+    (is (+bool (sut/is-connected (range 100) hb-<=)))
+    (is (+bool (sut/is-connected (range 100) hb->=)))
+    (is (+bool (+not (sut/is-connected (power-set (into #{} (range 8))) hb-proper-subset?))))
+    (is (+bool (+not (sut/is-connected (power-set (into #{} (range 8))) hb-subset?))))
+    (is (+bool (+not (sut/is-connected (range 100) hb-divides))))
+    ))
