@@ -125,6 +125,7 @@
   [f x]
   {:pre [(f x)]}
   x)
+
 (defn power-set 
   "Given a set of items, `base-set` return a set containing
   all subsets of `base-set`."
@@ -137,3 +138,23 @@
 
           #{#{}}
           base-set))
+(defn power
+  "compute the base `b` raised to the power `p`"
+  [b p]
+  (cond (and (= b 0) (= p 0))
+        (throw (ex-info "cannot compute (power 0 0)" {}))
+
+        (= b 0)
+        0
+
+        (= p 0)
+        1
+
+        (< p 0)
+        (recur (/ b) (- p))
+
+        (even? p)
+        (recur (* b b) (quot p 2))
+
+        :else
+        (* b (power b (dec p)))))

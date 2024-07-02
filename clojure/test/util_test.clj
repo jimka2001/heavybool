@@ -71,3 +71,11 @@
     (is (= true ((sut/almost-equal 0.01) 1.0 1.00001)))
     (is (= false ((sut/almost-equal 0.01) 1.0 2.00001)))))
 
+(deftest t-power-set
+  (sut/testing-with-timeout "power set"
+                            (doseq [n (range 5)
+                                    :let [base-set (into #{} (range n))
+                                          ps (sut/power-set base-set)]]
+                              (is (= (sut/power 2 n)
+                                     (count ps))))))
+                              
