@@ -1,8 +1,8 @@
 (ns heavy-bool
-  "A heavy-bool is a pair [bool reason], where bool is a truth value
+  "A `heavy-bool` is a pair `[bool reason]`, where `bool` is a truth value
   usually true or false, but may be any clojure truthy or falsey value.
-  reason is a list of maps with keys such as `:witness`, `:bool`, and
-  `:predicate` etc.  A heavy-bool answers a predicate question with either
+  `reason` is a list of maps with keys such as `:witness`, `:bool`, and
+  `:predicate` etc.  A `heavy-bool` answers a predicate question with either
   yes-because or no-because")
 
 
@@ -10,7 +10,7 @@
 (def +false "Standard false heavy-bool value." [false ()])
 
 (defn heavy-bool? 
-  "Predicate returning true if the given object is a `heavy-bool`" 
+  "Predicate returning true if the given object is a `heavy-bool`, false otherwise." 
   [heavy-bool]
   (and (vector? heavy-bool)
        (not-empty heavy-bool)
@@ -34,10 +34,13 @@
     hb
     [hb ()]))
 
-(defn +bool "convert heavy-bool to bool"
+(defn +bool
+  "convert a `heavy-bool` to explictly `true` or `false`."
   [[bool reason :as hb]]
-  {:pre [(heavy-bool? hb)]}
-  bool)
+  {:pre [(heavy-bool? hb)]
+   :post [(boolean? %)]
+   }
+  (boolean bool))
 
 (defmacro +if
   "heavy-bool version of `if`.  The condition must
