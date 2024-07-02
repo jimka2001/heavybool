@@ -78,4 +78,15 @@
                                           ps (sut/power-set base-set)]]
                               (is (= (sut/power 2 n)
                                      (count ps))))))
-                              
+
+(deftest t-gcd
+  (testing "gcd"
+    (is (= 1 (sut/gcd 3 5)))
+    (is (= 1 (sut/gcd 5 3)))
+
+    (is (= 2 (sut/gcd 6 26)))
+
+    (doseq [a (range 100)
+            b (range a 100)]
+      (is (= (sut/gcd a b)
+             (sut/gcd b a))))))

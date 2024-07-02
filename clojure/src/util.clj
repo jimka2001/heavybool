@@ -163,7 +163,7 @@
   "Euclidean algorithm to compute greatest common divisor"
   [a b]
   (cond (= b 0)
-        b
+        a
 
         :else
         (recur b (mod a b))))
