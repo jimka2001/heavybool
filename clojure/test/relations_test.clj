@@ -6,7 +6,8 @@
             [clojure.set :refer [subset?]]
             [clojure.test :refer [deftest is testing]]))
 
-(def hb-< (sut/lift-relation <))
+;;(def hb-< (sut/lift-relation <))
+(def hb-< <)
 (def hb-> (sut/lift-relation >))
 (def hb-= (sut/lift-relation =))
 (def hb-not= (sut/lift-relation not=))

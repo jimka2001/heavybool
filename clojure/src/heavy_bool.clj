@@ -18,11 +18,47 @@
        (list? (second heavy-bool))
        (every? map? (second heavy-bool))))
 
-(defn +not 
+(defn heavy-bool-dispatch 
+  "Dispatch function for multimethods in this namespace.
+  The dispatch function handles 4 cases.
+  1) first arument is `true`
+  2) first argument is `false`
+  3) first argument is a `heavy-bool`
+  4) otherwise throw an exception"
+  [hb & others]
+  (case hb
+    (true) true
+    (false) false
+    (cond (heavy-bool? hb)
+          :hb
+          
+          :else
+          (throw (ex-info "Not a valid heavy-bool" {:hb hb :others others})))))
+
+(defmulti +bool
+  "convert a `heavy-bool` to explictly `true` or `false`."
+  heavy-bool-dispatch)
+
+(defmethod +bool true [_]
+  true)
+
+(defmethod +bool false [_]
+  false)
+
+(defmethod +bool :hb [[bool reason]]
+  (boolean bool))
+
+(defmulti +not 
   "logically negate the given heavy-bool"
-  [[bool reason :as hb]]
-  {:pre [(heavy-bool? hb)]
-   :post [(heavy-bool? %)]}
+  heavy-bool-dispatch)
+  
+(defmethod +not true [_]
+  +false)
+
+(defmethod +not false [_]
+  +true)
+
+(defmethod +not :hb [[bool reason]]
   [(not bool) reason])
 
 (defn +conj
@@ -70,15 +106,6 @@
 
           :else
           (recur other-reasons))))
-
-
-(defn +bool
-  "convert a `heavy-bool` to explictly `true` or `false`."
-  [[bool reason :as hb]]
-  {:pre [(heavy-bool? hb)]
-   :post [(boolean? %)]
-   }
-  (boolean bool))
 
 
 (defmacro +if
