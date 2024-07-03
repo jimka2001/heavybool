@@ -123,7 +123,8 @@
   "Evaluates to the value of `x` but with a pre-condition
   that (f x) is true."
   [f x]
-  {:pre [(f x)]}
+  ;;{:pre [(f x)]}
+  (assert (f x) (format "%s wrong type" x))
   x)
 
 (defn power-set 
@@ -167,5 +168,3 @@
 
         :else
         (recur b (mod a b))))
-
-        

@@ -3,7 +3,9 @@
   usually true or false, but may be any clojure truthy or falsey value.
   `reason` is a list of maps with keys such as `:witness`, `:bool`, and
   `:predicate` etc.  A `heavy-bool` answers a predicate question with either
-  yes-because or no-because")
+  yes-because or no-because"
+  (:require [util :refer [type-check]])
+)
 
 
 (def +true "Standard true heavy-bool value." [true ()])
@@ -18,59 +20,45 @@
        (list? (second heavy-bool))
        (every? map? (second heavy-bool))))
 
-(defn heavy-bool-dispatch 
-  "Dispatch function for multimethods in this namespace.
-  The dispatch function handles 4 cases.
-  1) first arument is `true`
-  2) first argument is `false`
-  3) first argument is a `heavy-bool`
-  4) otherwise throw an exception"
-  [hb & others]
+(defn ensure-heavy-bool [hb]
   (case hb
-    (true) true
-    (false) false
+    (true) +true
+    (false) +false
     (cond (heavy-bool? hb)
-          :hb
-          
+          hb
+
           :else
-          (throw (ex-info "Not a valid heavy-bool" {:hb hb :others others})))))
+          (throw (ex-info "Not a valid heavy-bool" {:hb hb})))))
 
-(defmulti +bool
+(defmacro with-heavy-bool 
+  "Macro which rebinds the named variable to a value ensured to be a heavy-bool."
+  [hb & body]
+  `(let [~hb (ensure-heavy-bool ~hb)]
+     ~@body))
+
+(defn +bool
   "convert a `heavy-bool` to explictly `true` or `false`."
-  heavy-bool-dispatch)
+  [hb]
+  (with-heavy-bool hb
+    (boolean (first hb))))
 
-(defmethod +bool true [_]
-  true)
-
-(defmethod +bool false [_]
-  false)
-
-(defmethod +bool :hb [[bool reason]]
-  (boolean bool))
-
-(defmulti +not 
+(defn +not
   "logically negate the given heavy-bool"
-  heavy-bool-dispatch)
-  
-(defmethod +not true [_]
-  +false)
-
-(defmethod +not false [_]
-  +true)
-
-(defmethod +not :hb [[bool reason]]
-  [(not bool) reason])
+  [hb]
+  (with-heavy-bool hb
+    [(not (first hb))
+     (second hb)]))
 
 (defn +conj
   "Conjoin an additional item to the reason list"
   [hb item]
-  {:pre [(heavy-bool? hb)
-         (map? item)]
-   :post [(heavy-bool? %)]}
-  (let [[bool reason] hb]
-    [bool (conj reason item)]))
+  (with-heavy-bool hb
+    (if item
+      [(first hb)
+       (conj (second hb) item)]
+      hb)))
 
-(defn +heavy-bool
+(defn +heavy-bool 
   "Constructor (factor function) for `heavy-bool`.
   convert `arg` to a `heavy-bool`.
   `true` is converted to `+true`
@@ -78,18 +66,9 @@
   If `arg` is already a `heavy-bool`, no conversion occurs.
   In any case, if other key/value pairs are given, they are conjoined via `+conj`
   "
-  ([arg]
-   {:pre [(or (boolean? arg) (heavy-bool? arg))]
-    :post [(heavy-bool? %)]}
-   (if (boolean? arg)
-     [arg ()]
-     arg))
-  ([arg & {:as key-vals}]
-   {:pre [(or (boolean? arg) (heavy-bool? arg))]
-    :post [(heavy-bool? %)]}
-   (if (boolean? arg)
-     (+conj (+heavy-bool arg) key-vals)
-     (+conj arg key-vals))))
+  [arg & {:as key-vals}]
+  {:post [(heavy-bool? %)]}
+  (+conj arg key-vals))
 
 (defn find-reason
   "Search the reasons (each a map) within a heavy-bool for the first
@@ -106,7 +85,6 @@
 
           :else
           (recur other-reasons))))
-
 
 (defmacro +if
   "heavy-bool version of `if`.  The condition must
@@ -171,8 +149,7 @@
   Eg. `(+annotate hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool"
   [heavy-bool & {:as key-vals}]
-  {:pre [(heavy-bool? heavy-bool)]
-   :post [(heavy-bool? %)]}
+  {:post [(heavy-bool? %)]}
   (+conj heavy-bool key-vals))
 
 (defn +annotate-true 
@@ -180,26 +157,28 @@
   Eg. `(+annotate-true hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has true semantics."
   [heavy-bool & {:as key-vals}]
-  (+if heavy-bool
-       (+conj heavy-bool key-vals)
-       heavy-bool))
+  (with-heavy-bool heavy-bool
+    (+if heavy-bool
+         (+conj heavy-bool key-vals)
+         heavy-bool)))
 
-(defn +annotate-false 
+(defn +annotate-false
   "Add key/value pairs as annotation to a false heavy-bool.
   Eg. `(+annotate-true hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has false semantics."
   [heavy-bool & {:as key-vals}]
-  (+if heavy-bool
-       heavy-bool
-       (+conj heavy-bool key-vals)))
+  (with-heavy-bool heavy-bool
+    (+if heavy-bool
+         heavy-bool
+         (+conj heavy-bool key-vals))))
 
 (defn +tag
   "Conjoin the given key paired with the Boolean value of the given heavy-bool"
   [heavy-bool key]
-  {:pre [(heavy-bool? heavy-bool)
-         (keyword? key)]
+  {:pre [(keyword? key)]
    :post [(heavy-bool? %)]}
-  (+annotate heavy-bool key (+bool heavy-bool)))
+  (with-heavy-bool heavy-bool
+    (+annotate heavy-bool key (+bool heavy-bool))))
 
 (defn +forall-impl
   "Functional version of `+forall`.
@@ -297,7 +276,6 @@
 (defn +assert 
   "Assert that the given heavy-bool object is logically true"
   [[bool reason :as hb]]
-  {:pre [(heavy-bool? hb)]}
   (if (not bool)
     (throw (ex-info (format "%s" reason) {:reason reason
                                           :bool bool}))))
