@@ -5,12 +5,12 @@
 -  [`magma`](#magma)  - Example usage of <code>heavy-bool</code>.
     -  [`default-equal`](#magma/default-equal)
     -  [`find-identity`](#magma/find-identity)
-    -  [`has-inverses`](#magma/has-inverses)
+    -  [`has-inverses`](#magma/has-inverses) - Predicate returning a <code>heavy-bool</code> to determine whether every element of <code>coll</code> has an inverse for the given <code>*</code> operation w.r.t.
     -  [`is-associative`](#magma/is-associative)
     -  [`is-closed`](#magma/is-closed)
     -  [`is-commutative`](#magma/is-commutative)
     -  [`is-field`](#magma/is-field)
-    -  [`is-group`](#magma/is-group)
+    -  [`is-group`](#magma/is-group) - Predicate returning a <code>heavy-bool</code> indicating whether the given <code>coll</code> is a group under the given operation <code>*</code> with identity <code>ident</code>.
     -  [`is-identity`](#magma/is-identity)
     -  [`is-monoid`](#magma/is-monoid)
     -  [`is-ring`](#magma/is-ring)
@@ -91,10 +91,22 @@ Function.
 ## <a name="magma/has-inverses">`has-inverses`</a><a name="magma/has-inverses"></a>
 ``` clojure
 
-(has-inverses coll * ident invert member equal)
+(has-inverses coll * ident invertible member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L98-L116">Source</a></sub></p>
+
+Predicate returning a `heavy-bool` to determine whether every element
+  of `coll` has an inverse for the given `*` operation w.r.t. the given `ident`.
+    `coll` -- collections of object in the magma
+    `*` -- binary function, takes two elements from `coll` and returns a new element
+    `ident` -- the identity for the magma
+    `invertible` -- function which takes an element from `coll` and returns a heavy-bool
+                  indicating whether the given element is invertible.  If an element
+                  is invertible, then (find-reason hb :witness) should returns its inverse.
+    `member` -- membership predicate, returning `heavy-bool`
+    `equal` -- equality predicate, returning `heavy-bool`.
+  
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L98-L128">Source</a></sub></p>
 
 ## <a name="magma/is-associative">`is-associative`</a><a name="magma/is-associative"></a>
 ``` clojure
@@ -126,15 +138,28 @@ Function.
 (is-field coll + * zero one +inv *inv member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L150-L174">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L175-L199">Source</a></sub></p>
 
 ## <a name="magma/is-group">`is-group`</a><a name="magma/is-group"></a>
 ``` clojure
 
-(is-group coll * ident invert member equal)
+(is-group coll * ident invertible member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L118-L127">Source</a></sub></p>
+
+Predicate returning a `heavy-bool` indicating whether the given `coll` is a group
+  under the given operation `*` with identity `ident`.
+  A group is a monoid which has inverses for all elements.
+    `coll` -- collections of object in the magma
+    `*` -- binary function, takes two elements from `coll` and returns a new element
+    `ident` -- the identity for the magma
+    `invertible` -- function which takes an element from `coll` and returns a heavy-bool
+                  indicating whether the given element is invertible.  If an element
+                  is invertible, then (find-reason hb :witness) should returns its inverse.
+    `member` -- membership predicate, returning `heavy-bool`
+    `equal` -- equality predicate, returning `heavy-bool`.
+  
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L130-L152">Source</a></sub></p>
 
 ## <a name="magma/is-identity">`is-identity`</a><a name="magma/is-identity"></a>
 ``` clojure
@@ -158,7 +183,7 @@ Function.
 (is-ring coll + * zero one +inv member equal)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L129-L148">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L154-L173">Source</a></sub></p>
 
 ## <a name="magma/is-semigroup">`is-semigroup`</a><a name="magma/is-semigroup"></a>
 ``` clojure
@@ -193,12 +218,13 @@ The non-zero elements of the integers mod p (for prime p)
     :p  -- positive integer for which the operation is performed modulo p
     :gen -- a collection of integers from 1 to p-1
     :equiv -- a heavy-boolean relation (binary function returning a `heavy-bool`)
-    :invert -- 
-    :member
-    :op
-    :ident
+    :invertible -- a predicate returning a `heavy-bool` indicating whether a given element is invertible.
+               If it is invertible, the return value
+    :member -- a membership predicate returning a `heavy-bool`
+    :op -- integer multiplication mod p
+    :ident -- 1
   
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/mod_p.clj#L10-L56">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/mod_p.clj#L10-L57">Source</a></sub></p>
 
 -----
 # <a name="relations">relations</a>
