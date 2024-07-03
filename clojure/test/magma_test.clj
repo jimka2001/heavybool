@@ -49,11 +49,11 @@
       (is (+bool (+annotate (sut/is-group (:gen mod-2)
                                           (:op mod-2)
                                           (:ident mod-2)
-                                          (:invert mod-2)
+                                          (:invertible mod-2)
                                           (:member mod-2)
                                           (:equiv mod-2))
                             :testing 'mod-p
-                            :inv ((:invert mod-2) 1)
+                            :inv ((:invertible mod-2) 1)
                             :p 2))))))
 
 (deftest t-mod-3
@@ -62,7 +62,7 @@
       (is (+bool (sut/is-group (:gen mod-3)
                                        (:op mod-3)
                                        (:ident mod-3)
-                                       (:invert mod-3)
+                                       (:invertible mod-3)
                                        (:member mod-3)
                                        (:equiv mod-3)))))))
 
@@ -90,7 +90,7 @@
              (+bool (sut/is-group (:gen mod-n)
                                   (:op mod-n)
                                   (:ident mod-n)
-                                  (:invert mod-n)
+                                  (:invertible mod-n)
                                   (:member mod-n)
                                   (:equiv mod-n))))))))
 

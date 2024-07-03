@@ -95,35 +95,60 @@
          (is-identity coll * ident equal))
    :monoid))
 
-(defn has-inverses [coll * ident invert member equal]
+(defn has-inverses 
+  "Predicate returning a `heavy-bool` to determine whether every element
+  of `coll` has an inverse for the given `*` operation w.r.t. the given `ident`.
+    `coll` -- collections of object in the magma
+    `*` -- binary function, takes two elements from `coll` and returns a new element
+    `ident` -- the identity for the magma
+    `invertible` -- function which takes an element from `coll` and returns a heavy-bool
+                  indicating whether the given element is invertible.  If an element
+                  is invertible, then (find-reason hb :witness) should returns its inverse.
+    `member` -- membership predicate, returning `heavy-bool`
+    `equal` -- equality predicate, returning `heavy-bool`.
+  "
+  [coll * ident invertible member equal]
   {:pre [(seq? coll)
          (fn? *)
-         (fn? invert)
+         (fn? invertible)
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
    (+forall [a coll
-             :let [inv-a (invert a)
+             :let [inv-a (invertible a)
                    b (find-reason inv-a :witness)]]
      (+annotate (+tag
                  (+and inv-a
                        (member b)
                        (equal (* b a) ident)
                        (equal (* a b) ident))
-                 :invertable)
+                 :invertible)
                 :inv-a inv-a))
    :has-inverses))
 
-(defn is-group [coll * ident invert member equal]
+(defn is-group 
+  "Predicate returning a `heavy-bool` indicating whether the given `coll` is a group
+  under the given operation `*` with identity `ident`.
+  A group is a monoid which has inverses for all elements.
+    `coll` -- collections of object in the magma
+    `*` -- binary function, takes two elements from `coll` and returns a new element
+    `ident` -- the identity for the magma
+    `invertible` -- function which takes an element from `coll` and returns a heavy-bool
+                  indicating whether the given element is invertible.  If an element
+                  is invertible, then (find-reason hb :witness) should returns its inverse.
+    `member` -- membership predicate, returning `heavy-bool`
+    `equal` -- equality predicate, returning `heavy-bool`.
+  "
+  [coll * ident invertible member equal]
   {:pre [(fn? *)
-         (fn? invert)
+         (fn? invertible)
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
    (+and (is-monoid coll * ident member equal)
-         (has-inverses coll * ident invert member equal))
+         (has-inverses coll * ident invertible member equal))
    :group))
 
 (defn is-ring [coll + * zero one +inv member equal]
@@ -170,6 +195,6 @@
                  (+tag
                   (+and maybe-inv
                         (member (:witness (first reason))))
-                  :invertable))))
+                  :invertible))))
         ))
         

@@ -14,10 +14,11 @@
     :p  -- positive integer for which the operation is performed modulo p
     :gen -- a collection of integers from 1 to p-1
     :equiv -- a heavy-boolean relation (binary function returning a `heavy-bool`)
-    :invert -- 
-    :member
-    :op
-    :ident
+    :invertible -- a predicate returning a `heavy-bool` indicating whether a given element is invertible.
+               If it is invertible, the return value
+    :member -- a membership predicate returning a `heavy-bool`
+    :op -- integer multiplication mod p
+    :ident -- 1
   "
   [p]
   {:pre [(int? p) (> p 1)]
@@ -40,17 +41,17 @@
                                      :reason "expecting integer, got a")
                     (+annotate-false (+heavy-bool (<= 0 a p) :a a :p p)
                                      :reason "expecting 0 <= a < p")))
-            (invert [a]
+            (invertible [a]
               {:post [(heavy-bool? %)]}
               (+annotate-false (+exists [inv-a elements]
-                                 (+and (equiv ident (mult a inv-a))
-                                       (equiv ident (mult inv-a a))))
+                                        (+and (equiv ident (mult a inv-a))
+                                              (equiv ident (mult inv-a a))))
                                :reason "cannot compute inverse of"
                                :a a))]
       {:p p
        :gen elements
        :equiv equiv
-       :invert invert
+       :invertible invertible
        :member member
        :op mult
        :ident 1})))
