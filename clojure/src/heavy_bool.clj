@@ -36,15 +36,24 @@
 
 (defn +heavy-bool
   "Constructor (factor function) for `heavy-bool`.
-  convert bool to heavy-bool"
+  convert `arg` to a `heavy-bool`.
+  `true` is converted to `+true`
+  `false` is converted to `+false`
+  If `arg` is already a `heavy-bool`, no conversion occurs.
+  In any case, if other key/value pairs are given, they are conjoined via `+conj`
+  "
   ([arg]
-   (if (heavy-bool? arg)
-     arg
-     [arg ()]))
+   {:pre [(or (boolean? arg) (heavy-bool? arg))]
+    :post [(heavy-bool? %)]}
+   (if (boolean? arg)
+     [arg ()]
+     arg))
   ([arg & {:as key-vals}]
-   (if (heavy-bool? arg)
-     (+conj arg key-vals)
-     (+conj (+heavy-bool arg) key-vals))))
+   {:pre [(or (boolean? arg) (heavy-bool? arg))]
+    :post [(heavy-bool? %)]}
+   (if (boolean? arg)
+     (+conj (+heavy-bool arg) key-vals)
+     (+conj arg key-vals))))
 
 (defn find-reason
   "Search the reasons (each a map) within a heavy-bool for the first
@@ -197,12 +206,15 @@
   If some value in the collection causes the predicate to return
   heavy-true, then a reason will be specified which provides
   the `:witness` value (the example) which caused the predicate
-  to succeed.  The `:predicate` is also given in the reason."
+  to succeed.  The `:predicate` is also given in the reason.
+  `f` is a function which either returns a boolean (explicitly `true` or `false`)
+       or returns a `heavy-bool`
+  "
   [tag f coll]
   {:pre [(fn? f)
          (sequential? coll)]
    :post [(heavy-bool? %)]}
-  (+not (+forall-impl tag (fn [x] (+not (f x))) coll)))
+  (+not (+forall-impl tag (fn [x] (+not (+heavy-bool (f x)))) coll)))
 
 
 (defn assert-heavy-bool
@@ -231,8 +243,7 @@
         
         (empty? others)
         `(~f-name '~var
-          (fn [~var] {:post [(assert-heavy-bool ~'%)]}
-                     ~@body)
+          (fn [~var] ~@body)
           ~coll)
 
         :else
