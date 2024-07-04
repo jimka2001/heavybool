@@ -1,7 +1,7 @@
 # Table of contents
 -  [`gaussian-int`](#gaussian-int)  - Example usage of <code>heavy-bool</code>.
-    -  [`gaussian-int-mod-p`](#gaussian-int/gaussian-int-mod-p)
-    -  [`gaussian?`](#gaussian-int/gaussian?)
+    -  [`gaussian-int-mod-p`](#gaussian-int/gaussian-int-mod-p) - For a given integer return a map with the keys: :p :gen :op :equiv :mult :one :zero :add :add-inv :mult-inv :member These keys are the data necessary to make a call to the <code>is-field</code> function.
+    -  [`gaussian?`](#gaussian-int/gaussian?) - Bolean predicate detecting whether the given value is a 2 element vector of integers.
 -  [`magma`](#magma)  - Example usage of <code>heavy-bool</code>.
     -  [`default-equal`](#magma/default-equal) - The default equal predicate which returns a <code>heavy-bool</code> indicating whether the arguments <code>left</code> and <code>right</code> are equal to each other.
     -  [`find-identity`](#magma/find-identity) - Predicate returning <code>heavy-bool</code> indicating whether there exists an identity element in the given collection of elements.
@@ -48,7 +48,25 @@ Example usage of `heavy-bool`.
 (gaussian-int-mod-p p)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/gaussian_int.clj#L14-L125">Source</a></sub></p>
+
+For a given integer return a map with the keys:
+    :p
+    :gen
+    :op
+    :equiv
+    :mult
+    :one
+    :zero
+    :add
+    :add-inv
+    :mult-inv
+    :member
+  These keys are the data necessary to make a call to the `is-field` function.
+  The values of each key is determined in a way so that if p is an odd prime
+  of the form 4k-1, then the set of Gaussian integers modulo p is a field.
+  Otherwise the set is not a field.
+  
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/gaussian_int.clj#L16-L145">Source</a></sub></p>
 
 ## <a name="gaussian-int/gaussian?">`gaussian?`</a><a name="gaussian-int/gaussian?"></a>
 ``` clojure
@@ -56,7 +74,9 @@ Function.
 (gaussian? g)
 ```
 Function.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/gaussian_int.clj#L8-L12">Source</a></sub></p>
+
+Bolean predicate detecting whether the given value is a 2 element vector of integers
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/gaussian_int.clj#L8-L14">Source</a></sub></p>
 
 -----
 # <a name="magma">magma</a>
