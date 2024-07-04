@@ -23,6 +23,7 @@
     -  [`assert-heavy-bool`](#heavy-bool/assert-heavy-bool) - Assert that a given object is a <code>heavy-bool</code>.
     -  [`ensure-heavy-bool`](#heavy-bool/ensure-heavy-bool)
     -  [`find-reason`](#heavy-bool/find-reason) - Search the reasons (each a map) within a heavy-bool for the first one that has the given key.
+    -  [`find-witness`](#heavy-bool/find-witness) - Find the :witness which caused the existential quantifier to succeed or which caused the universal quantifier to fail.
     -  [`heavy-bool?`](#heavy-bool/heavy-bool?) - Predicate returning true if the given object is a <code>heavy-bool</code>, false otherwise.
     -  [`with-heavy-bool`](#heavy-bool/with-heavy-bool) - Macro which rebinds the named variable to a value ensured to be a heavy-bool.
 -  [`util`](#util) 
@@ -67,7 +68,7 @@ Logical AND of heavy-bools which evaluates to a [[`heavy-bool`](#heavy-bool)](#h
   in the argument list, otherwise evaluates to the right-most
   value.  If the argument list is empty, evaluates explicitly to
   [`+true`](#heavy-bool/+true)
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L99-L114">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L106-L121">Source</a></sub></p>
 
 ## <a name="heavy-bool/+annotate">`+annotate`</a><a name="heavy-bool/+annotate"></a>
 ``` clojure
@@ -79,7 +80,7 @@ Function.
 Add key/value pairs as annotation to a heavy-bool.
   Eg. `(+annotate hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L147-L153">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L154-L160">Source</a></sub></p>
 
 ## <a name="heavy-bool/+annotate-false">`+annotate-false`</a><a name="heavy-bool/+annotate-false"></a>
 ``` clojure
@@ -91,7 +92,7 @@ Function.
 Add key/value pairs as annotation to a false heavy-bool.
   Eg. `(+annotate-true hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has false semantics.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L165-L173">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L172-L180">Source</a></sub></p>
 
 ## <a name="heavy-bool/+annotate-true">`+annotate-true`</a><a name="heavy-bool/+annotate-true"></a>
 ``` clojure
@@ -103,7 +104,7 @@ Function.
 Add key/value pairs as annotation to a true heavy-bool.
   Eg. `(+annotate-true hb :x x :y y)`
   to add `{:x x :y y}` as annotation on the given heavy-bool if and only if it has true semantics.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L155-L163">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L162-L170">Source</a></sub></p>
 
 ## <a name="heavy-bool/+assert">`+assert`</a><a name="heavy-bool/+assert"></a>
 ``` clojure
@@ -113,7 +114,7 @@ Add key/value pairs as annotation to a true heavy-bool.
 Function.
 
 Assert that the given heavy-bool object is logically true
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L276-L282">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L285-L290">Source</a></sub></p>
 
 ## <a name="heavy-bool/+bool">`+bool`</a><a name="heavy-bool/+bool"></a>
 ``` clojure
@@ -144,8 +145,9 @@ Macro.
 
 Existential quantifier syntax.  `body` is expected to evaluate
   to a heavy-bool.  The syntax is similar to `for` and `doseq`
-  with `:let` and `:when` modifiers being supported but not `:while`.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L260-L266">Source</a></sub></p>
+  with `:let` and `:when` modifiers being supported but not `:while`
+  `:when` can be followed by a boolean or a [`heavy-bool`](#heavy-bool).
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L267-L274">Source</a></sub></p>
 
 ## <a name="heavy-bool/+exists-impl">`+exists-impl`</a><a name="heavy-bool/+exists-impl"></a>
 ``` clojure
@@ -165,7 +167,7 @@ Function version of [`+exists`](#heavy-bool/+exists).
   `f` is a function which either returns a boolean (explicitly `true` or `false`)
        or returns a [`heavy-bool`](#heavy-bool)
   
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L207-L223">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L214-L230">Source</a></sub></p>
 
 ## <a name="heavy-bool/+false">`+false`</a><a name="heavy-bool/+false"></a>
 
@@ -185,7 +187,8 @@ Macro.
 Universal quantifier syntax.  `body` is expected to evaluate
   to a heavy-bool.    The syntax is similar to `for` and `doseq`
   with `:let` and `:when` modifiers being supported but not `:while`.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L268-L274">Source</a></sub></p>
+  `:when` can be followed by a boolean or a [`heavy-bool`](#heavy-bool).
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L276-L283">Source</a></sub></p>
 
 ## <a name="heavy-bool/+forall-impl">`+forall-impl`</a><a name="heavy-bool/+forall-impl"></a>
 ``` clojure
@@ -202,7 +205,7 @@ Functional version of [`+forall`](#heavy-bool/+forall).
   heavy-false, then a reason will be specified which provides
   the `:witness` value (the counter-example) which caused the predicate
   to fail.  The `:predicate` is also given in the reason.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L183-L205">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L190-L212">Source</a></sub></p>
 
 ## <a name="heavy-bool/+heavy-bool">`+heavy-bool`</a><a name="heavy-bool/+heavy-bool"></a>
 ``` clojure
@@ -231,7 +234,7 @@ heavy-bool version of `if`.  The condition must
   evaluate to a [[`heavy-bool`](#heavy-bool)](#heavy-bool).  Either the consequent or
   alternative will be evaluated depending on the [[`heavy-bool`](#heavy-bool)](#heavy-bool)
   value.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L89-L97">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L96-L104">Source</a></sub></p>
 
 ## <a name="heavy-bool/+implied-by">`+implied-by`</a><a name="heavy-bool/+implied-by"></a>
 ``` clojure
@@ -242,7 +245,7 @@ Macro.
 
 Determine whether heavy-bool `a` logically implies heavy-bool `b`.
   `a` is not evaluated unless `b` is heavy-false
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L140-L145">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L147-L152">Source</a></sub></p>
 
 ## <a name="heavy-bool/+implies">`+implies`</a><a name="heavy-bool/+implies"></a>
 ``` clojure
@@ -253,7 +256,7 @@ Macro.
 
 Determine whether heavy-bool `a` logically implies heavy-bool `b`.
   `b` is not evaluated unless `a` is heavy-true
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L133-L138">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L140-L145">Source</a></sub></p>
 
 ## <a name="heavy-bool/+not">`+not`</a><a name="heavy-bool/+not"></a>
 ``` clojure
@@ -277,7 +280,7 @@ Logical OR of heavy-bools which evaluates to a [[`heavy-bool`](#heavy-bool)](#he
   in the argument list, otherwise evaluates to the left-most
   value.  If the argument list is empty, evaluates explicitly to
   [`+false`](#heavy-bool/+false)
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L116-L131">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L123-L138">Source</a></sub></p>
 
 ## <a name="heavy-bool/+tag">`+tag`</a><a name="heavy-bool/+tag"></a>
 ``` clojure
@@ -287,7 +290,7 @@ Logical OR of heavy-bools which evaluates to a [[`heavy-bool`](#heavy-bool)](#he
 Function.
 
 Conjoin the given key paired with the Boolean value of the given heavy-bool
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L175-L181">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L182-L188">Source</a></sub></p>
 
 ## <a name="heavy-bool/+true">`+true`</a><a name="heavy-bool/+true"></a>
 
@@ -305,7 +308,7 @@ Standard true heavy-bool value.
 Function.
 
 Assert that a given object is a [`heavy-bool`](#heavy-bool).
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L226-L230">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L233-L237">Source</a></sub></p>
 
 ## <a name="heavy-bool/ensure-heavy-bool">`ensure-heavy-bool`</a><a name="heavy-bool/ensure-heavy-bool"></a>
 ``` clojure
@@ -325,6 +328,17 @@ Function.
 Search the reasons (each a map) within a heavy-bool for the first
   one that has the given key.  When found, return the value of the key.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L73-L87">Source</a></sub></p>
+
+## <a name="heavy-bool/find-witness">`find-witness`</a><a name="heavy-bool/find-witness"></a>
+``` clojure
+
+(find-witness hb)
+```
+Function.
+
+Find the :witness which caused the existential quantifier to succeed or
+  which caused the universal quantifier to fail
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L89-L93">Source</a></sub></p>
 
 ## <a name="heavy-bool/heavy-bool?">`heavy-bool?`</a><a name="heavy-bool/heavy-bool?"></a>
 ``` clojure

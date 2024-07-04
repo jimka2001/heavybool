@@ -74,17 +74,24 @@
   "Search the reasons (each a map) within a heavy-bool for the first
   one that has the given key.  When found, return the value of the key."
   [hb key]
-  {:pre [(keyword? key)
-         (heavy-bool? hb)]}
-  (loop [[reason-1 & other-reasons :as reasons] (second hb)]
-    (cond (empty? reasons)
-          nil
+   {:pre [(keyword? key)
+          (heavy-bool? hb)]}
+   (loop [[reason-1 & other-reasons :as reasons] (second hb)]
+     (cond (empty? reasons)
+           nil
 
-          (contains? reason-1 key)
-          (key reason-1)
+           (contains? reason-1 key)
+           (key reason-1)
 
-          :else
-          (recur other-reasons))))
+           :else
+           (recur other-reasons))))
+
+(defn find-witness
+  "Find the :witness which caused the existential quantifier to succeed or
+  which caused the universal quantifier to fail"
+  [hb]
+  (find-reason hb :witness))
+
 
 (defmacro +if
   "heavy-bool version of `if`.  The condition must
@@ -242,7 +249,7 @@
                ~@body))
 
         (= var :when)
-        `(if ~coll
+        `(+if ~coll
            (~macro-name [~@others]
                ~@body)
            ~ident)
@@ -260,7 +267,8 @@
 (defmacro +exists
   "Existential quantifier syntax.  `body` is expected to evaluate
   to a heavy-bool.  The syntax is similar to `for` and `doseq`
-  with `:let` and `:when` modifiers being supported but not `:while`."
+  with `:let` and `:when` modifiers being supported but not `:while`
+  `:when` can be followed by a boolean or a `heavy-bool`."
   [[v coll & others :as var-coll] & body]
   (expand-quantifier v coll others var-coll body
                      `+exists `+exists-impl `+false))
@@ -268,7 +276,8 @@
 (defmacro +forall 
   "Universal quantifier syntax.  `body` is expected to evaluate
   to a heavy-bool.    The syntax is similar to `for` and `doseq`
-  with `:let` and `:when` modifiers being supported but not `:while`."
+  with `:let` and `:when` modifiers being supported but not `:while`.
+  `:when` can be followed by a boolean or a `heavy-bool`."
   [[v coll & others :as var-coll] & body]
   (expand-quantifier v coll others var-coll body
                      `+forall `+forall-impl `+true))
