@@ -1,8 +1,8 @@
 (ns magma-test
-  (:require [util :refer [member first-st]]
-            [magma :as sut]
+  (:require [magma :as sut]
             [mod-p :refer [mod-p]]
-            [heavy-bool :refer [+bool +not +and +or +forall +exists +conj +annotate +annotate-false heavy-bool?]]
+            [heavy-bool :refer [+bool +not
+                                +annotate +annotate-false heavy-bool? find-witness]]
             [gaussian-int :refer [gaussian-int-mod-p]]
             [clojure.math :refer [sqrt ceil]]
             [clojure.test :refer [deftest testing is]]))
@@ -39,9 +39,9 @@
 
 (deftest t-find-identity
   (testing "find-identity"
-    (let [[bool reason] (sut/find-identity (range 10) (fn [a b] (+ a b)) sut/default-equal)]
-      (is bool)
-      (is (first-st r reason (= 0 (:witness r)))))))
+    (let [id (sut/find-identity (range 10) (fn [a b] (+ a b)) sut/default-equal)]
+      (is (+bool id))
+      (is (= 0 (find-witness id))))))
 
 (deftest t-mod-2
   (testing "find-mod-2"
