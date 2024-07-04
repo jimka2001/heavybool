@@ -101,7 +101,7 @@ Function.
 
 The default equal predicate which returns a `heavy-bool` indicating
   whether the arguments `left` and `right` are equal to each other
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L28-L37">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L27-L36">Source</a></sub></p>
 
 ## <a name="magma/find-identity">`find-identity`</a><a name="magma/find-identity"></a>
 ``` clojure
@@ -116,7 +116,7 @@ Predicate returning `heavy-bool` indicating whether there exists an identity ele
   `coll` -- a collection of values representing a finite mathematical set.
    `*` -- a binary operator which accepts two elements of `coll`
    `equal` -- equivalence predicate returning a `heavy-bool`
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L95-L108">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L91-L103">Source</a></sub></p>
 
 ## <a name="magma/has-inverses">`has-inverses`</a><a name="magma/has-inverses"></a>
 ``` clojure
@@ -136,7 +136,7 @@ Predicate returning a `heavy-bool` to determine whether every element
     `member` -- membership predicate, returning `heavy-bool`
     `equal` -- equality predicate, returning `heavy-bool`.
   
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L148-L178">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L141-L170">Source</a></sub></p>
 
 ## <a name="magma/is-associative">`is-associative`</a><a name="magma/is-associative"></a>
 ``` clojure
@@ -150,7 +150,7 @@ Predicate returning a `heavy-bool` indicating whether the given operation
   `coll` -- a collection of values representing a finite mathematical set.
    `*` -- a binary operator which accepts two elements of `coll`
    `equal` -- equivalence predicate returning a `heavy-bool`
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L39-L56">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L38-L54">Source</a></sub></p>
 
 ## <a name="magma/is-closed">`is-closed`</a><a name="magma/is-closed"></a>
 ``` clojure
@@ -164,7 +164,7 @@ Predicate returning a `heavy-bool`, determining whether the given operation `*`
   `coll` -- a collection of values representing a finite mathematical set.
   `*` -- a binary operator which accepts two elements of `coll`
   `member` -- membership predicate returning a `heavy-bool`
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L11-L26">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L11-L25">Source</a></sub></p>
 
 ## <a name="magma/is-commutative">`is-commutative`</a><a name="magma/is-commutative"></a>
 ``` clojure
@@ -178,7 +178,7 @@ Predicate returning a `heavy-bool` indicating whether the given operation
   `coll` -- a collection of values representing a finite mathematical set.
    `*` -- a binary operator which accepts two elements of `coll`
    `equal` -- equivalence predicate returning a `heavy-bool`
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L58-L74">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L56-L71">Source</a></sub></p>
 
 ## <a name="magma/is-field">`is-field`</a><a name="magma/is-field"></a>
 ``` clojure
@@ -208,7 +208,7 @@ Predicate returning a `heavy-bool` indicating whether the given collection
           to extract the inverse.
   `member` -- membership predicate, returning `heavy-bool`
   `equal` -- equality predicate, returning `heavy-bool`.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L242-L288">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L233-L278">Source</a></sub></p>
 
 ## <a name="magma/is-group">`is-group`</a><a name="magma/is-group"></a>
 ``` clojure
@@ -229,7 +229,7 @@ Predicate returning a `heavy-bool` indicating whether the given `coll` is a grou
     `member` -- membership predicate, returning `heavy-bool`
     `equal` -- equality predicate, returning `heavy-bool`.
   
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L180-L202">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L172-L194">Source</a></sub></p>
 
 ## <a name="magma/is-identity">`is-identity`</a><a name="magma/is-identity"></a>
 ``` clojure
@@ -244,7 +244,7 @@ Predicate returning a `heavy-bool` indicating whether the proposed identity, `id
    `*` -- a binary operator which accepts two elements of `coll`
    `ident` -- the proposed identity element
    `equal` -- equivalence predicate returning a `heavy-bool`
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L76-L93">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L73-L89">Source</a></sub></p>
 
 ## <a name="magma/is-monoid">`is-monoid`</a><a name="magma/is-monoid"></a>
 ``` clojure
@@ -260,7 +260,7 @@ Predicate returning a `heavy-bool` indicating whether the given collection
    `*` -- a binary operator which accepts two elements of `coll`
    `member` -- membership predicate returning a `heavy-bool`
    `equal` -- equivalence predicate returning a `heavy-bool`
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L128-L146">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L122-L139">Source</a></sub></p>
 
 ## <a name="magma/is-ring">`is-ring`</a><a name="magma/is-ring"></a>
 ``` clojure
@@ -284,7 +284,7 @@ Predicate returning a `heavy-bool` indicating whether the given collection
           to extract the inverse.
   `member` -- membership predicate, returning `heavy-bool`
   `equal` -- equality predicate, returning `heavy-bool`.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L205-L240">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L197-L231">Source</a></sub></p>
 
 ## <a name="magma/is-semigroup">`is-semigroup`</a><a name="magma/is-semigroup"></a>
 ``` clojure
@@ -300,7 +300,7 @@ Predicate returning a `heavy-bool` indicating whether the given collection
    `*` -- a binary operator which accepts two elements of `coll`
    `member` -- membership predicate returning a `heavy-bool`
    `equal` -- equivalence predicate returning a `heavy-bool`
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L110-L126">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L105-L120">Source</a></sub></p>
 
 -----
 # <a name="mod-p">mod-p</a>
