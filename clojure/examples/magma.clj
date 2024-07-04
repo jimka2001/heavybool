@@ -15,8 +15,7 @@
   `*` -- a binary operator which accepts two elements of `coll`
   `member` -- membership predicate returning a `heavy-bool`"
  [coll * member]
-  {:pre [(seq? coll)
-         (fn? *)
+  {:pre [(fn? *)
          (fn? member)]
    :post [(heavy-bool? %)]}
   (+tag
@@ -43,8 +42,7 @@
    `*` -- a binary operator which accepts two elements of `coll`
    `equal` -- equivalence predicate returning a `heavy-bool`"
   [coll * equal]
-  {:pre [(seq? coll)
-         (fn? *)
+  {:pre [(fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
@@ -62,8 +60,7 @@
    `*` -- a binary operator which accepts two elements of `coll`
    `equal` -- equivalence predicate returning a `heavy-bool`"
   [coll * equal]
-  {:pre [(seq? coll)
-         (fn? *)
+  {:pre [(fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
@@ -81,8 +78,7 @@
    `ident` -- the proposed identity element
    `equal` -- equivalence predicate returning a `heavy-bool`"
   [coll * ident equal]
-  {:pre [(seq? coll)
-         (fn? *)
+  {:pre [(fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
@@ -100,8 +96,7 @@
    `*` -- a binary operator which accepts two elements of `coll`
    `equal` -- equivalence predicate returning a `heavy-bool`"
   [coll * equal]
-  {:pre [(seq? coll)
-         (fn? *)
+  {:pre [(fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+exists [e coll]
@@ -116,8 +111,7 @@
    `member` -- membership predicate returning a `heavy-bool`
    `equal` -- equivalence predicate returning a `heavy-bool`"
   [coll * member equal]
-  {:pre [(seq? coll)
-         (fn? *)
+  {:pre [(fn? *)
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
@@ -134,8 +128,7 @@
    `member` -- membership predicate returning a `heavy-bool`
    `equal` -- equivalence predicate returning a `heavy-bool`"
   [coll * ident member equal]
-  {:pre [(seq? coll)
-         (fn? *)
+  {:pre [(fn? *)
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
@@ -158,8 +151,7 @@
     `equal` -- equality predicate, returning `heavy-bool`.
   "
   [coll * ident invertible member equal]
-  {:pre [(seq? coll)
-         (fn? *)
+  {:pre [(fn? *)
          (fn? invertible)
          (fn? member)
          (fn? equal)]
@@ -219,8 +211,7 @@
   `member` -- membership predicate, returning `heavy-bool`
   `equal` -- equality predicate, returning `heavy-bool`."
   [coll + * zero one +invertible member equal]
-  {:pre [(seq? coll)
-         (fn? +)
+  {:pre [(fn? +)
          (fn? *)
          (fn? +invertible)
          (fn? member)
@@ -265,8 +256,7 @@
    zero one
    +invertible *invertible
    member equal]
-  {:pre [(seq? coll)
-         (fn? +)
+  {:pre [(fn? +)
          (fn? *)
          (fn? +invertible)
          (fn? *invertible)

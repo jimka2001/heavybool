@@ -1,7 +1,8 @@
 (ns magma-test
   (:require [magma :as sut]
+            [util :as ut]
             [mod-p :refer [mod-p]]
-            [heavy-bool :refer [+bool +not
+            [heavy-bool :refer [+bool +not +exists +tag
                                 +annotate +annotate-false heavy-bool? find-witness]]
             [gaussian-int :refer [gaussian-int-mod-p]]
             [clojure.math :refer [sqrt ceil]]
@@ -93,6 +94,36 @@
                                   (:invertible mod-n)
                                   (:member mod-n)
                                   (:equiv mod-n))))))))
+
+(deftest t-klein-4
+  (testing "Klein 4 group"
+    (let [coll [:e :a :b :c]]
+      (letfn [(* [x y]
+                (cond (= :e x)
+                      y
+
+                      (= :e y)
+                      x
+
+                      (= x y)
+                      :e
+
+                      :else
+                      (first (disj #{:a :b :c} x y))))
+              (invertible [x]
+                (+tag (+exists [y coll]
+                               (= :e (* y x)))
+                      :invertible))
+              (member [x]
+                (+tag (+annotate (ut/member x coll) :x x) :member))
+              (equal [x y]
+                (+tag (= x y) :equal))]
+        (is (+bool (sut/is-group coll
+                                 *
+                                 :e
+                                 invertible
+                                 member
+                                 equal)))))))
 
 (defn test-gaussian [p]
   (let [m (gaussian-int-mod-p p)
