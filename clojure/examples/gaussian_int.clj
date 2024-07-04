@@ -13,7 +13,25 @@
        (int? (first g))
        (int? (second g))))
 
-(defn gaussian-int-mod-p [p]
+(defn gaussian-int-mod-p 
+  "For a given integer return a map with the keys:
+    :p
+    :gen
+    :op
+    :equiv
+    :mult
+    :one
+    :zero
+    :add
+    :add-inv
+    :mult-inv
+    :member
+  These keys are the data necessary to make a call to the `is-field` function.
+  The values of each key is determined in a way so that if p is an odd prime
+  of the form 4k-1, then the set of Gaussian integers modulo p is a field.
+  Otherwise the set is not a field.
+  "
+  [p]
   {:pre [(int? p)
          (< 1 p)]
    :post [(map? %)

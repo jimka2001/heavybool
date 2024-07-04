@@ -109,8 +109,14 @@
 
 (deftest t-gaussian
   (testing "gaussian int"
-    (doseq [p (range 2 10)
+    (is (+bool (+not (test-gaussian 2))))
+    (doseq [p (range 3 10)
             :let [f (test-gaussian p)]]
-      (if (member p [3 7])
-        (is (+bool f))
-        (is (+bool (+not f)))))))
+      (cond (not (prime? p))
+            (is (+bool (+not f)))
+
+            (= 1 (mod p 4)) ;; 4k + 1
+            (is (+bool (+not f)))
+
+            :else ;; 4k - 1
+            (is (+bool f))))))
