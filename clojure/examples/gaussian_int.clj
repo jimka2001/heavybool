@@ -5,7 +5,9 @@
   (:require [util :refer [find-if]]
             [heavy-bool :refer [+and +forall +exists +false +true +annotate +conj +tag heavy-bool?]]))
 
-(defn gaussian? [g]
+(defn gaussian? 
+  "Bolean predicate detecting whether the given value is a 2 element vector of integers"
+  [g]
   (and (vector? g)
        (= 2 (count g))
        (int? (first g))
