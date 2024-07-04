@@ -47,10 +47,10 @@
 # <a name="heavy-bool">heavy-bool</a>
 
 
-A [[`heavy-bool`](#heavy-bool)](#heavy-bool) is a pair `[bool reason]`, where `bool` is a truth value
+A [`heavy-bool`](#heavy-bool) is a pair `[bool reason]`, where `bool` is a truth value
   usually true or false, but may be any clojure truthy or falsey value.
   `reason` is a list of maps with keys such as `:witness`, `:bool`, and
-  `:predicate` etc.  A [[`heavy-bool`](#heavy-bool)](#heavy-bool) answers a predicate question with either
+  `:predicate` etc.  A [`heavy-bool`](#heavy-bool) answers a predicate question with either
   yes-because or no-because
 
 
@@ -63,8 +63,8 @@ A [[`heavy-bool`](#heavy-bool)](#heavy-bool) is a pair `[bool reason]`, where `b
 ```
 Macro.
 
-Logical AND of heavy-bools which evaluates to a [[`heavy-bool`](#heavy-bool)](#heavy-bool).
-  Expands to code which evaluates to the left-most [[`heavy-bool`](#heavy-bool)](#heavy-bool) value
+Logical AND of heavy-bools which evaluates to a [`heavy-bool`](#heavy-bool).
+  Expands to code which evaluates to the left-most [`heavy-bool`](#heavy-bool) value
   in the argument list, otherwise evaluates to the right-most
   value.  If the argument list is empty, evaluates explicitly to
   [`+true`](#heavy-bool/+true)
@@ -214,11 +214,11 @@ Functional version of [`+forall`](#heavy-bool/+forall).
 ```
 Function.
 
-Constructor (factor function) for [[[`heavy-bool`](#heavy-bool)](#heavy-bool)](#heavy-bool).
-  convert `arg` to a [[[`heavy-bool`](#heavy-bool)](#heavy-bool)](#heavy-bool).
+Constructor (factor function) for [`heavy-bool`](#heavy-bool).
+  convert `arg` to a [`heavy-bool`](#heavy-bool).
   `true` is converted to [`+true`](#heavy-bool/+true)
   `false` is converted to [`+false`](#heavy-bool/+false)
-  If `arg` is already a [[[`heavy-bool`](#heavy-bool)](#heavy-bool)](#heavy-bool), no conversion occurs.
+  If `arg` is already a [`heavy-bool`](#heavy-bool), no conversion occurs.
   In any case, if other key/value pairs are given, they are conjoined via [`+conj`](#heavy-bool/+conj)
   
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L61-L71">Source</a></sub></p>
@@ -231,8 +231,8 @@ Constructor (factor function) for [[[`heavy-bool`](#heavy-bool)](#heavy-bool)](#
 Macro.
 
 heavy-bool version of `if`.  The condition must
-  evaluate to a [[`heavy-bool`](#heavy-bool)](#heavy-bool).  Either the consequent or
-  alternative will be evaluated depending on the [[`heavy-bool`](#heavy-bool)](#heavy-bool)
+  evaluate to a [`heavy-bool`](#heavy-bool).  Either the consequent or
+  alternative will be evaluated depending on the [`heavy-bool`](#heavy-bool)
   value.
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/src/heavy_bool.clj#L96-L104">Source</a></sub></p>
 
@@ -275,8 +275,8 @@ logically negate the given heavy-bool
 ```
 Macro.
 
-Logical OR of heavy-bools which evaluates to a [[`heavy-bool`](#heavy-bool)](#heavy-bool).
-  Expands to code which evaluates to the left-most [[`heavy-bool`](#heavy-bool)](#heavy-bool) value
+Logical OR of heavy-bools which evaluates to a [`heavy-bool`](#heavy-bool).
+  Expands to code which evaluates to the left-most [`heavy-bool`](#heavy-bool) value
   in the argument list, otherwise evaluates to the left-most
   value.  If the argument list is empty, evaluates explicitly to
   [`+false`](#heavy-bool/+false)
