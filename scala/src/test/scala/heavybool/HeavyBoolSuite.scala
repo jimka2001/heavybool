@@ -19,11 +19,14 @@ class HeavyBoolSuite extends MyFunSuite {
   }
 
   test("or") {
-    forallM(  "n", LazyList.range(1,10,3)) {
-      (n: Int) => (n % 2 != 0).tag("forall")
-    } || existsM("n", LazyList.range(1,10,3)){ (n: Int) =>
-      (n % 2 != 0).tag("exists")
-    }}
+    assert(
+      forallM("n", LazyList.range(1, 10, 3)) {
+        (n: Int) => (n % 2 != 0).tag("forall")
+      } || existsM("n", (1 to 10 by 3)) { (n: Int) =>
+        (n % 2 != 0).tag("exists")
+      }
+      )
+  }
 
   test("forall"){
     assert(HTrue == forallM("x", LazyList(1,2,3)){ (x:Int) =>
