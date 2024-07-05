@@ -1,4 +1,4 @@
-name := "cl-robdd-scala"
+name := "heavybool"
 
 version := "0.1"
 
