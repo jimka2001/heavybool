@@ -20,6 +20,13 @@ sealed abstract class HeavyBool(val because:Reason) {
     prefix + reasoning.mkString("[", "; ", "]")
   }
 
+  lazy val witness:Option[Any] = {
+    because.find(m=>m.contains("witness")) match {
+      case None => None
+      case Some(m) => m.get("witness")
+    }
+  }
+
   val toBoolean: Boolean = {
     this match {
       case HeavyTrue(_) => true
@@ -116,22 +123,14 @@ object HeavyBool {
       HeavyFalse(because)
   }
 
-  def heavyIf(cond:HeavyBool,
-              consequent: => HeavyBool,
-              alternative: => HeavyBool) = {
-    if (cond.toBoolean)
-      consequent
-    else
-      alternative
-  }
-
   def forallM[T, C[_]:Foldable](tag:String, items: C[T])( p: T => HeavyBool): HeavyBool = {
     import cats._
     import cats.syntax.all._
+    import HbImplicits._
 
     def folder(_hb:HeavyBool, item:T):Either[HeavyBool,HeavyBool] = {
       val hb = p(item)
-      if (hb.toBoolean)
+      if (hb)
         Right(HTrue) // not yet finished
       else
         Left(hb ++ Map("witness" -> item,

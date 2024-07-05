@@ -2,40 +2,39 @@ package heavybool
 
 import adjuvant.MyFunSuite
 import HeavyBool._
+import HbImplicits._
 
 class HeavyBoolSuite extends MyFunSuite {
   test("and") {
-    forallM("n",
-            LazyList.range(1,10,3)){
-      (n: Int) => HeavyBool(n % 2 != 0,
-                            List(Map("forall" -> true)))} &&
+    forallM("n", LazyList.range(1,10,3)){
+      (n: Int) => (n % 2 != 0).tag("forall")
+    } &&
       existsM("n", LazyList.range(1,10,3)){
-        (n: Int) => HeavyBool(n % 2 != 0,
-                              List(Map("exists" -> true)))}
+        (n: Int) => (n % 2 != 0).tag("exists")
+      }
   }
 
   test("or") {
     forallM(  "n", LazyList.range(1,10,3)) {
-      (n: Int) => HeavyBool(n % 2 != 0, List(Map("forall" -> true)))
+      (n: Int) => (n % 2 != 0).tag("forall")
     } || existsM("n", LazyList.range(1,10,3)){ (n: Int) =>
-      HeavyBool(n % 2 != 0, List(Map("exists" -> true)))
+      (n % 2 != 0).tag("exists")
     }}
 
   test("forall"){
     assert(HTrue == forallM("x", LazyList(1,2,3)){ (x:Int) =>
-      (if (x > 0)
-        HeavyBool(true, List(Map("reason" -> "works")))
-      else
-        HeavyBool(false, List(Map("reason" -> "fails"))))
+      (x>0).tag("works")
+    })
+    println(forallM("x", LazyList(1,2,3)){ (x:Int) =>
+      (x>0).tag("works")
     })
 
     val result = forallM("x", LazyList(1,2,3)){ (x:Int) =>
-      (if (x > 10)
-        HeavyTrue(List(Map("reason" -> "works")))
-      else
-        HeavyFalse(List(Map("reason" -> "fails"))))}
+      (x>1).tag("works")
+    }
     assert(result.toBoolean == false)
-    assert(result.because.head("witness") == 1)
+    assert(!result)
+    assert(result.witness == Some(1))
   }
 
   test("logic") {
@@ -47,4 +46,8 @@ class HeavyBoolSuite extends MyFunSuite {
     assert((HeavyFalse(x) || HeavyFalse(y)) == HeavyFalse(y))
   }
 
+  test("if"){
+    assert(1 == (if (HTrue) 1 else 2))
+    assert(2 == (if (HFalse) 1 else 2))
+  }
 }
