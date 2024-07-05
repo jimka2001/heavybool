@@ -77,7 +77,7 @@ object Relations {
     isIrreflexive(gen,rel) && isAsymmetric(gen,rel) && isTransitive(gen,rel)
   }.tag("strict partial order")
 
-  
+
   def main(argv:Array[String]):Unit = {
     println(existsM("a < 12", LazyList.range(1,20)){ (a:Int) => HeavyBool(a < 12)})
     println(isSymmetric(LazyList.range(1,20), (a:Int, b:Int) => a < b))

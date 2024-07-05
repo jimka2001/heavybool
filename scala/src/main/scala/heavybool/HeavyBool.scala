@@ -27,6 +27,13 @@ sealed abstract class HeavyBool(val because:Reason) {
     }
   }
 
+  def findWitness(tag:String):Option[Any] = {
+    because.find(m=> (m.contains("witness") && m.contains("tag") && m("tag") == tag)) match {
+      case None => None
+      case Some(m) => m.get("witness")
+    }
+  }
+
   val toBoolean: Boolean = {
     this match {
       case HeavyTrue(_) => true
