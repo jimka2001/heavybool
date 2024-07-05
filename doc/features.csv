@@ -1,7 +1,7 @@
-Language,Scala,Python,Common Lisp,Clojure,
+Language,Scala,Python,Common Lisp,Clojure
 constructor,HeavyBool,HeavyBool(),,heavy-bool
-true,HeavyTrue,HeavyTrue(),,+true
-false,HeavyFalse,HeavyFalse(),,+false
+TRUE,HeavyTrue,HeavyTrue(),,+true
+FALSE,HeavyFalse,HeavyFalse(),,+false
 if,heavyIf,,,+if
 not,!,!,,+not
 and,&&,and,,+and
@@ -15,15 +15,16 @@ annotate for user,,,,+annotate
 annotate programmatic,++,annotate,annotate,+conj
 tag,tag,tag,tag,+tag
 assert,AssertM,assert,,+assert
-magma,,Magma
-is-semigroup,,isSemiGroup
-is-monoid,,isMonoid
-is-group,,isGroup
-is-ring,,
-is-field,,
-addition-mod-p,,AdditionModP()
-multiplication-mod-p,,MultiplicationModP()
-dyn-magma,,DynMagma()
+magma,,Magma,,
+is-magma,,,,Is-magma
+is-semigroup,,isSemiGroup,,Is-semigroup
+is-monoid,,isMonoid,,Is-monoid
+is-group,,isGroup,,Is-group
+is-ring,,,,Is-ring
+is-field,,,,Is-field
+addition-mod-p,,AdditionModP(),,addition-mod-p
+multiplication-mod-p,,MultiplicationModP(),,multiplication-mod-p
+dyn-magma,,DynMagma(),,
 is-antisymmetric,,,,is-antisymmetric
 is-asymmetric,,,,is-asymmetric
 is-connected,,,,is-connected
@@ -35,4 +36,3 @@ is-strict-partial-order,,,,is-strict-partial-order
 is-strongly-connected,,,,is-strongly-connected
 is-symmetric,,,,is-symmetric
 is-transitive,,,,is-transitive
-
