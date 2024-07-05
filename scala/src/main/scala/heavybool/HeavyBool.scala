@@ -130,10 +130,10 @@ object HeavyBool {
       HeavyFalse(because)
   }
 
-  // this forallM declaration takes care of call-sites which specify a Range
-  // as items.   the cats library is not able ot match the forallM[T, C[_]]
-  // types for range because of some sort of type-arity kind-ness problem
-  // that I don't understand.  However, declaring this method, avoids the problem.
+  // This forallM declaration takes care of call-sites which specify a Range
+  // as items.   The forallM[T, C[_]] function defined below does not work with
+  // Range for the same reason foldM does not work with Range.
+  // However, declaring forallM directly on (String, Range) avoids the problem.
   def forallM(tag:String, items: Range)(p: Int => HeavyBool): HeavyBool = {
     forallM[Int,LazyList](tag, items.to(LazyList))(p)
   }
@@ -155,10 +155,10 @@ object HeavyBool {
     items.foldM(HTrue:HeavyBool)(folder).merge
   }
 
-  // this existsM declaration takes care of call-sites which specify a Range
-  // as items.   the cats library is not able ot match the existsM[T, C[_]]
-  // types for range because of some sort of type-arity kind-ness problem
-  // that I don't understand.  However, declaring this method, avoids the problem.
+  // This existsM declaration takes care of call-sites which specify a Range
+  // as items.   The existsM[T, C[_]] function defined below does not work with
+  // Range for the same reason foldM does not work with Range.
+  // However, declaring existsM directly on (String, Range) avoids the problem.
   def existsM(tag:String, items: Range)(p: Int => HeavyBool): HeavyBool = {
     existsM[Int,LazyList](tag, items.to(LazyList))(p)
   }

@@ -11,12 +11,12 @@ object Relations {
       .tag("reflexive")
   }
   def isIrreflexive[T](gen:LazyList[T], rel:(T,T)=>Boolean) = {
-    // every no element relates to itself
+    // no element relates to itself
     forallM("x", gen){(x:T) => !rel(x,x)}
       .tag("irreflexive")
   }
   def isSymmetric[T](gen:LazyList[T], rel:(T,T)=>Boolean) = {
-
+    // if a relates to b, then b relates to a
     forallM("x", gen) { (x: T) =>
       forallM("y", gen) { (y: T) => rel(x, y) ==> rel(y, x) }
     }.tag("symmetric")
