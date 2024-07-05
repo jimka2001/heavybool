@@ -12,11 +12,13 @@
     -  [`is-field`](#magma/is-field) - Predicate returning a <code>heavy-bool</code> indicating whether the given collection forms a field under the given operations.
     -  [`is-group`](#magma/is-group) - Predicate returning a <code>heavy-bool</code> indicating whether the given <code>coll</code> is a group under the given operation <code>*</code> with identity <code>ident</code>.
     -  [`is-identity`](#magma/is-identity) - Predicate returning a <code>heavy-bool</code> indicating whether the proposed identity, <code>ident</code> is really a left and right identity on the given collection of elements.
+    -  [`is-magma`](#magma/is-magma) - Predicate returning a <code>heavy-bool</code> indicating whether the given collection forms a magma under the given operation.
     -  [`is-monoid`](#magma/is-monoid) - Predicate returning a <code>heavy-bool</code> indicating whether the given collection forms a monoid under the given operation.
     -  [`is-ring`](#magma/is-ring) - Predicate returning a <code>heavy-bool</code> indicating whether the given collection forms a ring under the given operation.
     -  [`is-semigroup`](#magma/is-semigroup) - Predicate returning a <code>heavy-bool</code> indicating whether the given collection forms a semigroup under the given operation.
 -  [`mod-p`](#mod-p)  - Example usage of <code>heavy-bool</code>.
-    -  [`mod-p`](#mod-p/mod-p) - The non-zero elements of the integers mod p (for prime p) is a group under multiplication.
+    -  [`addition-mod-p`](#mod-p/addition-mod-p)
+    -  [`multiplication-mod-p`](#mod-p/multiplication-mod-p)
 -  [`relations`](#relations)  - Example usage of <code>heavy-bool</code>.
     -  [`is-antisymmetric`](#relations/is-antisymmetric) - Test for antisymmetric relation: ((a R b) and (b R a)) => (a = b) <code>gen</code> is a collection <code>hb-rel</code> is a binary function returning a heavy-bool.
     -  [`is-asymmetric`](#relations/is-asymmetric) - Test for asymmetric relation.
@@ -136,7 +138,7 @@ Predicate returning a `heavy-bool` to determine whether every element
     `member` -- membership predicate, returning `heavy-bool`
     `equal` -- equality predicate, returning `heavy-bool`.
   
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L141-L170">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L157-L186">Source</a></sub></p>
 
 ## <a name="magma/is-associative">`is-associative`</a><a name="magma/is-associative"></a>
 ``` clojure
@@ -208,7 +210,7 @@ Predicate returning a `heavy-bool` indicating whether the given collection
           to extract the inverse.
   `member` -- membership predicate, returning `heavy-bool`
   `equal` -- equality predicate, returning `heavy-bool`.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L233-L278">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L249-L294">Source</a></sub></p>
 
 ## <a name="magma/is-group">`is-group`</a><a name="magma/is-group"></a>
 ``` clojure
@@ -229,7 +231,7 @@ Predicate returning a `heavy-bool` indicating whether the given `coll` is a grou
     `member` -- membership predicate, returning `heavy-bool`
     `equal` -- equality predicate, returning `heavy-bool`.
   
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L172-L194">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L188-L210">Source</a></sub></p>
 
 ## <a name="magma/is-identity">`is-identity`</a><a name="magma/is-identity"></a>
 ``` clojure
@@ -246,6 +248,21 @@ Predicate returning a `heavy-bool` indicating whether the proposed identity, `id
    `equal` -- equivalence predicate returning a `heavy-bool`
 <p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L73-L89">Source</a></sub></p>
 
+## <a name="magma/is-magma">`is-magma`</a><a name="magma/is-magma"></a>
+``` clojure
+
+(is-magma coll * member)
+```
+Function.
+
+Predicate returning a `heavy-bool` indicating whether the given collection
+   forms a magma under the given operation.
+    A magma is a set which is closed under the operation
+   `coll` -- a collection of values representing a finite mathematical set.
+   `*` -- a binary operator which accepts two elements of `coll`
+   `member` -- membership predicate returning a `heavy-bool`
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L107-L119">Source</a></sub></p>
+
 ## <a name="magma/is-monoid">`is-monoid`</a><a name="magma/is-monoid"></a>
 ``` clojure
 
@@ -260,7 +277,7 @@ Predicate returning a `heavy-bool` indicating whether the given collection
    `*` -- a binary operator which accepts two elements of `coll`
    `member` -- membership predicate returning a `heavy-bool`
    `equal` -- equivalence predicate returning a `heavy-bool`
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L122-L139">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L138-L155">Source</a></sub></p>
 
 ## <a name="magma/is-ring">`is-ring`</a><a name="magma/is-ring"></a>
 ``` clojure
@@ -284,7 +301,7 @@ Predicate returning a `heavy-bool` indicating whether the given collection
           to extract the inverse.
   `member` -- membership predicate, returning `heavy-bool`
   `equal` -- equality predicate, returning `heavy-bool`.
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L197-L231">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L213-L247">Source</a></sub></p>
 
 ## <a name="magma/is-semigroup">`is-semigroup`</a><a name="magma/is-semigroup"></a>
 ``` clojure
@@ -295,12 +312,12 @@ Function.
 
 Predicate returning a `heavy-bool` indicating whether the given collection
    forms a semigroup under the given operation.
-   A semigroup is a magma which is closed with an associative operation.
+   A semigroup is a magma with an associative operation.
    `coll` -- a collection of values representing a finite mathematical set.
    `*` -- a binary operator which accepts two elements of `coll`
    `member` -- membership predicate returning a `heavy-bool`
    `equal` -- equivalence predicate returning a `heavy-bool`
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L105-L120">Source</a></sub></p>
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/magma.clj#L121-L136">Source</a></sub></p>
 
 -----
 # <a name="mod-p">mod-p</a>
@@ -314,26 +331,21 @@ Example usage of `heavy-bool`.
 
 
 
-## <a name="mod-p/mod-p">`mod-p`</a><a name="mod-p/mod-p"></a>
+## <a name="mod-p/addition-mod-p">`addition-mod-p`</a><a name="mod-p/addition-mod-p"></a>
 ``` clojure
 
-(mod-p p)
+(addition-mod-p p)
 ```
 Function.
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/mod_p.clj#L53-L58">Source</a></sub></p>
 
-The non-zero elements of the integers mod p (for prime p)
-  is a group under multiplication.
-  This function returns a map with the keys:
-    :p  -- positive integer for which the operation is performed modulo p
-    :gen -- a collection of integers from 1 to p-1
-    :equiv -- a heavy-boolean relation (binary function returning a `heavy-bool`)
-    :invertible -- a predicate returning a `heavy-bool` indicating whether a given element is invertible.
-               If it is invertible, the return value
-    :member -- a membership predicate returning a `heavy-bool`
-    :op -- integer multiplication mod p
-    :ident -- 1
-  
-<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/mod_p.clj#L10-L57">Source</a></sub></p>
+## <a name="mod-p/multiplication-mod-p">`multiplication-mod-p`</a><a name="mod-p/multiplication-mod-p"></a>
+``` clojure
+
+(multiplication-mod-p p)
+```
+Function.
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/mod_p.clj#L60-L65">Source</a></sub></p>
 
 -----
 # <a name="relations">relations</a>

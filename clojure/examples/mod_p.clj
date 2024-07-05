@@ -4,10 +4,12 @@
   This structure is useful for testing the `examples.magma/is-group` function.
   "
   (:require [heavy-bool :refer [+and +forall +exists +false +true +annotate +annotate-true +annotate-false
-                                +heavy-bool heavy-bool?]]))
+                                +tag +heavy-bool heavy-bool?]]
+            [util :as ut]
+))
 
 
-(defn mod-p
+(defn- mod-p
   "The non-zero elements of the integers mod p (for prime p)
   is a group under multiplication.
   This function returns a map with the keys:
@@ -20,38 +22,44 @@
     :op -- integer multiplication mod p
     :ident -- 1
   "
-  [p]
+  [p elements op ident]
   {:pre [(int? p) (> p 1)]
    :post [(map? %)]}
-  (let [elements (range 1 p)
-        ident 1]
-    (letfn [(equiv [a b]
-              {:post [(heavy-bool? %)]}
-              (if (= a b)
-                +true
-                (+annotate +false
-                           :a a
-                           :b b
-                           :reason "not equal")))
-            (mult [a b]
-              (mod (* a b) p))
-            (member [a]
-              {:post [(heavy-bool? %)]}
-              (+and (+annotate-false (+heavy-bool (integer? a) :a a :p p)
-                                     :reason "expecting integer, got a")
-                    (+annotate-false (+heavy-bool (<= 0 a p) :a a :p p)
-                                     :reason "expecting 0 <= a < p")))
-            (invertible [a]
-              {:post [(heavy-bool? %)]}
-              (+annotate-false (+exists [inv-a elements]
-                                        (+and (equiv ident (mult a inv-a))
-                                              (equiv ident (mult inv-a a))))
-                               :reason "cannot compute inverse of"
-                               :a a))]
-      {:p p
-       :gen elements
-       :equiv equiv
-       :invertible invertible
-       :member member
-       :op mult
-       :ident 1})))
+  (letfn [(equiv [a b]
+            (if (= a b)
+              +true
+              (+annotate +false
+                         :a a
+                         :b b
+                         :reason "not equal")))
+          (member [a]
+            (+tag (+annotate (ut/member a elements) :a a :p p)
+                  :member))
+          (invertible [a]
+            (+annotate-false (+exists [inv-a elements]
+                                      (+and (equiv ident (op a inv-a))
+                                            (equiv ident (op inv-a a))))
+                             :reason "cannot compute inverse of"
+                             :a a))]
+    {:p p
+     :gen elements
+     :equiv equiv
+     :invertible invertible
+     :member member
+     :op op
+     :ident ident}))
+
+
+(defn addition-mod-p
+  [p]
+  (mod-p p
+         (range p)
+         (fn [a b] (mod (+ a b) p))
+         0))
+
+(defn multiplication-mod-p
+  [p]
+  (mod-p p
+         (range 1 p)
+         (fn [a b] (mod (* a b) p))
+         1))

@@ -102,10 +102,26 @@
   (+exists [e coll]
     (is-identity coll * e equal)))
 
+
+
+(defn is-magma
+  "Predicate returning a `heavy-bool` indicating whether the given collection
+   forms a magma under the given operation.
+    A magma is a set which is closed under the operation
+   `coll` -- a collection of values representing a finite mathematical set.
+   `*` -- a binary operator which accepts two elements of `coll`
+   `member` -- membership predicate returning a `heavy-bool`"
+  [coll * member]
+  {:pre [(fn? *)
+         (fn? member)]
+   :post [(heavy-bool? %)]}
+  (+tag  (is-closed coll * member)
+         :magma))
+
 (defn is-semigroup
   "Predicate returning a `heavy-bool` indicating whether the given collection
    forms a semigroup under the given operation.
-   A semigroup is a magma which is closed with an associative operation.
+   A semigroup is a magma with an associative operation.
    `coll` -- a collection of values representing a finite mathematical set.
    `*` -- a binary operator which accepts two elements of `coll`
    `member` -- membership predicate returning a `heavy-bool`
@@ -115,7 +131,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+tag  (+and (is-closed coll * member)
+  (+tag  (+and (is-magma coll * member)
                (is-associative coll * equal))
          :semigroup))
 

@@ -1,7 +1,7 @@
 (ns magma-test
   (:require [magma :as sut]
             [util :as ut]
-            [mod-p :refer [mod-p]]
+            [mod-p :refer [multiplication-mod-p addition-mod-p]]
             [heavy-bool :refer [+bool +not +exists +tag
                                 +annotate +annotate-false heavy-bool? find-witness]]
             [gaussian-int :refer [gaussian-int-mod-p]]
@@ -44,9 +44,21 @@
       (is (+bool id))
       (is (= 0 (find-witness id))))))
 
-(deftest t-mod-2
-  (testing "find-mod-2"
-    (let [mod-2 (mod-p 2)]
+(deftest t-add-mod-n
+  (testing "add mod n"
+    (doseq [n (range 2 10)
+            :let [gr (addition-mod-p n)]]
+      (is (+bool (+annotate (sut/is-group 
+                             (:gen gr)
+                             (:op gr)
+                             (:ident gr)
+                             (:invertible gr)
+                             (:member gr)
+                             (:equiv gr))))))))
+
+(deftest t-mult-mod-2
+  (testing "mult-mod-2"
+    (let [mod-2 (multiplication-mod-p 2)]
       (is (+bool (+annotate (sut/is-group (:gen mod-2)
                                           (:op mod-2)
                                           (:ident mod-2)
@@ -57,9 +69,9 @@
                             :inv ((:invertible mod-2) 1)
                             :p 2))))))
 
-(deftest t-mod-3
-  (testing "find-mod-3"
-    (let [mod-3 (mod-p 3)]
+(deftest t-mult-mod-3
+  (testing "find-mult-mod-3"
+    (let [mod-3 (multiplication-mod-p 3)]
       (is (+bool (sut/is-group (:gen mod-3)
                                        (:op mod-3)
                                        (:ident mod-3)
@@ -85,8 +97,8 @@
 
 (deftest t-mod-prime
   (testing "find mod prime"
-    (doseq [n (range 2 50)
-            :let [mod-n (mod-p n)]]
+    (doseq [n (range 2 50) 
+            :let [mod-n (multiplication-mod-p n)]]
       (is (= (prime? n)
              (+bool (sut/is-group (:gen mod-n)
                                   (:op mod-n)
