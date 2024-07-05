@@ -68,13 +68,22 @@ sealed abstract class HeavyBool(val because:Reason) {
   }
 
   // implies:   this ==> that
+  // ==> uses a call-by-name argument because we want to
+  // avoid `that` being evaluated if `this` is already false.
   def ==>(that: => HeavyBool): HeavyBool = {
     !this || that
   }
 
   // implied by:   this <== that
+  // <== uses a call-by-name argument because we want to
+  // avoid `that` being evaluated if `this` is already false.
   def <==(that: => HeavyBool): HeavyBool = {
     this || !that
+  }
+
+  // this ==> that and also that ==> this
+  def <==>(that: => HeavyBool): HeavyBool = {
+    (this ==> that) && (this <== that)
   }
 
   def ++(any: Map[String,Any]): HeavyBool = {
