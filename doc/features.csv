@@ -8,6 +8,7 @@ and,&&,and,,+and
 or,||,or,,+or
 implies,==>,,,+implies
 implied by,<==,,,+implied-by
+iff,<==>,,,
 forall,forallM,forallM/allM,,+forall
 exists,existsM,existsM/anyM,,+exists
 to Boolean,toBoolean,,,+bool
