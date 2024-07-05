@@ -1,6 +1,7 @@
 package heavybool
 import cats.Foldable
 import cats.syntax.all._
+import heavybool.examples.DynMagma
 
 abstract class Magma[T,C[_]:Foldable] {
   import HeavyBool._

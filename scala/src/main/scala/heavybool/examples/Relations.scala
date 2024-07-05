@@ -1,5 +1,7 @@
-package heavybool
-import HeavyBool._
+package heavybool.examples
+
+import heavybool.HeavyBool
+import heavybool.HeavyBool.{HTrue, existsM, forallM}
 
 object Relations {
   def isReflexive[T](gen:LazyList[T], rel:(T,T)=>Boolean) = {

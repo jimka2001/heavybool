@@ -1,7 +1,8 @@
-package heavybool
+package heavybool.examples
 
-import HeavyBool._
 import cats.Foldable
+import heavybool.HeavyBool.{HFalse, HTrue}
+import heavybool.{HeavyBool, Magma}
 
 case class DynMagma[T, C[_]:Foldable](gen1: () => C[T],
                        op1: (T, T) => T,

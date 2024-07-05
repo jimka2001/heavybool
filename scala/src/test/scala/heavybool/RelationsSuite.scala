@@ -2,7 +2,7 @@ package heavybool
 
 import adjuvant.MyFunSuite
 import heavybool.HeavyBool._
-import heavybool.Relations._
+import heavybool.examples.Relations._
 
 class RelationsSuite extends MyFunSuite {
   test("symmetric") {
