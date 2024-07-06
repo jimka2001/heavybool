@@ -4,7 +4,11 @@ package heavybool
 import HeavyBool.Reason
 import cats.Foldable
 
-
+/**
+ * Represents true-because or false-because.
+ *
+ * @param because a list of hash tables explaining the reasoning for the Boolean value
+ */
 sealed abstract class HeavyBool(val because:Reason) {
   override def toString:String = locally{
     val prefix:String = toBoolean.toString
@@ -20,6 +24,10 @@ sealed abstract class HeavyBool(val because:Reason) {
     prefix + reasoning.mkString("[", "; ", "]")
   }
 
+  /**
+   * A value representing the witness value of an existential quantifier or
+   *    the counterexample of a universal quantifier.
+   */
   lazy val witness:Option[Any] = {
     because.find(m=>m.contains("witness")) match {
       case None => None
@@ -27,6 +35,13 @@ sealed abstract class HeavyBool(val because:Reason) {
     }
   }
 
+  /**
+   * If this HeavyBool is a result of concentric existential or universal
+   * quantifiers, then each may have left a witness tagged by a variable name.
+   * This method finds the witness associated with a variable name (string).
+   * @param tag
+   * @return
+   */
   def findWitness(tag:String):Option[Any] = {
     because.find(m=> (m.contains("witness") && m.contains("tag") && m("tag") == tag)) match {
       case None => None
@@ -34,6 +49,9 @@ sealed abstract class HeavyBool(val because:Reason) {
     }
   }
 
+  /**
+   * Convert a HeavyBool to true or false
+   */
   val toBoolean: Boolean = {
     this match {
       case HeavyTrue(_) => true
@@ -41,8 +59,12 @@ sealed abstract class HeavyBool(val because:Reason) {
     }
   }
 
-  // logical OR between to HeavyBool objects, 
-  // `that` is only evaluated if this is HeavyFalse.
+  /**
+   * logical OR between to HeavyBool objects,
+   * `that` is only evaluated if this is HeavyFalse.
+   *
+   * @param that a call-by-name expression
+   */
   def ||(that: => HeavyBool):HeavyBool = {
     this match {
       case HeavyTrue(_) => this
@@ -51,8 +73,10 @@ sealed abstract class HeavyBool(val because:Reason) {
   }
 
 
-  // logical AND between to HeavyBool objects, 
-  // `that` is only evaluated if this is HeavyTrue
+  /**
+   * logical AND between to HeavyBool objects,
+   * that` is only evaluated if this is HeavyTrue
+   */
   def &&(that: => HeavyBool):HeavyBool = {
     this match {
       case HeavyTrue(_) => that
@@ -67,21 +91,26 @@ sealed abstract class HeavyBool(val because:Reason) {
     }
   }
 
-  // implies:   this ==> that
-  // ==> uses a call-by-name argument because we want to
-  // avoid `that` being evaluated if `this` is already false.
+  /**
+   * implies:   this ==> that
+   * ==> uses a call-by-name argument because we want to
+   * avoid that being evaluated if this is already false.
+   */
   def ==>(that: => HeavyBool): HeavyBool = {
     !this || that
   }
 
-  // implied by:   this <== that
-  // <== uses a call-by-name argument because we want to
-  // avoid `that` being evaluated if `this` is already false.
+  /** implied by:   this <== that
+   * <== uses a call-by-name argument because we want to
+   * avoid that being evaluated if this is already false.
+   */
   def <==(that: => HeavyBool): HeavyBool = {
     this || !that
   }
 
-  // this ==> that and also that ==> this
+  /**
+   * this ==> that and also that ==> this
+   */
   def <==>(that: => HeavyBool): HeavyBool = {
     (this ==> that) && (this <== that)
   }
@@ -139,10 +168,12 @@ object HeavyBool {
       HeavyFalse(because)
   }
 
-  // This forallM declaration takes care of call-sites which specify a Range
-  // as items.   The forallM[T, C[_]] function defined below does not work with
-  // Range for the same reason foldM does not work with Range.
-  // However, declaring forallM directly on (String, Range) avoids the problem.
+  /**
+   * This forallM declaration takes care of call-sites which specify a Range
+   * as items.   The forallM[T, C[_]] function defined below does not work with
+   * Range for the same reason foldM does not work with Range.
+   * However, declaring forallM directly on (String, Range) avoids the problem.
+   */
   def forallM(tag:String, items: Range)(p: Int => HeavyBool): HeavyBool = {
     forallM[Int,LazyList](tag, items.to(LazyList))(p)
   }
@@ -164,10 +195,12 @@ object HeavyBool {
     items.foldM(HTrue:HeavyBool)(folder).merge
   }
 
-  // This existsM declaration takes care of call-sites which specify a Range
-  // as items.   The existsM[T, C[_]] function defined below does not work with
-  // Range for the same reason foldM does not work with Range.
-  // However, declaring existsM directly on (String, Range) avoids the problem.
+  /**
+   * This existsM declaration takes care of call-sites which specify a Range
+   * as items.   The existsM[T, C[_]] function defined below does not work with
+   * Range for the same reason foldM does not work with Range.
+   *  However, declaring existsM directly on (String, Range) avoids the problem.
+   */
   def existsM(tag:String, items: Range)(p: Int => HeavyBool): HeavyBool = {
     existsM[Int,LazyList](tag, items.to(LazyList))(p)
   }
