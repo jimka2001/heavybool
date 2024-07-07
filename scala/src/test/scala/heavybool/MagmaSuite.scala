@@ -1,6 +1,7 @@
 package heavybool
 
 import adjuvant.MyFunSuite
+import HbImplicits._
 
 class MagmaSuite extends MyFunSuite {
   def testCayleyTables(n:Int):Unit = {
@@ -28,5 +29,20 @@ class MagmaSuite extends MyFunSuite {
     findGroupsM(2)
     findGroupsM(3)
     findGroupsM(4)
+  }
+
+  test("is closed"){
+    class Test32a extends Magma[Int,LazyList] {
+      def member(a:Int):HeavyBool =  HeavyBool(0 <= a && a < 10)
+      def op(a:Int, b:Int):Int = a - b
+      def gen():LazyList[Int] = (0 to 10).to(LazyList)
+    }
+    val hba = new Test32a().isAssociative()
+    assert(!hba)
+    class Test32b extends Test32a {
+      override def op(a:Int, b:Int):Int = a + b
+    }
+    val hbb = new Test32b().isAssociative()
+    assert(hbb)
   }
 }
