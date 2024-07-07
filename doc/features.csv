@@ -16,16 +16,16 @@ annotate for user,,,,+annotate
 annotate programmatic,++,annotate,annotate,+conj
 tag,tag,tag,tag,+tag
 assert,AssertM,assert,,+assert
-magma,,Magma,,
-is-magma,,,,Is-magma
-is-semigroup,,isSemiGroup,,Is-semigroup
-is-monoid,,isMonoid,,Is-monoid
-is-group,,isGroup,,Is-group
-is-ring,,,,Is-ring
-is-field,,,,Is-field
-addition-mod-p,,AdditionModP(),,addition-mod-p
-multiplication-mod-p,,MultiplicationModP(),,multiplication-mod-p
-dyn-magma,,DynMagma(),,
+magma,Magma,Magma,,
+is-magma,isMagma,,,Is-magma
+is-semigroup,isSemiGroup,isSemiGroup,,Is-semigroup
+is-monoid,isMonoid,isMonoid,,Is-monoid
+is-group,isGroup,isGroup,,Is-group
+is-ring,isRing,,,Is-ring
+is-field,isField,,,Is-field
+addition-mod-p,AdditionModP,AdditionModP(),,addition-mod-p
+multiplication-mod-p,MultiplicationModP,MultiplicationModP(),,multiplication-mod-p
+dyn-magma,DynMagma,DynMagma(),,
 is-antisymmetric,isAntisymmetric,,,is-antisymmetric
 is-asymmetric,isAsymmetric,,,is-asymmetric
 is-connected,isConnected,,,is-connected

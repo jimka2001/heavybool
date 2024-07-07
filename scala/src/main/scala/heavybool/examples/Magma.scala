@@ -73,8 +73,12 @@ abstract class Magma[T,C[_]:Foldable] {
             equiv(z, op(b, a))
       }}}.tag("find inverter") ++ Map("z" -> z)
 
+  def isMagma(): HeavyBool = {
+    isClosed()
+  }.tag("magma")
+
   def isSemiGroup(): HeavyBool = {
-    (isClosed() && isAssociative())
+    (isMagma() && isAssociative())
   }.tag("semigroup")
 
   def isMonoid(z: T): HeavyBool = {
