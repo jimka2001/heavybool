@@ -2,6 +2,7 @@ package heavybool
 
 import adjuvant.MyFunSuite
 import HbImplicits._
+import heavybool.examples.DynMagma
 
 class MagmaSuite extends MyFunSuite {
   def testCayleyTables(n:Int):Unit = {
@@ -44,5 +45,20 @@ class MagmaSuite extends MyFunSuite {
     }
     val hbb = new Test32b().isAssociative()
     assert(hbb)
+
+    val hbc:DynMagma[Int,LazyList] = DynMagma[Int,LazyList](
+      () => (0 to 10).to(LazyList),
+      (a:Int, b:Int) => a - b,
+      (a:Int) =>  HeavyBool(0 <= a && a < 10)
+      )
+    assert(! hbc.isAssociative())
+
+    val hbd:DynMagma[Int,LazyList] = DynMagma[Int,LazyList](
+      () => (0 to 10).to(LazyList),
+      (a:Int, b:Int) => a + b,
+      (a:Int) =>  HeavyBool(0 <= a && a < 10)
+      )
+    assert( hbd.isAssociative())
+
   }
 }
