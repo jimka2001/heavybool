@@ -110,7 +110,7 @@ class MagmaSuite extends MyFunSuite {
   }
 
   class NotKlein4 extends Klein4 {
-    override op(x: String, y: String): String = {
+    override def op(x: String, y: String): String = {
       if ("e" == x)
         y
       else if ("e" == y)
