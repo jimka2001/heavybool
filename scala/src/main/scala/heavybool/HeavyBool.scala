@@ -75,7 +75,7 @@ sealed abstract class HeavyBool(val because:Reason) {
 
   /**
    * logical AND between to HeavyBool objects,
-   * that` is only evaluated if this is HeavyTrue
+   * `that` is only evaluated if `this`` is HeavyTrue
    */
   def &&(that: => HeavyBool):HeavyBool = {
     this match {
@@ -100,7 +100,8 @@ sealed abstract class HeavyBool(val because:Reason) {
     !this || that
   }
 
-  /** implied by:   this `<==` that
+  /**
+   * implied by:   this `<==` that
    * `<==` uses a call-by-name argument because we want to
    * avoid that being evaluated if this is already false.
    */

@@ -28,30 +28,47 @@ class HeavyBoolSuite extends MyFunSuite {
       )
   }
 
-  test("forall"){
-    assert(HTrue == forallM("x", List(1,2,3)){ (x:Int) =>
-      (x>0).tag("works")
+  test("forall") {
+    assert(HTrue == forallM("x", List(1, 2, 3)) { (x: Int) =>
+      (x > 0).tag("works")
     })
 
-    val result = forallM("x", List(1,2,3)){ (x:Int) =>
-      (x>1).tag("works")
+    val result = forallM("x", List(1, 2, 3)) { (x: Int) =>
+      (x > 1).tag("works")
     }
     assert(result.toBoolean == false)
     assert(!result)
     assert(result.witness == Some(1)) // 1 is the first element that fails the forall
   }
+  test("forall witness") {
+    val hb_xy = forallM("x", (0 to 100)){x =>
+      forallM("y", (0 to 100)){ y=>
+        (x + y < 120)
+      }
+    }
+    val x = hb_xy.findWitness("x") match {
+      case Some(x:Int) => x
+    }
+    val y = hb_xy.findWitness("y") match {
+      case Some(y:Int) => y
+    }
+    assert(x + y == 120)
+  }
 
-  test("exists"){
-    assert(HFalse == existsM("x", List(1,2,3)){ (x:Int) =>
-      (x>10).tag("works")
+  test("exists") {
+    assert(HFalse == existsM("x", List(1, 2, 3)) { (x: Int) =>
+      (x > 10).tag("works")
     })
 
-    val result = existsM("x", Seq(1,2,3)){ (x:Int) =>
-      (x>1).tag("works")
+    val result = existsM("x", Seq(1, 2, 3)) { (x: Int) =>
+      (x > 1).tag("works")
     }
     assert(result.toBoolean == true)
     assert(result)
     assert(result.witness == Some(2)) // 2 is the first element that succeeds the exists
+  }
+
+  test("exists witness") {
     // pythag triple
     val pt = existsM("a", (1 to 100)){
       a => existsM("b", (a+1 to 100)){

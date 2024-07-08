@@ -33,8 +33,7 @@ abstract class Magma[T,C[_]:Foldable] {
                 op(a, op(b, c)))
         }}}}.tag("associative")
 
-  // TODO rename to isCommutative
-  def isAbelian(): HeavyBool = {
+  def isCommutative(): HeavyBool = {
     forallM("a", gen()) { a:T =>
       forallM("b", gen()) { b: T =>
         equiv(op(a, b), op(b, a))
@@ -88,6 +87,13 @@ abstract class Magma[T,C[_]:Foldable] {
   def isGroup(z: T, invert: T => Option[T]): HeavyBool = {
     (isMonoid(z) && isInverter(z, invert))
   }.tag("group")
+
+  def isGroup(): HeavyBool = {
+    (findIdentity() match {
+      case None => HFalse
+      case Some(e) => isGroup(e, findInverse)
+    }).tag("group")
+  }
 }
 
 object Magma {
@@ -215,7 +221,7 @@ object Magma {
                        op1 = dyn_op,
                        member1 = (a: Int) => elements.contains(a)
                        )
-         ab = dm.isAbelian()
+         ab = dm.isCommutative()
          } {
       tries += 1
       if (ab.toBoolean)
@@ -292,7 +298,7 @@ object Magma {
     val ma = DynMagma[T,C](gen, add, x => member(x).toBoolean)
     val mb = DynMagma[T,C](gen, mult, x => member(x).toBoolean)
     ma.isGroup(zero, invert) &&
-      ma.isAbelian() &&
+      ma.isCommutative() &&
       mb.isMonoid(one) &&
       forallM("a", gen()) { a =>
         forallM("b", gen()) { b =>
@@ -319,7 +325,7 @@ object Magma {
       gen().filter_(_ != zero)
     }
     !ma.equiv(one,zero) &&
-      mb.isAbelian().conjFalse(Map("reason" -> "not Abelian")) &&
+      mb.isCommutative().conjFalse(Map("reason" -> "not commutative")) &&
       isRing(gen, member,
              add, mult, add_invert,
              one, zero).conjFalse(Map("reason" -> s"not a ring")) &&
