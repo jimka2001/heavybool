@@ -50,11 +50,13 @@ class MagmaSuite extends MyFunSuite {
     (a: Int, b: Int) => a - b,
     (a: Int) => HeavyBool(0 <= a && a < 10)
     )
+
   val hbd: DynMagma[Int, LazyList] = DynMagma[Int, LazyList](
     () => (0 to 10).to(LazyList),
     (a: Int, b: Int) => a + b,
     (a: Int) => HeavyBool(0 <= a && a < 10)
     )
+
   test("is associative") {
 
     val hba = new Test32a().isAssociative()
@@ -97,7 +99,7 @@ class MagmaSuite extends MyFunSuite {
       else if ("e" == y)
         x
       else if (x == y)
-        x // "e"
+        "e"
       else {
         // find the element of "A", "B", "C" which is not x and is not y
         elements.find( z => z != "e" && z != x && z != y).get
@@ -121,6 +123,7 @@ class MagmaSuite extends MyFunSuite {
       }
     }
   }
+
   test("klein group"){
     val k4 = new Klein4()
     println(k4.isGroup())
