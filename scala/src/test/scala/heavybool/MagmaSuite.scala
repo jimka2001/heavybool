@@ -116,7 +116,7 @@ class MagmaSuite extends MyFunSuite {
       else if ("e" == y)
         x
       else if (x == y)
-        x // "e"
+        x // "e" // NotKlein4 is not a group because the Cayley is not associative
       else {
         // find the element of "A", "B", "C" which is not x and is not y
         elements.find(z => z != "e" && z != x && z != y).get
@@ -128,5 +128,11 @@ class MagmaSuite extends MyFunSuite {
     val k4 = new Klein4()
     println(k4.isGroup())
     assert(k4.isGroup())
+  }
+
+  test("not klein group"){
+    val k4 = new NotKlein4()
+    println(k4.isGroup())
+    assert(! k4.isGroup())
   }
 }
