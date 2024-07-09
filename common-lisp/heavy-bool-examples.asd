@@ -7,18 +7,17 @@
 ;; WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
-(asdf:defsystem :heavy-bool
+(asdf:defsystem :heavy-bool-examples
   :version (:read-file-form "version.lisp")
   :author "Jim Newton"
-  :description "Implementation of heavy-booleans"
+  :description "Examples of heavy-booleans"
   :license "MIT"
-  :depends-on (:alexandria)
+  :depends-on (:heavy-bool :alexandria)
   :components
   ((:module "src"
     :components
-    ((:file "heavy-bool-package")
-     (:file "heavy-bool" :depends-on ("heavy-bool-package"))
-     (:file "magma" :depends-on ("heavy-bool"))
+    ((:file "heavy-bool-examples-package")
+     (:file "magma")
      (:file "mod-p" :depends-on ("magma"))
-     (:file "relations" :depends-on ("heavy-bool"))
+     (:file "relations")
      ))))

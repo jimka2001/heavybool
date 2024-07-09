@@ -8,12 +8,15 @@
 
 (defpackage :heavy-bool-test
 ;;  (:shadowing-import-from :rte "TEST")
-  (:use :cl :heavy-bool :scrutiny :alexandria))
+  (:use :cl :heavy-bool :heavy-bool-examples :scrutiny :alexandria))
 
 (in-package :heavy-bool-test)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (shadow-all-symbols :package-from :heavy-bool :package-into :heavy-bool-test))
+  (shadow-all-symbols :package-from :heavy-bool
+                      :package-into :heavy-bool-test)
+  (shadow-all-symbols :package-from :heavy-bool-examples
+                      :package-into :heavy-bool-test))
 
 (defun test ()
   (run-package-tests :heavy-bool-test))
