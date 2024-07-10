@@ -22,6 +22,12 @@
    (reason :type list :initform nil :initarg :reason :reader reason
            :documentation "a possibly empty list of non-empty plists")))
 
+(defgeneric heavy-bool? (hb))
+(defmethod heavy-bool? ((hb heavy-bool))
+  t)
+(defmethod heavy-bool? ((otherwise t))
+  nil)
+
 (defmethod plist? (plist)
   (or (null plist)
       (and (symbolp (car plist))

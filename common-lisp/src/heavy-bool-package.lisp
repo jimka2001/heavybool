@@ -26,8 +26,12 @@
    "+NOT"
    "+OR"
    "+TAG"
+   "HEAVY-BOOL?"
    "BOOL"
    "HEAVY-BOOL"
+   "RANGE"
+   "FIND-WITNESS"
+   "DEFAULT-INVERTER"
    "HEAVY-FALSE"
    "HEAVY-TRUE"
 ))

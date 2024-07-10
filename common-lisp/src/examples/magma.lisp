@@ -80,6 +80,18 @@
         (find-inverse-from-ident magma a z)
         (values nil nil))))
 
+(defgeneric default-inverter (magma ident))
+(defmethod default-inverter ((magma magma) ident)
+  (lambda (a)
+    (let ((hb (+exists (inv (gen magma))
+                (and (is-equiv magma ident (op magma inv a))
+                     (is-equiv magma ident (op magma a inv)))))
+          (none '(0)))
+      (let ((inv (find-witness hb none)))
+        (if (eq inv none)
+            (values nil nil)
+            (values inv t))))))
+
 (defgeneric is-inverter (magma z invert))
 (defmethod is-inverter ((magma magma) z invert)
   (declare (type (function (t) (values t (member t nil))) invert))
