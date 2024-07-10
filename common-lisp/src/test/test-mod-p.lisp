@@ -9,7 +9,8 @@
 (in-package :heavy-bool-test)
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (shadow-all-symbols :package-from :heavy-bool :package-into :heavy-bool-test))
+  (shadow-all-symbols :package-from :heavy-bool :package-into :heavy-bool-test)
+  (shadow-all-symbols :package-from :heavy-bool-examples :package-into :heavy-bool-test))
 
 (define-test mod-p-primes
   (loop :for p in '(2 3 5 7 11)
