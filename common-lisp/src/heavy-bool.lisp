@@ -148,5 +148,5 @@
 (defmacro +exists (var coll &body body)
   `(exists ',var (lambda (,var) ,@body) ,coll))
 
-(defmacro +assert (val & args)
+(defmacro +assert (val &rest args)
   `(assert (bool ,val) ,@ args))
