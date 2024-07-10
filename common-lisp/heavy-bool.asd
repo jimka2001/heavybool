@@ -12,7 +12,7 @@
   :author "Jim Newton"
   :description "Implementation of heavy-booleans"
   :license "MIT"
-  :depends-on (:alexandria)
+  :depends-on ()
   :components
   ((:module "src"
     :components

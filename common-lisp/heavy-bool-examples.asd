@@ -12,7 +12,7 @@
   :author "Jim Newton"
   :description "Examples of heavy-booleans"
   :license "MIT"
-  :depends-on (:heavy-bool :alexandria)
+  :depends-on (:heavy-bool)
   :components
   ((:module "src"
     :components

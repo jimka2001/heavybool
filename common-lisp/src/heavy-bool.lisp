@@ -8,6 +8,15 @@
 
 (in-package :heavy-bool)
 
+(defun range (start &optional stop step)
+  (cond ((null stop)
+         (range 0 start step))
+        ((null step)
+         (range start stop 1))
+        (t
+         (loop :for i :from start :below stop :by step
+              :collect i))))
+        
 (defclass heavy-bool ()
   ((bool :initarg :bool :reader bool)
    (reason :type list :initform nil :initarg :reason :reader reason
