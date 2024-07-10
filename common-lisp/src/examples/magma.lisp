@@ -131,9 +131,8 @@
               (is-inverter magma z invert))
         :group))
 
-
 (defun gen-list-finite (n)
-  (iota (1+ n)))
+  (range 0 (1+ n) 1))
 
 (defun mkstring (data &key (delimeter "") (prefix "") (suffix "") (key #'identity))
   (concatenate 'string
