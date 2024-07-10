@@ -16,12 +16,10 @@
                :heavy-bool-examples
                )
   :components
-  ((:module "src"
+  ((:module "test"
     :components
-    ((:module "test"
-      :components
-      ((:file "test-heavy-bool")
-       (:file "test-relations")
-       (:file "test-magma")
-       (:file "test-mod-p")
-       ))))))
+    ((:file "test-heavy-bool")
+     (:file "test-relations")
+     (:file "test-magma")
+     (:file "test-mod-p")
+     ))))
