@@ -50,30 +50,22 @@
 
 
 (define-test t-exists
-  (let ((w (find-witness (+exists x (iota 10 :start 1)
+  (let ((w (find-witness (+exists (x (iota 10 :start 1))
                            (heavy-bool (evenp x))))))
     (assert-true (= w 2))))
 
 
-(heavy-bool nil)
-(heavy-bool t)
-(EXISTS 'X (LAMBDA (X) (HEAVY-BOOL (EVENP X))) (IOTA 10 :START 1))
-(forall 'X (LAMBDA (X) (HEAVY-BOOL (EVENP X))) (IOTA 10 :START 1))
-(+exists x (iota 10 :start 1)
-  (heavy-bool (evenp x)))
-(t-exists)
 
-(define-test t-forall
-  (let ((w (find-witness (+forall x (iota 10 :start 1)
+(define-test t-forall-1
+  (let ((w (find-witness (+forall (x (iota 10 :start 1))
                            (heavy-bool (oddp x))))))
     (assert-true (= w 2))))
-(t-forall)
 
 
 (define-test t-and
-  (let ((hb (+and (+forall x (iota 10 :start 1 :step 3)
+  (let ((hb (+and (+forall (x (iota 10 :start 1 :step 3))
                     (heavy-bool (oddp x) :forall t))
-                  (+exists x (iota 10 :start 1 :step 3)
+                  (+exists (x (iota 10 :start 1 :step 3))
                     (heavy-bool (oddp x) :exists t)))))
     (assert-true (equal (bool hb) nil))
     (assert-true (equal (reason hb) '((:witness 4 :var x) ( :forall t))))))
@@ -82,28 +74,28 @@
 
 
 (define-test t-or
-  (let ((hb (+or (+forall x (iota 10 :start 1 :step 3)
+  (let ((hb (+or (+forall (x (iota 10 :start 1 :step 3))
                    (heavy-bool (oddp x) :forall t))
-                 (+exists x (iota 10 :start 1 :step 3)
+                 (+exists (x (iota 10 :start 1 :step 3))
                    (heavy-bool (oddp x) :exists t)))))
     (assert-true (equal (bool hb) t))
-    (assert-true (equal (reason hb) '((:witness 1 :var x) ( :exists t))))))
+    (assert-true (equal (reason hb) '((:witness 1 :var x) (:exists t))))))
 
 
 
 (define-test t-forall
   (assert-true
-   (equal (test-serialize (+forall x '(1 2 3)
+   (equal (test-serialize (+forall (x '(1 2 3))
                             (if (> x 0)
                                 (heavy-bool t :reason :works)
                                 (heavy-bool nil :reason :fails))))
           '(t)))
   (assert-true
-   (equal (test-serialize (+forall x '(1 2 3)
+   (equal (test-serialize (+forall (x '(1 2 3))
                             (if (<= x 1)
                                 (heavy-bool t :reason :works)
                                 (heavy-bool nil :reason :fails))))
-          '(nil :witness 2 :tag x :reason :fails))))
+          '(nil (:witness 2 :var x) (:reason :fails)))))
   
 
 

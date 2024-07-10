@@ -26,7 +26,7 @@
      (+annotate 
       (+and (+annotate-false (heavy-bool (>= a 0)) :reason "a < 0")
             (+annotate-false (heavy-bool (< a p)) :reason "a >= p"))
-      :a a  :p p)
+      :a a :p p)
      :is-member)))
 
 (defclass addition-mod-p (mod-p) ())

@@ -77,6 +77,9 @@
     (make-instance 'heavy-true :reason (list reason-plist))
     (make-instance 'heavy-true)))
 
+(defmethod heavy-bool ((unknown t) &rest reason-plist)
+  (error "cannot create heavy-bool from ~A" unknown))
+
 
 (defvar *heavy-true* (heavy-bool t))
 (defvar *heavy-false* (heavy-bool nil))
@@ -167,11 +170,19 @@
                 (lambda (x) (+not (heavy-bool (funcall predicate x))))
                 coll)))
 
-(defmacro +forall (var coll &body body)
-  `(forall ',var (lambda (,var) ,@body) ,coll))
+(defmacro +forall ((var coll &rest pairs) &body body)
+  (if (null pairs)
+      `(forall ',var (lambda (,var) ,@body) ,coll)
+      `(forall ',var (lambda (,var)
+                       (+forall ,pairs ,@body))
+               ,coll)))
 
-(defmacro +exists (var coll &body body)
-  `(exists ',var (lambda (,var) ,@body) ,coll))
+(defmacro +exists ((var coll &rest pairs) &body body)
+  (if (null pairs)
+      `(exists ',var (lambda (,var) ,@body) ,coll)
+      `(exists ',var (lambda (,var) 
+                       (+exists ,pairs ,@body))
+               ,coll)))
 
 (defmacro +assert (val &rest args)
   `(assert (bool ,val) ,@ args))

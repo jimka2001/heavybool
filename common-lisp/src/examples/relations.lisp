@@ -13,14 +13,14 @@
   (declare (type (function () t) gen)
            (type (function (t t) t) <))
   (+tag
-   (+forall x (funcall gen)
+   (+forall (x (funcall gen))
      (funcall (+lift <) x x))
    :reflexive))
 
 (defun is-irreflexive (gen <)
   (declare (type (function () t) gen)
            (type (function (t t) t) <))
-  (+tag (+not (+exists x (funcall gen)
+  (+tag (+not (+exists (x (funcall gen))
                 (funcall (+lift <) x x)))
         :irreflexive))
 
@@ -34,10 +34,10 @@
                        :b b)))
     ;; a < b ==> b < a
     (+tag
-     (+forall x (funcall gen)
-       (+forall y (funcall gen)
-         (+implies (rel x y)
-                   (rel y x))))
+     (+forall (x (funcall gen)
+                 y (funcall gen))
+       (+implies (rel x y)
+                 (rel y x)))
      :symmetric)))
 
 (defun is-asymmetric (gen <)
@@ -48,10 +48,10 @@
                        :a a
                        :b b)))
     (+tag
-     (+forall x (funcall gen)
-       (+forall y (funcall gen)
-         (+implies (rel x y)
-                   (+not (rel y x)))))
+     (+forall (x (funcall gen)
+                 y (funcall gen))
+       (+implies (rel x y)
+                 (+not (rel y x))))
      :assymmetric)))
 
 (defun is-antisymmetric (gen <)
@@ -62,11 +62,11 @@
                        :a a
                        :b b)))
     (+tag
-     (+forall x (funcall gen)
-       (+forall y (funcall gen)
-         (+implies (+and (rel x y)
-                         (rel y x))
-                   (heavy-bool (equal x y)))))
+     (+forall (x (funcall gen)
+                 y (funcall gen))
+       (+implies (+and (rel x y)
+                       (rel y x))
+                 (heavy-bool (equal x y))))
      :antisymmetric)))
 
 (defun is-connected (gen <)
@@ -77,11 +77,11 @@
                        :a a
                        :b b)))
     (+tag
-     (+forall a (funcall gen)
-       (+forall b (funcall gen)
-         (+implies (heavy-bool (not (equal a b)))
-                   (+or (rel a b)
-                        (rel b a)))))
+     (+forall (a (funcall gen)
+                 b (funcall gen))
+       (+implies (heavy-bool (not (equal a b)))
+                 (+or (rel a b)
+                      (rel b a))))
      :connected)))
 
 (defun is-strongly-connected (gen <)
@@ -92,10 +92,10 @@
                        :a a
                        :b b)))
     (+tag
-     (+forall a (funcall gen)
-       (+forall b (funcall gen)
+     (+forall (a (funcall gen)
+                 b (funcall gen))
          (+or (rel a b)
-              (rel b a))))
+              (rel b a)))
      :strongly-connected)))
 
 
@@ -108,12 +108,12 @@
                        :b b)))
 
     (+tag
-     (+forall x (funcall gen)
-       (+forall y (funcall gen)
-         (+implies (rel x y)
-                   (+forall z (funcall gen)
-                     (+implies (rel y z)
-                               (rel x z))))))
+     (+forall (x (funcall gen)
+                 y (funcall gen))
+       (+implies (rel x y)
+                 (+forall (z (funcall gen))
+                   (+implies (rel y z)
+                             (rel x z)))))
      :transitive)))
 
 (defun is-equivalence (gen =)
