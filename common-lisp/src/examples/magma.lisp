@@ -95,12 +95,16 @@
               :ident z)
    :inverter))
 
+(defgeneric is-magma (magma))
+(defmethod is-magma ((magma magma))
+  (+tag (is-closed magma)
+        :magma))
+
 (defgeneric is-semigroup (magma))
 (defmethod is-semigroup ((magma magma))
-  (+tag (+and (is-closed magma)
+  (+tag (+and (is-magma magma)
               (is-associative magma))
         :semigroup))
-
 
 (defgeneric is-monoid (magma z))
 (defmethod is-monoid ((magma magma) z)
@@ -115,22 +119,6 @@
               (is-inverter magma z invert))
         :group))
 
-
-(defclass dyn-magma (magma)
-  ((gen :initarg :gen :type (function () t))
-   (op :initarg :op :type (function (t t) t))
-   (is-member :initarg :is-member :type (function (t) t))))
-
-(defmethod gen ((md dyn-magma))
-  (funcall (slot-value md 'gen)))
-  
-(defmethod op ((md dyn-magma) a b)
-  (funcall (slot-value md 'op) a b))
-
-(defmethod is-member ((md dyn-magma) a)
-  (+tag (heavy-bool (funcall (slot-value md 'is-member) a)
-                    :a a)
-        :member))
 
 (defun gen-list-finite (n)
   (iota (1+ n)))
