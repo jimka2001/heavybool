@@ -50,33 +50,30 @@
 
 
 (define-test t-exists
-  (let ((w (find-witness (+exists (x (iota 10 :start 1))
+  (let ((w (find-witness (+exists (x (range 1 10))
                            (heavy-bool (evenp x))))))
     (assert-true (= w 2))))
 
 
 
 (define-test t-forall-1
-  (let ((w (find-witness (+forall (x (iota 10 :start 1))
+  (let ((w (find-witness (+forall (x (range 1 10))
                            (heavy-bool (oddp x))))))
     (assert-true (= w 2))))
 
 
 (define-test t-and
-  (let ((hb (+and (+forall (x (iota 10 :start 1 :step 3))
+  (let ((hb (+and (+forall (x (range 1 10 3))
                     (heavy-bool (oddp x) :forall t))
-                  (+exists (x (iota 10 :start 1 :step 3))
+                  (+exists (x (iota 1 10 3))
                     (heavy-bool (oddp x) :exists t)))))
     (assert-true (equal (bool hb) nil))
     (assert-true (equal (reason hb) '((:witness 4 :var x) ( :forall t))))))
 
-(t-and)
-
-
 (define-test t-or
-  (let ((hb (+or (+forall (x (iota 10 :start 1 :step 3))
+  (let ((hb (+or (+forall (x (iota 1 10 3))
                    (heavy-bool (oddp x) :forall t))
-                 (+exists (x (iota 10 :start 1 :step 3))
+                 (+exists (x (iota 1 10 3))
                    (heavy-bool (oddp x) :exists t)))))
     (assert-true (equal (bool hb) t))
     (assert-true (equal (reason hb) '((:witness 1 :var x) (:exists t))))))
@@ -97,7 +94,6 @@
                                 (heavy-bool nil :reason :fails))))
           '(nil (:witness 2 :var x) (:reason :fails)))))
   
-
 
 (define-test t-or-2
   (assert-true (equal (test-serialize (+or (heavy-bool nil :reason 1)
