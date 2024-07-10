@@ -57,23 +57,18 @@
 ))
     
 
-    
+(deftest t-forall-examples
+  (sut/+forall [a (range 10)
+                b (range 10)
+                :when (> a 5)
+                :when (> b a)]
+    (sut/+heavy-bool (> b 5)))
 
-
-(sut/+forall [a (range 10)
-              b (range 10)
-              :when (> a 5)
-              :when (> b a)]
-  (sut/+heavy-bool (> b 5)))
-
-
-
-(sut/+forall [a (range 10)
-                         b (range 10)
-                         :when (> a 5)
-                         :when (> b a)]
-             (sut/+heavy-bool (> b 5)))
-
+  (sut/+forall [a (range 10)
+                b (range 10)
+                :when (> a 5)
+                :when (> b a)]
+    (sut/+heavy-bool (> b 5))))
 
 (deftest t+or-2
   (testing "or 2"
