@@ -126,7 +126,8 @@
 
 (defgeneric is-group (magma z invert))
 (defmethod is-group ((magma magma) z invert)
-  (declare (type (function (t) (values t (member t nil))) invert))
+  (declare (type (function (t) (values t (member t nil)))
+                 invert))
   (+tag (+and (is-monoid magma z)
               (is-inverter magma z invert))
         :group))
