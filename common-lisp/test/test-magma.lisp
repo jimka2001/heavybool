@@ -147,9 +147,13 @@
                                    #'invertible))))))
 
 
-(defn test-gaussian [p]
-  (let [m (gaussian-int-mod-p p)
-        f (sut/is-field (:gen m)
+(defun test-gaussian (p)
+  (let ((m (make-instance 'gaussian-int-mod-p :p p))
+        (f (is-field (lambda () (gen m))
+                     is-member + * - 1/ one zero)
+
+
+
                         (:add m)
                         (:mult m)
                         (:zero m)
