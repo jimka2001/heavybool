@@ -16,8 +16,10 @@
   :components
   ((:module "src"
     :components
-    ((:file "heavy-bool-examples-package")
-     (:file "magma")
-     (:file "mod-p" :depends-on ("magma"))
-     (:file "relations")
-     ))))
+    ((:module "examples"
+      :components
+      ((:file "heavy-bool-examples-package")
+       (:file "magma")
+       (:file "mod-p" :depends-on ("magma"))
+       (:file "relations")
+       ))))))

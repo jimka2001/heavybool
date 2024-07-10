@@ -18,8 +18,10 @@
   :components
   ((:module "src"
     :components
-    ((:file "test-heavy-bool")
-     (:file "test-relations")
-     (:file "test-magma")
-     (:file "test-mod-p")
-     ))))
+    ((:module "test"
+      :components
+      ((:file "test-heavy-bool")
+       (:file "test-relations")
+       (:file "test-magma")
+       (:file "test-mod-p")
+       ))))))

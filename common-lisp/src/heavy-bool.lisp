@@ -105,6 +105,10 @@
   `(+or ,b
         (+not ,a)))
 
+(defmacro +iff (a b)
+  `(+and (+implies ,a ,b)
+         (+implied-by ,a ,b)))
+
 (defun +annotate (hb &rest reasons)
   ;; reasons is a property list
   (+annotate-reasons hb reasons))
@@ -122,19 +126,19 @@
        hb
        (+annotate-reasons hb reasons)))
 
-(defun forall (tag predicate coll)
+(defun forall (v predicate coll)
   (reduce (lambda (hb item)
             (let ((this (heavy-bool (funcall predicate item))))
               (if (bool this)
                   hb
                   (return-from forall (+annotate this
                                                  :witness item
-                                                 :tag tag)))))
+                                                 :var v)))))
           coll
           :initial-value *heavy-true*))
 
-(defun exists (tag predicate coll)
-  (+not (forall tag
+(defun exists (v predicate coll)
+  (+not (forall v
                 (lambda (x) (+not (heavy-bool (funcall predicate x))))
                 coll)))
 
@@ -143,3 +147,6 @@
 
 (defmacro +exists (var coll &body body)
   `(exists ',var (lambda (,var) ,@body) ,coll))
+
+(defmacro +assert (val & args)
+  `(assert (bool ,val) ,@ args))
