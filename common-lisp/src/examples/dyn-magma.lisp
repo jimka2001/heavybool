@@ -24,3 +24,5 @@
                     :a a)
         :member))
 
+(defun dyn-magma (&key gen op (is-member (lambda (a) (and (member a (funcall gen)) t))))
+  (make-instance 'dyn-magma :gen gen :op op :is-member is-member))
