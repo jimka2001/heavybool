@@ -8,7 +8,7 @@
 
 
 (defpackage :heavy-bool
-  (:use :cl :alexandria)
+  (:use :cl)
   (:export
    "*HEAVY-FALSE*"
    "*HEAVY-TRUE*"
@@ -31,7 +31,6 @@
    "HEAVY-BOOL"
    "RANGE"
    "FIND-WITNESS"
-   "DEFAULT-INVERTER"
    "HEAVY-FALSE"
    "HEAVY-TRUE"
 ))

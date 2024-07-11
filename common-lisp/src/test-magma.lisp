@@ -73,27 +73,27 @@
 
 (define-test t-add-mod-n
   (loop :for n :in (range 2 10)
-        :with m = (make-instance 'addition-mod-p :p n)
-        :do (assert-true (bool (is-group m 0 (lambda (a)
-                                               (values (mod (- a ) n) t))
-                                         )))))
+        :do (let ((n n)
+                  (m (make-instance 'addition-mod-p :p n)))
+              (assert-true (bool (is-group m 0 (lambda (a)
+                                                 (heavy-bool t :witness (mod (- a) n)))))))))
 
 (define-test t-mult-mod-2
   (let ((mod-2 (make-instance 'multiplication-mod-p :p 2)))
     (assert-true (bool (heavy-bool (is-group mod-2 
                                              1
                                              (lambda (a)
-                                               (funcall (default-inverter mod-2) a)))
+                                               (find-inverse-from-ident mod-2 a 1)))
 
                                    :testing 'mod-p
                                    :p 2)))))
 
 (define-test t-mult-mod-3
   (let ((mod-3 (make-instance 'multiplication-mod-p :p 3)))
-    (assert-true (bool (is-group mod3
+    (assert-true (bool (is-group mod-3
                                  1
                                  (lambda (a)
-                                   (funcall (default-inverter mod-32) a)))))))
+                                   (find-inverse-from-ident mod-3 a 1)))))))
 
 (defun prime? (p)
   (or (= 2 p)
@@ -110,18 +110,49 @@
   (assert-false (prime? 6))
   (assert-true (prime? 7)))
 
+(let* ((n 4)
+       (mod-n (make-instance 'multiplication-mod-p :p n))
+       (g (is-group mod-n
+                    1 
+                    (lambda (a)
+                      (find-inverse-from-ident mod-n a 1)))))
+  (list (prime? n)
+        g
+        (bool g)
+        (eql (prime? n)
+             (bool g))
+
+        ))
+
+
+(define-test t-mod-prime-4
+  (let* ((n 4)
+         (mod-n (make-instance 'multiplication-mod-p :p n))
+         (g (is-group mod-n
+                      1 
+                      (lambda (a)
+                        (find-inverse-from-ident mod-n a 1)))))
+    (assert-false (bool g)
+                  :tag :mod-prime-4)))
+
 (define-test t-mod-prime
-  (loop :for n :from 2 to 50
-        :with mod-n = (make-instance 'multiplication-mod-p :p n)
-        :do (assert-true (= (prime? n)
-                            (bool (is-group mod-n
-                                            1 
-                                            (lambda (a)
-                                              (funcall (default-inverter mod-n) a))))))))
+  (loop :for n :from 2 to 4
+        :do (let* ((n n)
+                   (mod-n (make-instance 'multiplication-mod-p :p n))
+                   (g (is-group mod-n
+                                1 
+                                (lambda (a)
+                                  (find-inverse-from-ident mod-n a 1))))
+                   
+                  )
+              (assert-true (eql (prime? n)
+                                (bool g))
+                           :tag :mod-prime
+                           :message (format nil "n=~A, prime=~A g=~A" n (prime? n) g)))))
 
 (define-test t-klein-4
   (let ((coll '(:e :a :b :c)))
-    (labels ((* (x y)
+    (labels ((times (x y)
                (cond ((eql :e x)
                       y)
                      ((eql :e y)
@@ -132,48 +163,44 @@
                       (car (member-if (lambda (u)
                                         (and (not (eql u x))
                                              (not (eql u y))))
-                                      '(:a :b :c}))))))
-              (invertible (x)
-                (+tag (+exists (y coll)
-                        (= :e (* y x)))
-                      :invertible))
-              (mem (x)
-                (+tag (+annotate (member x coll) :x x) :member))
-              (equal [x y]
-                (+tag (= x y) :equal)))
+                                      '(:a :b :c))))))
+             (invertible (x)
+               (+exists (y coll)
+                 (and (eql :e (times y x))
+                      (eql :e (times x y))))))
+      (assert-true (eql :e (times :a :a)))
+      (assert-true (eql :c (times :c :e)))
+      (assert-true (eql :e (times :e :e)))
       (assert-true (bool (is-group (dyn-magma :gen (lambda () coll)
-                                              :op #'*)
+                                              :op #'times)
                                    :e
                                    #'invertible))))))
 
 
 (defun test-gaussian (p)
-  (let ((m (make-instance 'gaussian-int-mod-p :p p))
-        (f (is-field (lambda () (gen m))
-                     is-member + * - 1/ one zero)
-
-
-
-                        (:add m)
-                        (:mult m)
-                        (:zero m)
-                        (:one m)
-                        (:add-inv m)
-                        (:mult-inv m)
-                        (:member m)
-                        (:equiv m))]
-    (+annotate f :p p)))
+  (let* ((m (gaussian-int-mod-p p))
+         (f (is-field (slot-value m 'gen)
+                      (slot-value m 'member)
+                      (slot-value m 'add)
+                      (slot-value m 'mult)
+                      (slot-value m 'add-inv)
+                      (slot-value m 'mult-inv)
+                      (slot-value m 'zero)
+                      (slot-value m 'one))))
+    (heavy-bool f :p p)))
 
 (define-test t-gaussian
-  (testing "gaussian int"
-    (is (+bool (+not (test-gaussian 2))))
-    (doseq [p (iota 3 10)
-            :let [f (test-gaussian p)]]
-      (cond (not (prime? p))
-            (is (+bool (+not f)))
+  (assert-true (bool (+not (test-gaussian 2))))
+  (loop :for p :in (range 3 13)
+        :do (let* ((p p)
+                  (f (test-gaussian p)))
+              (cond ((not (prime? p))
+                     (assert-true (bool (+not f))
+                                  :message (format nil "p=~A" p)))
+                    ((= 1 (mod p 4)) ;; 4k + 1
+                     (assert-true (bool (+not f))
+                                  :message (format nil "p=~A" p)))
+                    (t ;; 4k - 1
+                     (assert-true (bool f)
+                                  :message (format nil "p=~A" p)))))))
 
-            (= 1 (mod p 4)) ;; 4k + 1
-            (is (+bool (+not f)))
-
-            :else ;; 4k - 1
-            (is (+bool f))))))

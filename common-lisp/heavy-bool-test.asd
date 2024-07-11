@@ -16,7 +16,7 @@
                :heavy-bool-examples
                )
   :components
-  ((:module "test"
+  ((:module "src"
     :components
     ((:file "test-heavy-bool")
      (:file "test-relations")

@@ -93,7 +93,7 @@
     (make-instance 'heavy-true)))
 
 (defmethod heavy-bool ((unknown t) &rest reason-plist)
-  (error "cannot create heavy-bool from ~A" unknown))
+  (error "cannot create heavy-bool from ~A, reason-plist=~A" unknown reason-plist))
 
 
 (defvar *heavy-true* (heavy-bool t))

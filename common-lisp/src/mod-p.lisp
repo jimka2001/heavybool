@@ -32,6 +32,8 @@
 (defclass addition-mod-p (mod-p) ())
 
 (defmethod op ((amp addition-mod-p) a b)
+  (assert (integerp a))
+  (assert (integerp b))
   (mod (+ a b) (slot-value amp 'p)))
 
 (defclass multiplication-mod-p (mod-p) ())

@@ -8,7 +8,7 @@
 
 (defpackage :heavy-bool-test
 ;;  (:shadowing-import-from :rte "TEST")
-  (:use :cl :heavy-bool :heavy-bool-examples :scrutiny :alexandria))
+  (:use :cl :heavy-bool :heavy-bool-examples :scrutiny))
 
 (in-package :heavy-bool-test)
 
@@ -65,15 +65,15 @@
 (define-test t-and
   (let ((hb (+and (+forall (x (range 1 10 3))
                     (heavy-bool (oddp x) :forall t))
-                  (+exists (x (iota 1 10 3))
+                  (+exists (x (range 1 10 3))
                     (heavy-bool (oddp x) :exists t)))))
     (assert-true (equal (bool hb) nil))
     (assert-true (equal (reason hb) '((:witness 4 :var x) ( :forall t))))))
 
 (define-test t-or
-  (let ((hb (+or (+forall (x (iota 1 10 3))
+  (let ((hb (+or (+forall (x (range 1 10 3))
                    (heavy-bool (oddp x) :forall t))
-                 (+exists (x (iota 1 10 3))
+                 (+exists (x (range 1 10 3))
                    (heavy-bool (oddp x) :exists t)))))
     (assert-true (equal (bool hb) t))
     (assert-true (equal (reason hb) '((:witness 1 :var x) (:exists t))))))
@@ -146,4 +146,4 @@
                       '(t)
                       )))
                         
-(run-package-tests '(:heavy-bool-test) :break-on-error t)
+;; (run-package-tests '(:heavy-bool-test) :break-on-error t)

@@ -16,11 +16,10 @@
   :components
   ((:module "src"
     :components
-    ((:module "examples"
-      :components
-      ((:file "heavy-bool-examples-package")
-       (:file "magma")
-       (:file "dyn-magma" :depends-on ("magma"))
-       (:file "mod-p" :depends-on ("magma"))
-       (:file "relations")
-       ))))))
+    ((:file "heavy-bool-examples-package")
+     (:file "magma")
+     (:file "dyn-magma" :depends-on ("magma"))
+     (:file "mod-p" :depends-on ("magma"))
+     (:file "relations")
+     (:file "gaussian-int" )
+     ))))

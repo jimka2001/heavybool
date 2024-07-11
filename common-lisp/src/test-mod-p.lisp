@@ -16,10 +16,7 @@
   (loop :for p in '(2 3 5 7 11)
         :do (let ((g (make-instance 'multiplication-mod-p :p p)))
               (labels ((inv (a)
-                         (loop :for b :from 1 :below p
-                               :do (if (= 1 (mod (* a b) p))
-                                       (return-from inv (values b t))))
-                         (values nil nil)))
+                         (find-inverse-from-ident g a 1)))
                 (assert-true (bool (is-group g 1 #'inv))
                              :tag 33)))))
 
@@ -27,10 +24,7 @@
   (loop :for p in '(4 6 8 9 10)
         :do (let ((g (make-instance 'multiplication-mod-p :p p)))
               (labels ((inv (a)
-                         (loop :for b :from 1 :below p
-                               :do (if (= 1 (mod (* a b) p))
-                                       (return-from inv (values b t))))
-                         (values nil nil)))
+                         (find-inverse-from-ident g a 1)))
                 (assert-true (bool (+not (is-group g 1 #'inv)))
                              :tag 33)))))
                        
