@@ -176,6 +176,30 @@
                                    :e
                                    #'invertible))))))
 
+(define-test t-not-klein-4
+  (let ((coll '(:e :a :b :c)))
+    (labels ((times (x y)
+               (cond ((eql :e x)
+                      y)
+                     ((eql :e y)
+                      x)
+                     ((eql x y)
+                      x ;; :e not a group because this case should return :e
+                      )
+                     (t
+                      (car (member-if (lambda (u)
+                                        (and (not (eql u x))
+                                             (not (eql u y))))
+                                      '(:a :b :c))))))
+             (invertible (x)
+               (+exists (y coll)
+                 (and (eql :e (times y x))
+                      (eql :e (times x y))))))
+      (assert-false (bool (is-group (dyn-magma :gen (lambda () coll)
+                                               :op #'times)
+                                    :e
+                                    #'invertible))))))
+
 
 (defun test-gaussian (p)
   (let* ((m (gaussian-int-mod-p p))
