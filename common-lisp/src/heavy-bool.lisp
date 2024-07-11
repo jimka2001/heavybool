@@ -185,19 +185,39 @@
                 (lambda (x) (+not (heavy-bool (funcall predicate x))))
                 coll)))
 
-(defmacro +forall ((var coll &rest pairs) &body body)
+(defun expand-quantifier (pairs body macro-name f-name ident)
   (if (null pairs)
-      `(forall ',var (lambda (,var) ,@body) ,coll)
-      `(forall ',var (lambda (,var)
-                       (+forall ,pairs ,@body))
-               ,coll)))
+      `(progn ,@body)
+      (destructuring-bind (var val &rest pairs) pairs
+        (case var
+          ((:let) `(let (,val)
+                     (,macro-name ,pairs ,@body)))
+          ((:when) `(if ,val
+                        (,macro-name ,pairs ,@body)
+                        ,ident))
+          (t
+           `(,f-name ',var (lambda (,var) 
+                            (,macro-name ,pairs ,@body))
+                    ,val))))))
 
-(defmacro +exists ((var coll &rest pairs) &body body)
-  (if (null pairs)
-      `(exists ',var (lambda (,var) ,@body) ,coll)
-      `(exists ',var (lambda (,var) 
-                       (+exists ,pairs ,@body))
-               ,coll)))
+(defmacro +exists (pairs &body body)
+  "(+exists (a some-list-1
+             b some-list-2
+             :let (c (+ a b))
+             :when (= 0 (mod b c))
+             d some-list 3)
+      (= (* d d) (* c c)))"
+  (expand-quantifier pairs body '+exists 'exists '*heavy-false*))
+
+(defmacro +forall (pairs &body body)
+  "(+forall (a some-list-1
+             b some-list-2
+             :let (c (+ a b))
+             :when (= 0 (mod b c))
+             d some-list 3)
+      (= (* d d) (* c c)))"
+  (expand-quantifier pairs body '+forall 'forall '*heavy-true*))
+
 
 (defmacro +assert (val &rest args)
   `(assert (bool ,val) ,@ args))
