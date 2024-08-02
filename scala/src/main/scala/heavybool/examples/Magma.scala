@@ -20,27 +20,27 @@ abstract class Magma[T,C[_]:Foldable] {
   }.tag("equivalent") ++ Map("a" -> a, "b" -> b)
 
   def isClosed(): HeavyBool = {
-    forallM("a", gen()){ a:T =>
-      forallM("b", gen()) { b: T =>
+    forallM("a", gen()){ (a:T) =>
+      forallM("b", gen()) { (b: T) =>
         member(op(a, b)) ++ Map("op(a,b)" -> op(a, b))
       }}}.tag("closed")
 
   def isAssociative(): HeavyBool = {
-    forallM("a", gen()) { a:T =>
-      forallM("b", gen()) { b:T =>
-        forallM("c", gen()) { c:T =>
+    forallM("a", gen()) { (a:T) =>
+      forallM("b", gen()) { (b:T) =>
+        forallM("c", gen()) { (c:T) =>
           equiv(op(op(a, b), c),
                 op(a, op(b, c)))
         }}}}.tag("associative")
 
   def isCommutative(): HeavyBool = {
-    forallM("a", gen()) { a:T =>
-      forallM("b", gen()) { b: T =>
+    forallM("a", gen()) { (a:T) =>
+      forallM("b", gen()) { (b: T) =>
         equiv(op(a, b), op(b, a))
       }}}.tag("commutative")
 
   def isIdentity(z: T): HeavyBool = {
-    forallM("a", gen()) { a:T =>
+    forallM("a", gen()) { (a:T) =>
       equiv(op(a, z), a) && equiv(op(z, a), a)
     }}.tag("identity") ++ Map("z" -> z)
 
@@ -63,7 +63,7 @@ abstract class Magma[T,C[_]:Foldable] {
   }
 
   def isInverter(z: T, invert: T => Option[T]): HeavyBool = {
-    forallM("a", gen()) { a:T =>
+    forallM("a", gen()) { (a:T) =>
       invert(a) match {
         case None => HFalse +| s"because $a has no inverse"
         case Some(b) =>
