@@ -130,7 +130,7 @@
                       (+annotate +false :reason "y >= p")
                       :else
                       +true)
-                {:p p :x :y})
+                {:p p :x x :y y})
                :member))]
       {:p p
        :gen (gen)

@@ -8,7 +8,7 @@
 
 (defpackage :heavy-bool-test
 ;;  (:shadowing-import-from :rte "TEST")
-  (:use :cl :heavy-bool :heavy-bool-examples :scrutiny :alexandria))
+  (:use :cl :heavy-bool :heavy-bool-examples :scrutiny))
 
 (in-package :heavy-bool-test)
 
@@ -26,106 +26,124 @@
 
 ;; (heavy-bool (heavy-bool t :x 100))
 
-(define-test t-constructor
+(define-test t-simple-constructor
   (assert-true (eql (class-of (heavy-bool t))
                     (find-class 'heavy-true)))
   (assert-true (eql (class-of (heavy-bool nil))
-                    (find-class 'heavy-false)))
+                    (find-class 'heavy-false))))
+
+
+(define-test t-constructor
   (let ((hb1 (heavy-bool t :x 100))
         (hb2 (heavy-bool nil :x 200)))
     (assert-true (eq hb1 (heavy-bool hb1)))
     (assert-true (eq hb2 (heavy-bool hb2)))
     (assert-true (equal (test-serialize (heavy-bool hb1 :y 300))
-                        '(t :y 300 :x 100)))
+                        '(t (:y 300) (:x 100))))
     (assert-true (equal (test-serialize (heavy-bool hb2 :y 300))
-                        '(nil :y 300 :x 200)))))
+                        '(nil (:y 300) (:x 200))))))
+
+(define-test t-witness
+  (let ((hb (heavy-bool (heavy-bool nil :x 100) :witness 200)))
+    (assert-true (= 100 (find-reason hb :x)))
+    (assert-true (= 200 (find-witness hb)))))
 
 
+(define-test t-exists
+  (let ((w (find-witness (+exists (x (range 1 10))
+                           (heavy-bool (evenp x))))))
+    (assert-true (= w 2))))
+
+
+
+(define-test t-forall-1
+  (let ((w (find-witness (+forall (x (range 1 10))
+                           (heavy-bool (oddp x))))))
+    (assert-true (= w 2))))
 
 
 (define-test t-and
-  (let ((hb (+and (+forall x (iota 10 :start 1 :step 3)
+  (let ((hb (+and (+forall (x (range 1 10 3))
                     (heavy-bool (oddp x) :forall t))
-                  (+exists x (iota 10 :start 1 :step 3)
+                  (+exists (x (range 1 10 3))
                     (heavy-bool (oddp x) :exists t)))))
     (assert-true (equal (bool hb) nil))
-    (assert-true (equal (reason hb) '(:witness 4 :tag x :forall t)))))
+    (assert-true (equal (reason hb) '((:witness 4 :var x) ( :forall t))))))
 
 (define-test t-or
-  (let ((hb (+or (+forall x (iota 10 :start 1 :step 3)
+  (let ((hb (+or (+forall (x (range 1 10 3))
                    (heavy-bool (oddp x) :forall t))
-                 (+exists x (iota 10 :start 1 :step 3)
+                 (+exists (x (range 1 10 3))
                    (heavy-bool (oddp x) :exists t)))))
     (assert-true (equal (bool hb) t))
-    (assert-true (equal (reason hb) '(:witness 1 :tag x :exists t)))))
+    (assert-true (equal (reason hb) '((:witness 1 :var x) (:exists t))))))
+
 
 
 (define-test t-forall
   (assert-true
-   (equal (test-serialize (+forall x '(1 2 3)
+   (equal (test-serialize (+forall (x '(1 2 3))
                             (if (> x 0)
                                 (heavy-bool t :reason :works)
                                 (heavy-bool nil :reason :fails))))
           '(t)))
   (assert-true
-   (equal (test-serialize (+forall x '(1 2 3)
+   (equal (test-serialize (+forall (x '(1 2 3))
                             (if (<= x 1)
                                 (heavy-bool t :reason :works)
                                 (heavy-bool nil :reason :fails))))
-          '(nil :witness 2 :tag x :reason :fails))))
+          '(nil (:witness 2 :var x) (:reason :fails)))))
   
-
 
 (define-test t-or-2
   (assert-true (equal (test-serialize (+or (heavy-bool nil :reason 1)
                                            (heavy-bool nil :reason 2)))
-                      '(nil :reason 2)))
+                      '(nil (:reason 2))))
   (assert-true (equal (test-serialize (+or (heavy-bool nil :reason 1)
                                            (heavy-bool nil :reason 2)
                                            (heavy-bool nil :reason 3)))
-                      '(nil :reason 3)))
+                      '(nil (:reason 3))))
   (assert-true (equal (test-serialize (+or (heavy-bool nil :reason 1)
                                            (heavy-bool t :reason 2)
                                            (heavy-bool nil :reason 3)))
-                      '(t :reason 2))))
-
+                      '(t (:reason 2)))))
 
 (define-test t-and-2
   (assert-true (equal (test-serialize (+and (heavy-bool nil :reason 1)
                                             (heavy-bool nil :reason 2)))
-                      '(nil :reason 1)))
+                      '(nil (:reason 1))))
   (assert-true (equal (test-serialize (+and (heavy-bool t :reason 1)
                                             (heavy-bool t :reason 2)))
-                      '(t :reason 2)))
+                      '(t (:reason 2))))
   (assert-true (equal (test-serialize (+and (heavy-bool nil :reason 1)
                                             (heavy-bool t :reason 2)))
-                      '(nil :reason 1)))
+                      '(nil (:reason 1))))
 
   (assert-true (equal (test-serialize (+and (heavy-bool t :reason 1)
                                             (heavy-bool nil :reason 2)))
-                      '(nil :reason 2)))
+                      '(nil (:reason 2))))
   (assert-true (equal (test-serialize (+and (heavy-bool nil :reason 1)
                                             (heavy-bool t :reason 2)))
-                      '(nil :reason 1)))
+                      '(nil (:reason 1))))
   (assert-true (equal (test-serialize (+and (heavy-bool nil :reason 1)
                                             (heavy-bool nil :reason 2)
                                             (heavy-bool nil :reason 3)))
-                      '(nil :reason 1)))
+                      '(nil (:reason 1))))
   (assert-true (equal (test-serialize (+and (heavy-bool nil :reason 1)
                                             (heavy-bool t :reason 2)
                                             (heavy-bool nil :reason 3)))
-                      '(nil :reason 1))
+                      '(nil (:reason 1)))
                )
   (assert-true (equal (test-serialize (+and (heavy-bool t :reason 1)
                                             (heavy-bool t :reason 2)
                                             (heavy-bool t :reason 3)))
-                      '(t :reason 3)))
+                      '(t (:reason 3))))
   (assert-true (equal (test-serialize (+and (heavy-bool t :reason 1)))
-                      '(t :reason 1)))
+                      '(t (:reason 1))))
   (assert-true (equal (test-serialize (+and (heavy-bool nil :reason 1)))
-                      '(nil :reason 1)))
+                      '(nil (:reason 1))))
   (assert-true (equal (test-serialize (+and))
                       '(t)
                       )))
                         
-;;(run-package-tests '(:heavy-bool-test) :break-on-error t)
+;; (run-package-tests '(:heavy-bool-test) :break-on-error t)

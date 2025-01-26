@@ -151,6 +151,13 @@
   `(+or ~b
         (+not ~a)))
 
+(defun +iff
+  "a ==> b and b ==> a"
+  [a b]
+  (+and (+implies a b)
+        (+implies b a)))
+
+
 (defn +annotate 
   "Add key/value pairs as annotation to a heavy-bool.
   Eg. `(+annotate hb :x x :y y)`

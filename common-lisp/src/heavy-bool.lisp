@@ -8,9 +8,40 @@
 
 (in-package :heavy-bool)
 
+(defun range (start &optional stop step)
+  (cond ((null stop)
+         (range 0 start step))
+        ((null step)
+         (range start stop 1))
+        (t
+         (loop :for i :from start :below stop :by step
+              :collect i))))
+        
 (defclass heavy-bool ()
   ((bool :initarg :bool :reader bool)
-   (reason :type list :initarg :reason :reader reason)))
+   (reason :type list :initform nil :initarg :reason :reader reason
+           :documentation "a possibly empty list of non-empty plists")))
+
+(defgeneric heavy-bool? (hb))
+(defmethod heavy-bool? ((hb heavy-bool))
+  t)
+(defmethod heavy-bool? ((otherwise t))
+  nil)
+
+(defmethod plist? (plist)
+  (or (null plist)
+      (and (symbolp (car plist))
+           (not (null (cdr plist)))
+           (plist? (cddr plist)))))
+(defmethod initialize-instance :after ((hb heavy-bool) &key &allow-other-keys)
+  (assert (listp (reason hb)) (hb) "expecting a list, got ~A" (reason hb))
+  (assert (not (eql (class-of hb) (find-class 'heavy-bool)))
+          (hb) "can only create instance of heavy-true or heavy-false")
+  (loop :for plist :in (reason hb)
+        :do (assert plist (plist)
+                    "expecting a list of non-empty plists, found ~A in list ~A" plist (reason hb))
+        :do (assert (plist? plist) (hb plist)
+                    "expecting a list of plists, found ~A in list ~A" plist (reason hb))))
 
 (defclass heavy-true (heavy-bool)
   ((bool :initform t)))
@@ -39,29 +70,41 @@
                 :args args)))
            
 
-(defun +annotate-reasons (hb reasons)
+(defun +annotate-reasons (hb reasons-plist)
   (make-instance (class-of hb)
-                 :reason (append reasons (reason hb))))
+                 :reason (cons reasons-plist (reason hb))))
 
 
-(defgeneric heavy-bool (bool &rest reasons))
+(defgeneric heavy-bool (bool &rest reasons-plist))
 
-(defmethod heavy-bool ((bool heavy-bool) &rest reasons)
-  (if reasons
-   (+annotate-reasons bool reasons)
+(defmethod heavy-bool ((bool heavy-bool) &rest reasons-plist)
+  (if reasons-plist
+   (+annotate-reasons bool reasons-plist)
    bool))
 
-(defmethod heavy-bool ((bool null) &rest reasons)
-  (make-instance 'heavy-false :reason reasons))
+(defmethod heavy-bool ((bool null) &rest reason-plist)
+  (if reason-plist
+    (make-instance 'heavy-false :reason (list reason-plist))
+    (make-instance 'heavy-false)))
 
-(defmethod heavy-bool ((bool t) &rest reasons)
-  (make-instance 'heavy-true :reason reasons))
+(defmethod heavy-bool ((bool (eql t)) &rest reason-plist)
+  (if reason-plist
+    (make-instance 'heavy-true :reason (list reason-plist))
+    (make-instance 'heavy-true)))
+
+(defmethod heavy-bool ((unknown t) &rest reason-plist)
+  (error "cannot create heavy-bool from ~A, reason-plist=~A" unknown reason-plist))
+
 
 (defvar *heavy-true* (heavy-bool t))
 (defvar *heavy-false* (heavy-bool nil))
 
-(defun +not (hb)
-  (apply #'heavy-bool (not (bool hb)) (reason hb)))
+(defgeneric +not (hb))
+(defmethod +not ((hb heavy-true))
+  (make-instance 'heavy-false :reason (reason hb)))
+
+(defmethod +not ((hb heavy-false))
+  (make-instance 'heavy-true :reason (reason hb)))
 
 (defmacro +if (condition consequent &optional alternative)
   `(if (bool ,condition)
@@ -105,6 +148,10 @@
   `(+or ,b
         (+not ,a)))
 
+(defun +iff (a b)
+  (+and (+implies a b)
+        (+implied-by a b)))
+
 (defun +annotate (hb &rest reasons)
   ;; reasons is a property list
   (+annotate-reasons hb reasons))
@@ -122,24 +169,69 @@
        hb
        (+annotate-reasons hb reasons)))
 
-(defun forall (tag predicate coll)
+(defun forall (v predicate coll)
   (reduce (lambda (hb item)
             (let ((this (heavy-bool (funcall predicate item))))
               (if (bool this)
                   hb
                   (return-from forall (+annotate this
                                                  :witness item
-                                                 :tag tag)))))
+                                                 :var v)))))
           coll
           :initial-value *heavy-true*))
 
-(defun exists (tag predicate coll)
-  (+not (forall tag
+(defun exists (v predicate coll)
+  (+not (forall v
                 (lambda (x) (+not (heavy-bool (funcall predicate x))))
                 coll)))
 
-(defmacro +forall (var coll &body body)
-  `(forall ',var (lambda (,var) ,@body) ,coll))
+(defun expand-quantifier (pairs body macro-name f-name ident)
+  (if (null pairs)
+      `(progn ,@body)
+      (destructuring-bind (var val &rest pairs) pairs
+        (case var
+          ((:let) `(let (,val)
+                     (,macro-name ,pairs ,@body)))
+          ((:when) `(if ,val
+                        (,macro-name ,pairs ,@body)
+                        ,ident))
+          (t
+           `(,f-name ',var (lambda (,var) 
+                            (,macro-name ,pairs ,@body))
+                    ,val))))))
 
-(defmacro +exists (var coll &body body)
-  `(exists ',var (lambda (,var) ,@body) ,coll))
+(defmacro +exists (pairs &body body)
+  "(+exists (a some-list-1
+             b some-list-2
+             :let (c (+ a b))
+             :when (= 0 (mod b c))
+             d some-list 3)
+      (= (* d d) (* c c)))"
+  (expand-quantifier pairs body '+exists 'exists '*heavy-false*))
+
+(defmacro +forall (pairs &body body)
+  "(+forall (a some-list-1
+             b some-list-2
+             :let (c (+ a b))
+             :when (= 0 (mod b c))
+             d some-list 3)
+      (= (* d d) (* c c)))"
+  (expand-quantifier pairs body '+forall 'forall '*heavy-true*))
+
+
+(defmacro +assert (val &rest args)
+  `(assert (bool ,val) ,@ args))
+
+(defun find-reason (hb key &optional default)
+  "search in reasons (a list of plists) for a plist having key=`key`,
+   and return the associated value.  If no such plist is found,
+   `default` is returned"
+  (let ((no-key '(:no-key)))
+    (loop :for plist :in (reason hb)
+          :unless (eq no-key (getf plist key no-key))
+            :do (return-from find-reason (getf plist key)))
+    default))
+
+(defun find-witness (hb &optional default)
+  "Find the first :witness key in (reason hb) which is a list of plists."
+  (find-reason hb :witness default))

@@ -8,22 +8,29 @@
 
 
 (defpackage :heavy-bool
-  (:use :cl :alexandria)
+  (:use :cl)
   (:export
-   "HEAVY-BOOL"
-   "HEAVY-TRUE"
-   "HEAVY-FALSE"
-   "*HEAVY-TRUE*"
    "*HEAVY-FALSE*"
-   "+FORALL"
-   "+EXISTS"
+   "*HEAVY-TRUE*"
    "+AND"
+   "+ANNOTATE"
+   "+ANNOTATE-FALSE"
+   "+ANNOTATE-TRUE"
+   "+ASSERT"
+   "+EXISTS"
+   "+FORALL"
+   "+IF"
+   "+IMPLIED-BY"
+   "+IMPLIES"
+   "+LIFT"
    "+NOT"
    "+OR"
-   "+IMPLIES"
-   "+IMPLIED-BY"
-   "+IF"
-   "+ANNOTATE-TRUE"
-   "+ANNOTATE-FALSE"
-   "+ANNOTATE"
+   "+TAG"
+   "HEAVY-BOOL?"
+   "BOOL"
+   "HEAVY-BOOL"
+   "RANGE"
+   "FIND-WITNESS"
+   "HEAVY-FALSE"
+   "HEAVY-TRUE"
 ))

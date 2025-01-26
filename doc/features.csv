@@ -1,39 +1,40 @@
-Language,Scala,Python,Common Lisp,Clojure
-constructor,HeavyBool,HeavyBool(),,heavy-bool
-TRUE,HeavyTrue,HeavyTrue(),,+true
-FALSE,HeavyFalse,HeavyFalse(),,+false
-if,if,if,,+if
-not,!,!,,+not
-and,&&,and,,+and
-or,||,or,,+or
-implies,==>,,,+implies
-implied by,<==,,,+implied-by
-iff,<==>,,,
-forall,forallM,forallM/allM,,+forall
-exists,existsM,existsM/anyM,,+exists
-to Boolean,toBoolean,,,+bool
-annotate for user,,,,+annotate
-annotate programmatic,++,annotate,annotate,+conj
-tag,tag,tag,tag,+tag
-assert,AssertM,assert,,+assert
-magma,Magma,Magma,,
-is-magma,isMagma,,,Is-magma
-is-semigroup,isSemiGroup,isSemiGroup,,Is-semigroup
-is-monoid,isMonoid,isMonoid,,Is-monoid
-is-group,isGroup,isGroup,,Is-group
-is-ring,isRing,,,Is-ring
-is-field,isField,,,Is-field
-addition-mod-p,AdditionModP,AdditionModP(),,addition-mod-p
-multiplication-mod-p,MultiplicationModP,MultiplicationModP(),,multiplication-mod-p
-dyn-magma,DynMagma,DynMagma(),,
-is-antisymmetric,isAntisymmetric,,,is-antisymmetric
-is-asymmetric,isAsymmetric,,,is-asymmetric
-is-connected,isConnected,,,is-connected
-is-equivalence,isEquivalence,,,is-equivalence
-is-irreflexive,isIrreflexive,,,is-irreflexive
-is-partial-order,isPartialOrder,,,is-partial-order
-is-reflexive,isReflexive,,,is-reflexive
-is-strict-partial-order,isStrictPartialOrder,,,is-strict-partial-order
-is-strongly-connected,isStronglyConnected,,,is-strongly-connected
-is-symmetric,isSymmetric,,,is-symmetric
-is-transitive,isTransitivie,,,is-transitive
+Language,Scala,Python,Common Lisp,Clojure,,,
+constructor,HeavyBool,HeavyBool(),heavy-bool,heavy-bool,,,
+TRUE,HeavyTrue,HeavyTrue(),*heavy-true*,+true,,,
+FALSE,HeavyFalse,HeavyFalse(),*heavy-false*,+false,,,
+if,if,if,+if,+if,,,
+not,!,!,+not,+not,,,
+and,&&,and,+and,+and,,,
+or,||,or,+or,+or,,,
+implies,==>,,+implies,+implies,,,
+implied by,<==,,+implied-by,+implied-by,,,
+iff,<==>,,+iff,+iff,,,
+forall,forallM,forallM/allM,+forall,+forall,,,
+exists,existsM,existsM/anyM,+exists,+exists,,,
+to Boolean,toBoolean,,bool,+bool,,,
+annotate for user,,,+annotate,+annotate,,,
+annotate programmatic,++,annotate,+annotate-reasons,+conj,,,
+tag,tag,tag,tag,+tag,,,
+assert,AssertM,assert,+assert,+assert,,,
+magma,Magma,Magma,magma,,,,
+is-magma,isMagma,,is-magma,Is-magma,,,
+is-semigroup,isSemiGroup,isSemiGroup,is-semigroup,Is-semigroup,,,
+is-monoid,isMonoid,isMonoid,is-monoid,Is-monoid,,,
+is-group,isGroup,isGroup,is-group,Is-group,,,
+is-ring,isRing,,is-ring,Is-ring,,,
+is-field,isField,,is-field,Is-field,,,
+addition-mod-p,AdditionModP,AdditionModP(),addition-mod-p,addition-mod-p,,,
+multiplication-mod-p,MultiplicationModP,MultiplicationModP(),multiplication-mod-p,multiplication-mod-p,,,
+dyn-magma,DynMagma,DynMagma(),dyn-magma,,,,
+is-antisymmetric,isAntisymmetric,,is-antisymmetric,is-antisymmetric,,,
+is-asymmetric,isAsymmetric,,is-asymmetric,is-asymmetric,,,
+is-connected,isConnected,,is-connected,is-connected,,,
+is-equivalence,isEquivalence,,is-equivalence,is-equivalence,,,
+is-irreflexive,isIrreflexive,,is-irreflexive,is-irreflexive,,,
+is-partial-order,isPartialOrder,,is-partial-order,is-partial-order,,,
+is-reflexive,isReflexive,,is-reflexive,is-reflexive,,,
+is-strict-partial-order,isStrictPartialOrder,,is-strict-partial-order,is-strict-partial-order,,,
+is-strongly-connected,isStronglyConnected,,is-strongly-connected,is-strongly-connected,,,
+is-symmetric,isSymmetric,,is-symmetric,is-symmetric,,,
+is-transitive,isTransitivie,,is-transitive,is-transitive,,,
+gaussian-int,,,,gaussian-int,,,

@@ -8,5 +8,5 @@
 
 
 (defpackage :heavy-bool-examples
-  (:use :heavy-bool :cl :alexandria)
+  (:use :heavy-bool :cl)
   (:export))

@@ -12,13 +12,10 @@
   :author "Jim Newton"
   :description "Implementation of heavy-booleans"
   :license "MIT"
-  :depends-on (:alexandria)
+  :depends-on ()
   :components
   ((:module "src"
     :components
     ((:file "heavy-bool-package")
      (:file "heavy-bool" :depends-on ("heavy-bool-package"))
-     (:file "magma" :depends-on ("heavy-bool"))
-     (:file "mod-p" :depends-on ("magma"))
-     (:file "relations" :depends-on ("heavy-bool"))
      ))))

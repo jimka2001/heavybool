@@ -39,7 +39,7 @@ class MultiplicationModP(p: Int) extends ModP(p) {
   override def toString: String = s"MultiplicationModP($p)"
 
   override def gen(): List[Int] = {
-    super.gen().filter { a:Int => a != 0 }
+    super.gen().filter { (a:Int) => a != 0 }
   }
 
   override def member(a: Int): HeavyBool = {

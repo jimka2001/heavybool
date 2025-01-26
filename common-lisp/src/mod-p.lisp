@@ -6,7 +6,7 @@
 ;; OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 ;; WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-(in-package :heavy-bool)
+(in-package :heavy-bool-examples)
 
 (defclass mod-p (magma)
   ((p :initarg :p :type integer)))
@@ -26,12 +26,14 @@
      (+annotate 
       (+and (+annotate-false (heavy-bool (>= a 0)) :reason "a < 0")
             (+annotate-false (heavy-bool (< a p)) :reason "a >= p"))
-      :a a  :p p)
+      :a a :p p)
      :is-member)))
 
 (defclass addition-mod-p (mod-p) ())
 
 (defmethod op ((amp addition-mod-p) a b)
+  (assert (integerp a))
+  (assert (integerp b))
   (mod (+ a b) (slot-value amp 'p)))
 
 (defclass multiplication-mod-p (mod-p) ())

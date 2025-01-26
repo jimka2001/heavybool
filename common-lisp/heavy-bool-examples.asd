@@ -12,12 +12,14 @@
   :author "Jim Newton"
   :description "Examples of heavy-booleans"
   :license "MIT"
-  :depends-on (:heavy-bool :alexandria)
+  :depends-on (:heavy-bool)
   :components
   ((:module "src"
     :components
     ((:file "heavy-bool-examples-package")
      (:file "magma")
+     (:file "dyn-magma" :depends-on ("magma"))
      (:file "mod-p" :depends-on ("magma"))
      (:file "relations")
+     (:file "gaussian-int" )
      ))))

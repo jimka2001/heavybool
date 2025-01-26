@@ -6,14 +6,14 @@
 ;; OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 ;; WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-(in-package :heavy-bool)
+(in-package :heavy-bool-examples)
 
 (defclass magma () ())
 (defgeneric gen (magma))
 (defgeneric op (magma a b))
 (defgeneric is-equiv (magma a b))
 (defmethod is-equiv ((magma magma) a b)
-  (+tag (heavy-bool (= a b)
+  (+tag (heavy-bool (equal a b)
                     :a a
                     :b b)
         :is-equiv))
@@ -22,32 +22,32 @@
 (defgeneric is-closed (magma))
 
 (defmethod is-closed ((magma magma))
-  (+tag (+forall a (gen magma)
-          (+forall b (gen magma)
-            (is-member magma (op magma a b))))
+  (+tag (+forall (a (gen magma)
+                    b (gen magma))
+          (is-member magma (op magma a b)))
         :closed))
 
 (defgeneric is-associative (magma))
 (defmethod is-associative ((magma magma))
-  (+tag (+forall a (gen magma)
-          (+forall b (gen magma)
-            (+forall c (gen magma)
-              (is-equiv magma (op magma (op magma a b) c)
-                        (op magma a (op magma b c))))))
+  (+tag (+forall (a (gen magma)
+                    b (gen magma)
+                    c (gen magma))
+          (is-equiv magma (op magma (op magma a b) c)
+                    (op magma a (op magma b c))))
         :associative))
 
 (defgeneric is-commutative (magma))
 (defmethod is-commutative ((magma magma))
-  (+tag (+forall a (gen magma)
-          (+forall b (gen magma)
-            (is-equiv magma
-                      (op magma a b)
-                      (op magma b a))))
+  (+tag (+forall (a (gen magma)
+                    b (gen magma))
+          (is-equiv magma
+                    (op magma a b)
+                    (op magma b a)))
         :commutative))
 
 (defgeneric is-identity (magma z))
 (defmethod is-identity ((magma magma) z)
-  (+tag (+forall a (gen magma)
+  (+tag (+forall (a (gen magma))
           (+annotate (+and (is-equiv magma (op magma a z) a)
                            (is-equiv magma (op magma z a) a))
            :z z))
@@ -55,52 +55,54 @@
 
 (defgeneric find-identity (magma))
 (defmethod find-identity ((magma magma))
-  (let ((found (member-if (lambda (x)
-                            (is-identity magma x))
-                          (gen magma)
-                          :key #'bool)))
-    (if found
-        (values (car found) t)
-        (values nil nil))))
+  (+tag (+exists (e (gen magma))
+          (is-identity magma e))
+        :identity))
 
+;; find inverse knowing the identity
 (defgeneric find-inverse-from-ident (magma a z))
 (defmethod find-inverse-from-ident ((magma magma) a z)
-  (loop :for b :in  (gen magma)
-        :do (+if (+and (is-equiv magma z (op magma b a))
-                       (is-equiv magma z (op magma a b)))
-                 (return-from find-inverse-from-ident
-                   (values b t))
-                 nil))
-  (values nil nil))
-            
+  (+tag (+exists (b (gen magma))
+          (+and (is-equiv magma z (op magma b a))
+                (is-equiv magma z (op magma a b))))
+        :inverse))
+
+;; find inverse without knowing the identity
 (defgeneric find-inverse-wo-ident (magma a))
 (defmethod find-inverse-wo-identity ((magma magma) a)
-  (multiple-value-bind (z found) (find-identity magma)
-    (if found
-        (find-inverse-from-ident magma a z)
-        (values nil nil))))
+  (let ((e (find-identity magma)))
+    (+tag (+and e
+                (find-inverse-from-ident magma a e))
+          :inverse)))
 
+
+;; determine whether the given heavy-bool valued function
+;; is an inverter for the magma, i.e. is it true that
+;; the function, `invert`, is able to find an inverse
+;; for every element of the magma.
 (defgeneric is-inverter (magma z invert))
 (defmethod is-inverter ((magma magma) z invert)
-  (declare (type (function (t) (values t (member t nil))) invert))
+  (declare (type (function (t) heavy-bool) invert))
   (+tag
-   (+annotate (+forall a (gen magma)
-                (multiple-value-bind (b found) (funcall invert a)
-                  (if found
-                      (+and (is-member magma b)
-                            (is-equiv magma z (op magma a b))
-                            (is-equiv magma z (op magma b a)))
-                      (+tag *heavy-false*
-                            :has-no-inverse))))
-              :ident z)
+   (+forall (a (gen magma))
+     (let* ((inv (funcall invert a))
+            (w (find-witness inv)))
+       (+and inv
+             (is-member magma w)
+             (is-equiv magma z (op magma a w))
+             (is-equiv magma z (op magma w a)))))
    :inverter))
+
+(defgeneric is-magma (magma))
+(defmethod is-magma ((magma magma))
+  (+tag (is-closed magma)
+        :magma))
 
 (defgeneric is-semigroup (magma))
 (defmethod is-semigroup ((magma magma))
-  (+tag (+and (is-closed magma)
+  (+tag (+and (is-magma magma)
               (is-associative magma))
         :semigroup))
-
 
 (defgeneric is-monoid (magma z))
 (defmethod is-monoid ((magma magma) z)
@@ -110,30 +112,14 @@
 
 (defgeneric is-group (magma z invert))
 (defmethod is-group ((magma magma) z invert)
-  (declare (type (function (t) (values t (member t nil))) invert))
+  (declare (type (function (t) heavy-bool)
+                 invert))
   (+tag (+and (is-monoid magma z)
               (is-inverter magma z invert))
         :group))
 
-
-(defclass dyn-magma (magma)
-  ((gen :initarg :gen :type (function () t))
-   (op :initarg :op :type (function (t t) t))
-   (is-member :initarg :is-member :type (function (t) t))))
-
-(defmethod gen ((md dyn-magma))
-  (funcall (slot-value md 'gen)))
-  
-(defmethod op ((md dyn-magma) a b)
-  (funcall (slot-value md 'op) a b))
-
-(defmethod is-member ((md dyn-magma) a)
-  (+tag (heavy-bool (funcall (slot-value md 'is-member) a)
-                    :a a)
-        :member))
-
 (defun gen-list-finite (n)
-  (iota (1+ n)))
+  (range 0 (1+ n) 1))
 
 (defun mkstring (data &key (delimeter "") (prefix "") (suffix "") (key #'identity))
   (concatenate 'string
@@ -184,30 +170,30 @@
 
 (defun is-ring (gen is-member + * - one zero)
   (labels ((is-local-member (x)
-             (bool (funcall is-member x))))
+             (heavy-bool (funcall is-member x))))
   
     (let ((ma (make-instance 'dyn-magma :gen gen :op + :is-member #'is-local-member))
           (mb (make-instance 'dyn-magma :gen gen :op * :is-member #'is-local-member)))
       (+tag (+and (is-group ma zero -)
                   (is-monoid mb one)
-                  (+forall a (funcall gen)
-                    (+forall b (funcall gen)
-                      (+forall c (funcall gen)
-                        (+and (+tag (is-equiv ma
-                                              (funcall * a (funcall + b c))
-                                              (funcall + (funcall * a b) (funcall * a c)))
-                                    :left-distributive)
-                              (+tag (is-equiv ma
-                                              (funcall * (funcall + b c) a)
-                                              (funcall + (funcall * b a) (funcall * c a)))
-                                    :right-distributive))))))
+                  (+forall (a (funcall gen)
+                              b (funcall gen)
+                              c (funcall gen))
+                    (+and (+tag (is-equiv ma
+                                          (funcall * a (funcall + b c))
+                                          (funcall + (funcall * a b) (funcall * a c)))
+                                :left-distributive)
+                          (+tag (is-equiv ma
+                                          (funcall * (funcall + b c) a)
+                                          (funcall + (funcall * b a) (funcall * c a)))
+                                :right-distributive))))
             :ring))))
 
-(defun is-field (gen is-member + * - 1/ one zero)
+(defun is-field (gen is-member + * - 1/ zero one)
   (labels ((is-local-member (x)
-             (bool (funcall is-member x)))
+             (heavy-bool (funcall is-member x)))
            (non-zero-gen ()
-             (remove-if (lambda (x) (equal 0 x))
+             (remove-if (lambda (x) (equal zero x))
                         (funcall gen))))
     (let ((ma (make-instance 'dyn-magma :gen gen :op + :is-member #'is-local-member))
           (mb (make-instance 'dyn-magma :gen gen :op * :is-member #'is-local-member))
@@ -241,6 +227,7 @@
                                (let ((pos (+ (* a n) b)))
                                  (mod (/ i (expt n pos)) n))))))
 
+
 (defun count-groups (n)
   (let ((elements (gen-list-finite (1- n)))
         (groups 0)
@@ -256,7 +243,7 @@
                                (let* ((dm (make-instance 'dyn-magma
                                                         :gen (constantly elements)
                                                         :op dyn-op
-                                                        :is-member (lambda (a) (member a elements))))
+                                                        :is-member (lambda (a) (and (member a elements) t))))
                                       (ab (is-commutative dm)))
                                  (incf tries)
                                  (+if ab
@@ -312,7 +299,7 @@
          (incf tries)
          (let* ((dm (make-instance 'dyn-magma
                                   :is-member (lambda (a)
-                                               (member a elements))
+                                               (and (member a elements) t))
                                   :op add
                                   :gen (constantly elements)))
                 (ig (is-group dm 0 (lambda (x)
