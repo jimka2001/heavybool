@@ -16,7 +16,8 @@ class HeavyBoolTestCase(unittest.TestCase):
         self.assertTrue(existsM(range(10), lambda n: n > 10).Not())
 
     def test_anyM(self):
-        self.assertTrue(anyM(i for i in [HeavyTrue().flag("x"), HeavyFalse().flag("y")]))
+        self.assertTrue(anyM(i for i in [HeavyTrue().flag("x"),
+                                         HeavyFalse().flag("y")]))
         self.assertTrue(anyM(HeavyBool(a > 5, {"a": a})
                              for a in range(10)))
         self.assertTrue(anyM(HeavyBool(a > b, {"a": a, "b": b})
