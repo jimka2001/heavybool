@@ -2,6 +2,15 @@
   (:require [heavy-bool :as sut]
             [clojure.test :refer [deftest testing is]]))
 
+(deftest t-+true
+  (testing "+true"
+    (is (sut/heavy-bool? sut/+true))
+    (is (sut/heavy-bool? sut/+false))
+    (is (sut/heavy-bool? (sut/ensure-heavy-bool sut/+true)))
+    (is (sut/heavy-bool? (sut/ensure-heavy-bool sut/+false)))
+    (is (sut/heavy-bool? (sut/ensure-heavy-bool true)))
+    (is (sut/heavy-bool? (sut/ensure-heavy-bool false)))))
+
 (deftest t+and
   (testing "and"
     (is (sut/+and (sut/+forall [x (range 1 10 3)] [(odd? x) '({:forall true})])

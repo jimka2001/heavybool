@@ -20,7 +20,10 @@
        (list? (second heavy-bool))
        (every? map? (second heavy-bool))))
 
-(defn ensure-heavy-bool [hb]
+(defn ensure-heavy-bool
+  "test whether the given object is either already a `heavy-bool`
+  or explicitly `true` or `false`."
+  [hb]
   (case hb
     (true) +true
     (false) +false
