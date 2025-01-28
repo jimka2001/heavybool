@@ -104,7 +104,7 @@ def existsM(items, p: Callable[[Any], HeavyBool]) -> HeavyBool:
     for i in items:
         r = p(i)
         if r:
-            return HeavyTrue({"witness": i})
+            return r.annotate({"witness": i})
 
     return HeavyFalse()
 
@@ -125,3 +125,28 @@ def allM(gen: Generator[HeavyBool, None, None]) -> HeavyBool:
         if not hb:
             return hb
     return HeavyTrue()
+
+
+if __name__ == '__main__':
+    M = [0, 1, 2, 3, 4]
+    # print(allM(HeavyBool(((a - b) - c) == (a - (b - c)),
+    #                      {"a": a, "b": b, "c": c})
+    #            for a in M
+    #            for b in M
+    #            for c in M))
+
+    print(forallM(M, lambda a:
+  forallM(M, lambda b:
+    forallM(M, lambda c: HeavyTrue() if (((a - b) - c) == (a - (b - c))) else HeavyFalse({"a":a, "b":b, "c":c})))))
+    print(forallM(M, lambda a:
+            forallM(M, lambda b:
+                forallM(M, lambda c: HeavyBool(((a - b) - c) == (a - (b - c))).annotateFalse(
+                                        {"a": a, "b": b, "c": c})))))
+
+    if allM(HeavyBool(a > 10)
+            for a in M) or anyM(HeavyBool(a * b < 100)
+                                for a in M
+                                for b in M):
+        print("yes")
+    else:
+        print("no")
