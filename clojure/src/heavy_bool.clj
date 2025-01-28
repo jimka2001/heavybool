@@ -108,7 +108,7 @@
 
 (defmacro +and
   "Logical AND of heavy-bools which evaluates to a `heavy-bool`.
-  Expands to code which evaluates to the left-most `heavy-bool` value
+  Expands to code which evaluates to the left-most `heavy-false` value
   in the argument list, otherwise evaluates to the right-most
   value.  If the argument list is empty, evaluates explicitly to
   `+true`"
@@ -125,7 +125,7 @@
 
 (defmacro +or
   "Logical OR of heavy-bools which evaluates to a `heavy-bool`.
-  Expands to code which evaluates to the left-most `heavy-bool` value
+  Expands to code which evaluates to the left-most `heavy-true` value
   in the argument list, otherwise evaluates to the left-most
   value.  If the argument list is empty, evaluates explicitly to
   `+false`"
@@ -141,7 +141,7 @@
               (+or ~@tail))))))
 
 (defmacro +implies
-  "Determine whether heavy-bool `a` logically implies heavy-bool `b`.
+  "Determine whether` heavy-bool` `a` logically implies `heavy-bool` `b`.
   `b` is not evaluated unless `a` is `heavy-true`"
   [a b]
   `(+or (+not ~a)
