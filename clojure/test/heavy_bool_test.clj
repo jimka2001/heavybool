@@ -27,7 +27,7 @@
     (is (= (sut/+forall [x [1 2 3]] (if (> x 0) [sut/+true
                                         '({:reason "works"})]
                                       [sut/+false '({:reason "fails"})]))
-           [true '({:var x})]))))
+           [true ()]))))
 
 (deftest t-forall-syntax
   (testing "forall syntax"
