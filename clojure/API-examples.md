@@ -1,4 +1,6 @@
 # Table of contents
+-  [`els2025`](#els2025)  - Examples to support els 2025 paper submission.
+    -  [`example1`](#els2025/example1)
 -  [`gaussian-int`](#gaussian-int)  - Example usage of <code>heavy-bool</code>.
     -  [`gaussian-int-mod-p`](#gaussian-int/gaussian-int-mod-p) - For a given integer return a map with the keys: :p :gen :op :equiv :mult :one :zero :add :add-inv :mult-inv :member These keys are the data necessary to make a call to the <code>is-field</code> function.
     -  [`gaussian?`](#gaussian-int/gaussian?) - Bolean predicate detecting whether the given value is a 2 element vector of integers.
@@ -32,6 +34,21 @@
     -  [`is-symmetric`](#relations/is-symmetric) - A symmetric relation means that (a R b) => (b R a).
     -  [`is-transitive`](#relations/is-transitive) - hb-rel is a binary function which returns a <code>heavy-bool</code> <code>gen</code> is a collection <code>hb-rel</code> is a binary function returning a heavy-bool.
     -  [`lift-relation`](#relations/lift-relation) - Accepts a relation, a binary predicate returning a boolean, and returns a binary predicate returning a heavy-boolean.
+
+-----
+# <a name="els2025">els2025</a>
+
+
+Examples to support els 2025 paper submission
+
+
+
+
+## <a name="els2025/example1">`example1`</a><a name="els2025/example1"></a>
+
+
+
+<p><sub><a href="https://github.com/jimka2001/heavybool/blob/main/clojure/examples/els2025.clj#L5-L11">Source</a></sub></p>
 
 -----
 # <a name="gaussian-int">gaussian-int</a>
