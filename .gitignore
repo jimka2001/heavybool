@@ -16,3 +16,4 @@ clojure/pom.xml
 python/tests/__pycache__
 .clj-kondo/.cache
 .lsp/.cache
+scala/project/project/target

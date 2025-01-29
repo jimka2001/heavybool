@@ -40,6 +40,22 @@ class HeavyBoolSuite extends MyFunSuite {
     assert(!result)
     assert(result.witness == Some(1)) // 1 is the first element that fails the forall
   }
+  test("els2025") {
+    val M = List(0, 1, 2, 3, 4)
+    val h1 = forallM("a", M) { (a) =>
+      forallM("b", M) { (b) =>
+        forallM("c", M) { (c) =>
+          HeavyBool((a - b) - c == a - (b - c))
+        }
+      }
+    }
+    //println(h1)
+    val h2 = (forallM("a", M){(a) => a < 10}
+      && existsM("a", M){(a)=>
+      existsM("b", M){(b) =>
+        a*b < 100}})
+    println(h2)
+  }
   test("forall witness") {
     val hb_xy = forallM("x", (0 to 100)){x =>
       forallM("y", (0 to 100)){ y=>
