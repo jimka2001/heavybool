@@ -42,18 +42,21 @@ class HeavyBoolSuite extends MyFunSuite {
   }
   test("els2025") {
     val M = List(0, 1, 2, 3, 4)
-    val h1 = forallM("a", M) { (a) =>
+    // forallM returns object of type HeavyBool
+    val h1:HeavyBool = forallM("a", M) { (a) =>
       forallM("b", M) { (b) =>
         forallM("c", M) { (c) =>
           HeavyBool((a - b) - c == a - (b - c))
         }
       }
     }
-    //println(h1)
-    val h2 = (forallM("a", M){(a) => a < 10}
+    // forallM returns object of type HeavyBool
+    val h2:HeavyBool = (forallM("a", M){(a) => a < 10}
       && existsM("a", M){(a)=>
       existsM("b", M){(b) =>
         a*b < 100}})
+    // prints:
+    //   true[(witness->0, tag->a); (witness->0, tag->b)]
     println(h2)
   }
   test("forall witness") {
