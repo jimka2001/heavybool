@@ -29,7 +29,7 @@
 
 (deftest t-has-identity
   (testing "find-identity"
-    (is (sut/has-identity (range 10) (fn [a b] (+ a b)) sut/default-equal)))))
+    (is (sut/has-identity (range 10) (fn [a b] (+ a b)) sut/default-equal))))
 
 (deftest t-add-mod-n
   (testing "add mod n"
@@ -40,7 +40,7 @@
            (:op gr)
            (:ident gr)
            (:member gr)
-           (:equiv gr))))))))
+           (:equiv gr))))))
 
 (deftest t-mult-mod-2
   (testing "mult-mod-2"
