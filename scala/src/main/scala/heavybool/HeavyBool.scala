@@ -10,6 +10,8 @@ import cats.Foldable
  * @param because a list of hash tables explaining the reasoning for the Boolean value
  */
 sealed abstract class HeavyBool(val because:Reason) {
+  // TODO refactor this class to use 
+  // https://scastie.scala-lang.org/BalmungSan/bNwF2C8lToK0Onq30b62iQ/5
   override def toString:String = locally{
     val prefix:String = toBoolean.toString
     val reasoning:List[String] = for{ m <- because
@@ -75,7 +77,7 @@ sealed abstract class HeavyBool(val because:Reason) {
 
   /**
    * logical AND between to HeavyBool objects,
-   * `that` is only evaluated if `this`` is HeavyTrue
+   * `that` is only evaluated if `this` is HeavyTrue
    */
   def &&(that: => HeavyBool):HeavyBool = {
     this match {
