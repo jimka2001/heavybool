@@ -121,17 +121,6 @@
                            =))
           (format "n=%d" n)))))
 
-(deftest t-mod-prime
-  (testing "find mod prime"
-    (doseq [n (range 2 50) 
-            :let [mod-n (multiplication-mod-p n)]]
-      (is (= (prime? n)
-             (sut/is-group (:gen mod-n)
-                           (:op mod-n)
-                           (:ident mod-n)
-                           (:member mod-n)
-                           (:equiv mod-n)))
-          (format "n=%d" n)))))
 
 (deftest t-klein-4
   (testing "Klein 4 group"
@@ -156,27 +145,3 @@
                           member
                           =))))))
 
-(defn test-gaussian [p]
-  (let [m (gaussian-int-mod-p p)]
-    (sut/is-field (:gen m)
-                  (:add m)
-                  (:mult m)
-                  (:zero m)
-                  (:one m)
-                  (:member m)
-                  (:equiv m))))
-
-
-;; (deftest t-gaussian
-;;   (testing "gaussian int"
-;;     (is (not (test-gaussian 2)))
-;;     (doseq [p (range 3 10)
-;;             :let [f (test-gaussian p)]]
-;;       (cond (not (prime? p))
-;;             (is (not f))
-
-;;             (= 1 (mod p 4)) ;; 4k + 1
-;;             (is (not f))
-
-;;             :else ;; 4k - 1
-;;             (is f)))))

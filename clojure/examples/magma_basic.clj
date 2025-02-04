@@ -14,36 +14,36 @@
           coll))
                                
 (defn is-associative
-  [coll * equal]
+  [coll * =]
   (every? (fn [a]
              (every? (fn [b]
                        (every? (fn [c]
-                                 (equal (* a (* b c))
+                                 (= (* a (* b c))
                                         (* (* a b) c)))
                                coll))
                      coll))
           coll))
 
 (defn is-commutative
-  [coll * equal]
+  [coll * =]
   (every? (fn [a]
             (every? (fn [b]
-                      (equal (* a b)
+                      (= (* a b)
                              (* b a)))
                     coll))
           coll))
 
 (defn is-identity
-  [coll * ident equal]
+  [coll * ident =]
   (every? (fn [a]
-            (and (equal a (* ident a))
-                 (equal a (* a ident))))
+            (and (= a (* ident a))
+                 (= a (* a ident))))
           coll))
 
 (defn has-identity
-  [coll * equal]
+  [coll * =]
   (some (fn [e]
-          (is-identity coll * e equal))
+          (is-identity coll * e =))
         coll))
 
 (defn is-magma
@@ -51,46 +51,46 @@
   (is-closed coll * member))
 
 (defn is-semigroup
-  [coll * member equal]
+  [coll * member =]
   (and (is-magma coll * member)
-       (is-associative coll * equal)))
+       (is-associative coll * =)))
 
 (defn is-monoid
-  [coll * ident member equal]
+  [coll * ident member =]
   (and (member ident)
-       (is-semigroup coll * member equal)
-       (is-identity coll * ident equal)))
+       (is-semigroup coll * member =)
+       (is-identity coll * ident =)))
 
-(defn is-inverse [a * b ident equal]
-  (and (equal ident (* b a))
-       (equal ident (* a b))))
+(defn is-inverse [a * b ident =]
+  (and (= ident (* b a))
+       (= ident (* a b))))
 
 (defn has-inverses 
-  [coll * ident equal]
+  [coll * ident =]
   (every? (fn [a]
             (some (fn [b]
-                    (is-inverse a * b ident equal))
+                    (is-inverse a * b ident =))
                   coll))
           coll))
 
 (defn is-group 
-  [coll * ident member equal]
-  (and (is-monoid coll * ident member equal)
-       (has-inverses coll * ident equal)))
+  [coll * ident member =]
+  (and (is-monoid coll * ident member =)
+       (has-inverses coll * ident =)))
 
 
 (defn is-ring
-  [coll + * zero one member equal]
-  (and (is-group coll + zero member equal)
-       (is-commutative coll + equal)
-       (is-monoid coll * one member equal)
+  [coll + * zero one member =]
+  (and (is-group coll + zero member =)
+       (is-commutative coll + =)
+       (is-monoid coll * one member =)
        (every? (fn [a]
                  (every? (fn [b]
                            (every? (fn [c]
-                                     (and (equal (* a (+ b c))
-                                                 (+ (* a b) (* a c)))
-                                          (equal (* (+ b c) a)
-                                                 (+ (* b a) (* c a)))))
+                                     (and (= (* a (+ b c))
+                                             (+ (* a b) (* a c)))
+                                          (= (* (+ b c) a)
+                                             (+ (* b a) (* c a)))))
                                    coll))
                          coll))
                coll)))
@@ -98,13 +98,13 @@
 (defn is-field
   [coll + *
    zero one
-   member equal]
-  (and (not (equal one zero))
-       (is-ring coll + * zero one member equal)
-       (is-commutative coll * equal)
+   member =]
+  (and (not (= one zero))
+       (is-ring coll + * zero one member =)
+       (is-commutative coll * =)
        (every? (fn [x]
-                 (or (equal x zero)
+                 (or (= x zero)
                      (some (fn [y]
-                             (is-inverse x * y one equal))
+                             (is-inverse x * y one =))
                            coll)))
                coll)))

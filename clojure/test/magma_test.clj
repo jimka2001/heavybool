@@ -106,6 +106,24 @@
                     (range 2 n))))))))
 
 
+(deftest t-mod-prime-basic
+  (testing "basic find mod prime"
+    (doseq [n (range 2 50)
+            :let [elements (range 1 n)
+                  ident 0
+                  op (fn [a b] (mod (* a b) n))]]
+      (is (= (prime? n)
+             (sut/is-group elements
+                           op
+                           ident
+                           (fn [a]
+                             (+exists [b elements]
+                               (and (= (op a b) ident)
+                                    (= (op b a) ident))))
+                           (fn [a] (ut/member a elements))
+                           =))
+          (format "n=%d" n)))))
+
 (deftest t-mod-prime
   (testing "find mod prime"
     (doseq [n (range 2 50) 

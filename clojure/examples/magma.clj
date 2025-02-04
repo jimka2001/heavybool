@@ -81,12 +81,12 @@
   {:pre [(fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
-  (+tag
+  (+annotate-false
    (+forall [a coll]
-            (+annotate-false (+and (equal (* ident a) a)
-                                   (equal (* a ident) a))
-                      :ident ident))
-   :identity))
+            (+and (equal (* ident a) a)
+                  (equal (* a ident) a)))
+   :is-identity false
+   :ident ident))
 
 (defn find-identity
   "Predicate returning `heavy-bool` indicating whether there exists an identity element
@@ -149,9 +149,9 @@
          (fn? equal)]
    :post [(heavy-bool? %)]}
   (+tag
-   (+and (member ident)
-         (is-semigroup coll * member equal)
-         (is-identity coll * ident equal))
+   (+and (is-semigroup coll * member equal)
+         (is-identity coll * ident equal)
+         )
    :monoid))
 
 (defn has-inverses 

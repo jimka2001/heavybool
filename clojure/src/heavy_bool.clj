@@ -272,6 +272,7 @@
              (~macro-name [~@others]
                  ~@body))))
 
+
 (defmacro +exists
   "Existential quantifier syntax.  `body` is expected to evaluate
   to a heavy-bool.  The syntax is similar to `for` and `doseq`
