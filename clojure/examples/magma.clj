@@ -85,7 +85,7 @@
    (+forall [a coll]
             (+and (equal (* ident a) a)
                   (equal (* a ident) a)))
-   :is-identity false
+   :identity false
    :ident ident))
 
 (defn find-identity
