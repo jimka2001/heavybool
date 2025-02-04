@@ -20,5 +20,5 @@
              , "--add-opens=java.xml/com.sun.xml.internal.stream.writers=ALL-UNNAMED" ;; MAC only
              ]
   :profiles {:test {:plugins [[lein-test-report-junit-xml "0.2.0"]]
-                    :test-report-junit-xml {:output-dir "."}
+                    :test-report-junit-xml {:output-dir "junit-xml"}
                     }})
