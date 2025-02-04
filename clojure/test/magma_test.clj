@@ -95,6 +95,17 @@
      (is (not (prime? 6)))
      (is (prime? 7))))
 
+(deftest t-prime-2
+  (testing "2nd prime?"
+    (let [M 2000]
+      (doseq [n (range 2 M)]
+        (if (prime? n)
+          (is (not (some (fn [f] (= 0 (mod n f)))
+                         (range 2 n))))
+          (is (some (fn [f] (= 0 (mod n f)))
+                    (range 2 n))))))))
+
+
 (deftest t-mod-prime
   (testing "find mod prime"
     (doseq [n (range 2 50) 

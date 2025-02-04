@@ -1,5 +1,5 @@
-(ns magma-basic-test
-  (:require [magma-basic :as sut]
+(ns magma-basic-2-test
+  (:require [magma-basic-2 :as sut]
             [util :as ut]
             [mod-p :refer [multiplication-mod-p addition-mod-p]]
             [gaussian-int :refer [gaussian-int-mod-p]]
@@ -96,7 +96,7 @@
 
 (deftest t-mod-prime-3
   (testing "group 3"
-    (let [elements (range 1 3)
+    (let [elements (range 0 3)
           ident 1
           op (fn [a b] (mod (* a b) 3))
           member (fn [a] (ut/member a elements))
@@ -116,22 +116,22 @@
       (is (= (prime? n)
              (sut/is-group elements
                            (fn [a b] (mod (* a b) n))
-                           1
+                           0
                            (fn [a] (ut/member a elements))
                            =))
           (format "n=%d" n)))))
 
-;; (deftest t-mod-prime
-;;   (testing "find mod prime"
-;;     (doseq [n (range 2 50) 
-;;             :let [mod-n (multiplication-mod-p n)]]
-;;       (is (= (prime? n)
-;;              (sut/is-group (:gen mod-n)
-;;                            (:op mod-n)
-;;                            (:ident mod-n)
-;;                            (:member mod-n)
-;;                            (:equiv mod-n)))
-;;           (format "n=%d" n)))))
+(deftest t-mod-prime
+  (testing "find mod prime"
+    (doseq [n (range 2 50) 
+            :let [mod-n (multiplication-mod-p n)]]
+      (is (= (prime? n)
+             (sut/is-group (:gen mod-n)
+                           (:op mod-n)
+                           (:ident mod-n)
+                           (:member mod-n)
+                           (:equiv mod-n)))
+          (format "n=%d" n)))))
 
 (deftest t-klein-4
   (testing "Klein 4 group"

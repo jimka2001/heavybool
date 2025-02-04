@@ -38,8 +38,6 @@
     (is (= true
            (sut/member nil '(0 nil 2))))
 
-
-
     (is (= true
            (sut/member 1 [0 1 2])))
     (is (= true
@@ -63,7 +61,14 @@
     (is (= false
            (sut/member nil #{0 false 2})))
     (is (= false
-           (sut/member false #{0 true 2})))))
+           (sut/member false #{0 true 2})))
+
+
+    (is (sut/member 0 (range 3)))
+    (is (sut/member 1 (range 3)))
+    (is (sut/member 2 (range 3)))
+    (is (not (sut/member 3 (range 3))))
+))
 
 
 (deftest t-almost-equal
@@ -90,3 +95,44 @@
             b (range a 100)]
       (is (= (sut/gcd a b)
              (sut/gcd b a))))))
+
+(deftest t-forall
+  (testing "forall"
+    (is (sut/forall [a (range 0 100 2)]
+          (even? a)))
+    (is (not (sut/forall [a (range 0 100 3)]
+               (even? a))))
+
+    (is (sut/forall [a (range 0 100)
+                     b (range 50 150)]
+          (assert (> a -1))
+          (= (* a b)
+             (* b a))))
+
+    (is (sut/forall [a (range 0 100)
+                     b (range a 100)]
+          (assert (> a -1))
+          (assert (<= a b))
+          (= (* a b)
+             (* b a))))))
+
+(deftest t-exists
+  (testing "exists"
+    (is (sut/exists [a (range 0 100 2)]
+          (even? a)))
+    (is (sut/exists [a (range 0 100 3)]
+          (even? a)))
+    (is (sut/exists [a (range 0 100)]
+          (> a 17)))
+    (is (not (sut/exists [a (range 0 100)]
+               (< a 0))))
+
+    (is (sut/exists [a (range 0 100)
+                     b (range 50 150)]
+          (= (* a b)
+             (* b a))))
+
+    (is (sut/exists [a (range 0 100)
+                     b (range 50 150)]
+          (not= (- a b)
+             (- b a))))))

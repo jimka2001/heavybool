@@ -1,6 +1,5 @@
 (ns magma-basic
-  "Example usage of `heavy-bool`.
-  This namespace implements tests for certain finite algebraic structures including:
+  "This namespace implements tests for certain finite algebraic structures including:
   magma, semigroup, monoid, group, ring, and field.
   In each case we assume that the elements of the algebraic structures form a finite
   set.  Thus we may test the axioms, such as closure, associativity, and identity,
@@ -14,13 +13,8 @@
                     coll))
           coll))
                                
-(defn default-equal
-  [left right]
-  (= left right))
-
 (defn is-associative
   [coll * equal]
-
   (every? (fn [a]
              (every? (fn [b]
                        (every? (fn [c]
@@ -28,7 +22,7 @@
                                         (* (* a b) c)))
                                coll))
                      coll))
-           coll))
+          coll))
 
 (defn is-commutative
   [coll * equal]
@@ -72,7 +66,7 @@
        (equal ident (* a b))))
 
 (defn has-inverses 
-  [coll * ident member equal]
+  [coll * ident equal]
   (every? (fn [a]
             (some (fn [b]
                     (is-inverse a * b ident equal))
@@ -82,7 +76,7 @@
 (defn is-group 
   [coll * ident member equal]
   (and (is-monoid coll * ident member equal)
-       (has-inverses coll * ident member equal)))
+       (has-inverses coll * ident equal)))
 
 
 (defn is-ring

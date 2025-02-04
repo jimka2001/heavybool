@@ -168,3 +168,17 @@
 
         :else
         (recur b (mod a b))))
+
+(defmacro forall [[var coll & pairs] & body]
+  (cond (empty? pairs)
+        `(every? (fn [~var] ~@body) ~coll)
+
+        :else
+        `(every? (fn [~var]
+                   (forall [~@pairs]
+                     ~@body))
+                 ~coll)))
+
+(defmacro exists [[var coll & pairs] & body]
+  `(not (forall [~var ~coll ~@pairs] (not (do ~@body)))))
+
