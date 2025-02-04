@@ -1,7 +1,7 @@
 (defproject heavy-bool "0.1.0-SNAPSHOT"
   :description "Implementation of Heavy-Bool"
   :license {:name "BSD"}
-  :dependencies [[org.clojure/clojure "1.11.1"]
+  :dependencies [[org.clojure/clojure "1.12.0"]
                  [org.clojure/tools.trace "0.7.11"] ;; DOCKER OMIT
                  ]
   :plugins [[lein-exec "0.3.7"]]

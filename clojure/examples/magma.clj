@@ -14,7 +14,7 @@
   `coll` -- a collection of values representing a finite mathematical set.
   `*` -- a binary operator which accepts two elements of `coll`
   `member` -- membership predicate returning a `heavy-bool`"
- [coll * member]
+  [coll * member]
   {:pre [(fn? *)
          (fn? member)]
    :post [(heavy-bool? %)]}
@@ -83,8 +83,8 @@
    :post [(heavy-bool? %)]}
   (+tag
    (+forall [a coll]
-     (+annotate-false (equal (* ident a)
-                         (* a ident))
+            (+annotate-false (+and (equal (* ident a) a)
+                                   (equal (* a ident) a))
                       :ident ident))
    :identity))
 

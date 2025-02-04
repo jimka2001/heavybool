@@ -127,3 +127,17 @@
                        [true m2]
                        [true m2])
              [true m2])))))
+
+(deftest t+assoc-els
+  (testing "assoc els"
+    (let [M (range 5)
+          op -]
+      (is (not-empty
+           (some (fn [[x y z]]
+                   (when (not (= (op x (op y z))
+                                 (op (op x y) z)))
+                     [x y z]))
+                 (for [p1 M
+                       p2 M
+                       p3 M]
+                   [p1 p2 p3])))))))
