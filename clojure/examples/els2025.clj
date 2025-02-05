@@ -3,7 +3,7 @@
   (:require [heavy-bool :as hb])
 )
 
-(def example1 []
+(defn example1 []
   (let [M [1 2 3 4 5]
         op (fn [x y] (- x y))]
     (some (fn [x]
@@ -11,7 +11,14 @@
                   M))
           M)))
 
-(hb/+exists [a (range 1 100)
-                b (range a 100)]
-                  (hb/+forall [c (range b 100)]
-                              (= 0 (* 0 (+ a b c)))))
+(hb/+exists [a (range 4 100)
+             b (range a 100)
+             c (range b 100)]
+  (= (+ (* a a) (* b b))
+     (* c c)))
+
+(hb/+forall [a (range 4 100)
+             b (range a 100)
+             c (range b 100)]
+  (= (+ (* a a) (* b b))
+     (* c c)))
