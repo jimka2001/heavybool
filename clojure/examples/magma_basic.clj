@@ -14,19 +14,19 @@
                                
 (defn is-associative  [coll * =]
   (every? (fn [a]
-             (every? (fn [b]
-                       (every? (fn [c]
-                                 (= (* a (* b c))
-                                        (* (* a b) c)))
-                               coll))
-                     coll))
+            (every? (fn [b]
+                      (every? (fn [c]
+                                (= (* a (* b c))
+                                   (* (* a b) c)))
+                              coll))
+                    coll))
           coll))
 
 (defn is-commutative  [coll * =]
   (every? (fn [a]
             (every? (fn [b]
                       (= (* a b)
-                             (* b a)))
+                         (* b a)))
                     coll))
           coll))
 
