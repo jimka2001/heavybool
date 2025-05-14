@@ -118,8 +118,7 @@
                           ident
                           (fn [a]
                             (+exists [b elements]
-                              (and (= (op a b) ident)
-                                   (= (op b a) ident))))
+                              (= (op a b) (op b a) ident)))
                           (fn [a] (ut/member a elements))
                           =))
             (format "n=%d" n))))))
