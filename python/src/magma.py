@@ -61,7 +61,10 @@ class Magma:
         return None
 
     def findInverse2(self, z, a):
-        return next((b for b in self.gen() if self.equiv(z, self.op(a, b)) and self.equiv(z, self.op(b, a))),
+        return next((b
+                     for b in self.gen()
+                     if self.equiv(z, self.op(a, b))
+                        and self.equiv(z, self.op(b, a))),
                     None)
 
     def findInverse1(self, a):
