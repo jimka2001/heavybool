@@ -32,13 +32,15 @@ class Magma:
                     ).flag("closed")
 
     def isAssociative(self) -> HeavyBool:
-        return allM(self.equiv(self.op(self.op(a, b), c),
-                               self.op(a, self.op(b, c))).annotate({"a": a,
-                                                                    "b": b,
-                                                                    "c": c})
-                    for a in self.gen()
-                    for b in self.gen()
-                    for c in self.gen()).flag("associative")
+        return allM(
+            # (a+b) + c == a + (b+c)
+            self.equiv(self.op(self.op(a, b), c),
+                       self.op(a, self.op(b, c))).annotate({"a": a,
+                                                            "b": b,
+                                                            "c": c})
+            for a in self.gen()
+            for b in self.gen()
+            for c in self.gen()).flag("associative")
 
     def isAbelian(self) -> HeavyBool:
         return allM(self.equiv(self.op(a, b),
@@ -61,10 +63,9 @@ class Magma:
         return None
 
     def findInverse2(self, z, a):
-        return next((b
-                     for b in self.gen()
-                     if self.equiv(z, self.op(a, b))
-                        and self.equiv(z, self.op(b, a))),
+        return next((b for b in self.gen()
+                       if self.equiv(z, self.op(a, b))
+                          and self.equiv(z, self.op(b, a))),
                     None)
 
     def findInverse1(self, a):
