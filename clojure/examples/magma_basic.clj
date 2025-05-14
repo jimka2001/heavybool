@@ -5,14 +5,14 @@
   set.  Thus we may test the axioms, such as closure, associativity, and identity,
   using exhaustive seach.")
 
-(defn is-closed  [coll * member]
+(defn is-closed [coll * member]
   (every? (fn [a]
             (every? (fn [b]
                       (member (* a b)))
                     coll))
           coll))
                                
-(defn is-associative  [coll * =]
+(defn is-associative [coll * =]
   (every? (fn [a]
             (every? (fn [b]
                       (every? (fn [c]
@@ -22,7 +22,7 @@
                     coll))
           coll))
 
-(defn is-commutative  [coll * =]
+(defn is-commutative [coll * =]
   (every? (fn [a]
             (every? (fn [b]
                       (= (* a b)
@@ -30,25 +30,25 @@
                     coll))
           coll))
 
-(defn is-identity  [coll * ident =]
+(defn is-identity [coll * ident =]
   (every? (fn [a]
             (and (= a (* ident a))
                  (= a (* a ident))))
           coll))
 
-(defn has-identity  [coll * =]
+(defn has-identity [coll * =]
   (some (fn [e]
           (is-identity coll * e =))
         coll))
 
-(defn is-magma  [coll * member]
+(defn is-magma [coll * member]
   (is-closed coll * member))
 
-(defn is-semigroup  [coll * member =]
+(defn is-semigroup [coll * member =]
   (and (is-magma coll * member)
        (is-associative coll * =)))
 
-(defn is-monoid  [coll * ident member =]
+(defn is-monoid [coll * ident member =]
   (and (member ident)
        (is-semigroup coll * member =)
        (is-identity coll * ident =)))
@@ -57,19 +57,19 @@
   (and (= ident (* b a))
        (= ident (* a b))))
 
-(defn has-inverses   [coll * ident =]
+(defn has-inverses [coll * ident =]
   (every? (fn [a]
             (some (fn [b]
                     (is-inverse a * b ident =))
                   coll))
           coll))
 
-(defn is-group   [coll * ident member =]
+(defn is-group [coll * ident member =]
   (and (is-monoid coll * ident member =)
        (has-inverses coll * ident =)))
 
 
-(defn is-ring  [coll + * zero one member =]
+(defn is-ring [coll + * zero one member =]
   (and (is-group coll + zero member =)
        (is-commutative coll + =)
        (is-monoid coll * one member =)
@@ -84,7 +84,7 @@
                          coll))
                coll)))
 
-(defn is-field  [coll + *
+(defn is-field [coll + *
                  zero one
                  member =]
   (and (not (= one zero))

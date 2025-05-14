@@ -24,3 +24,30 @@
              c (range (inc b) 100)]
   (= (+ (* a a) (* b b))
      (* c c)))
+
+(defn is-symmetric [M <]
+  (hb/+tag
+   (hb/+forall [x M
+                y M]
+     (hb/+implies (< x y)
+                  (< y x)))
+   :symmetric))
+
+(def M (range 1 20))
+
+(is-symmetric M =)
+(is-symmetric M <)
+
+(defn is-transitive [M <]
+  (hb/+tag
+   (hb/+forall [x M
+                y M]
+     (hb/+implies (< x y)
+                  (hb/+forall [z M]
+                    (hb/+implies (< y z)
+                                 (< x z)))))
+   :transitive))
+
+(is-transitive M =)
+(is-transitive M <)
+(is-transitive M not=)
