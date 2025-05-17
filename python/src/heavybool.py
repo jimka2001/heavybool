@@ -1,13 +1,13 @@
-from typing import Callable, Any, TypeVar, Iterable, Optional, Tuple, Generator
+from typing import Callable, Any, TypeVar, Iterable, Optional, Tuple, Generator, Union, List
 
-
+type BECAUSE = Optional[Union[dict, List[dict]]]
 class HeavyBool:
-    def __init__(self, parity, because=[]):
+    def __init__(self, parity, because:BECAUSE=None):
         if parity:
             self.__class__ = HeavyTrue
         else:
             self.__class__ = HeavyFalse
-        if not because:
+        if not because: # either None or empty list or ...
             self.because = []
         elif isinstance(because, list):
             for m in because:
@@ -47,7 +47,7 @@ class HeavyBool:
 
 
 class HeavyTrue(HeavyBool):
-    def __init__(self, because=[]):
+    def __init__(self, because:BECAUSE=None):
         super().__init__(True, because)
 
     def __eq__(self, other):
@@ -74,7 +74,7 @@ class HeavyTrue(HeavyBool):
 
 
 class HeavyFalse(HeavyBool):
-    def __init__(self, because=[]):
+    def __init__(self, because:BECAUSE=None):
         super().__init__(False, because)
 
     def __eq__(self, other):
@@ -127,6 +127,7 @@ def allM(gen: Generator[HeavyBool, None, None]) -> HeavyBool:
     return HeavyTrue()
 
 
+# ELS 2025 DEMO
 if __name__ == '__main__':
     M = [0, 1, 2, 3, 4]
     # print(allM(HeavyBool(((a - b) - c) == (a - (b - c)),
@@ -136,12 +137,16 @@ if __name__ == '__main__':
     #            for c in M))
 
     print(forallM(M, lambda a:
-  forallM(M, lambda b:
-    forallM(M, lambda c: HeavyTrue() if (((a - b) - c) == (a - (b - c))) else HeavyFalse({"a":a, "b":b, "c":c})))))
+            forallM(M, lambda b:
+                forallM(M, lambda c:
+                    HeavyTrue() if (((a - b) - c) == (a - (b - c)))
+                        else HeavyFalse({"a":a, "b":b, "c":c})))))
+
     print(forallM(M, lambda a:
             forallM(M, lambda b:
-                forallM(M, lambda c: HeavyBool(((a - b) - c) == (a - (b - c))).annotateFalse(
-                                        {"a": a, "b": b, "c": c})))))
+                forallM(M, lambda c:
+                    HeavyBool(((a - b) - c) == (a - (b - c))
+                              ).annotateFalse({"a": a, "b": b, "c": c})))))
 
     if allM(HeavyBool(a > 10)
             for a in M) or anyM(HeavyBool(a * b < 100)
