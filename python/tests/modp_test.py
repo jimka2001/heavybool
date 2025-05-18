@@ -20,6 +20,6 @@ class ModPTestCase(unittest.TestCase):
             def invert(a):
                 return next((b for b in range(1, p) if (a * b) % p == 1), None)
 
-            mig = mult.isGroup(1, invert)
+            mig = mult.isGroup(1, invert).annotate({"p": p})
             self.assertTrue(mig)
 
