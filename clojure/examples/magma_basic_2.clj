@@ -7,6 +7,7 @@
   (:require [util :refer [forall exists]]))
 
 (defn is-closed  [coll * member]
+  ;; forall and exists are easy macros to implement
   (forall [a coll
            b coll]
     (member (* a b))))

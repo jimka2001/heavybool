@@ -18,6 +18,7 @@
   {:pre [(fn? *)
          (fn? member)]
    :post [(heavy-bool? %)]}
+
   (+tag
    (+forall [a coll
              b coll]
@@ -29,6 +30,7 @@
   whether the arguments `left` and `right` are equal to each other"
   [left right]
   {:post [(heavy-bool? %)]}
+
   (+tag
    (+annotate-false (= left right)
                     :left left
@@ -45,6 +47,7 @@
   {:pre [(fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+tag
    (+forall [a coll
              b coll
@@ -63,6 +66,7 @@
   {:pre [(fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+tag
    (+forall [a coll
              b coll]
@@ -81,6 +85,7 @@
   {:pre [(fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+annotate-false
    (+forall [a coll]
             (+and (equal (* ident a) a)
@@ -99,6 +104,7 @@
   {:pre [(fn? *)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+exists [e coll]
     (is-identity coll * e equal)))
 
@@ -115,6 +121,7 @@
   {:pre [(fn? *)
          (fn? member)]
    :post [(heavy-bool? %)]}
+
   (+tag  (is-closed coll * member)
          :magma))
 
@@ -131,6 +138,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+tag  (+and (is-magma coll * member)
                (is-associative coll * equal))
          :semigroup))
@@ -148,6 +156,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+tag
    (+and (is-semigroup coll * member equal)
          (is-identity coll * ident equal)
@@ -172,6 +181,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+tag
    (+forall [a coll
              :let [inv-a (invertible a)
@@ -204,6 +214,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+tag
    (+and (is-monoid coll * ident member equal)
          (has-inverses coll * ident invertible member equal))
@@ -233,6 +244,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+and (is-group coll + zero +invertible member equal)
         (is-commutative coll + equal)
         (is-monoid coll * one member equal)
@@ -279,6 +291,7 @@
          (fn? member)
          (fn? equal)]
    :post [(heavy-bool? %)]}
+
   (+tag
    (+and (+not (equal one zero))
          (+annotate-false (is-ring coll + * zero one +invertible member equal)
