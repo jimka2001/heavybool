@@ -1,6 +1,7 @@
 (ns els2025
   "Examples to support els 2025 paper submission"
-  (:require [heavy-bool :as hb])
+  (:require [heavy-bool :as hb]
+            [util :refer [forall]])
 )
 
 (let [M [1 2 3 4 5]
@@ -10,6 +11,21 @@
                           [x y]))
                 M))
         M))
+
+(let [M [1 2 3 4 5]
+      op (fn [x y] (- x y))]
+  (forall [a M
+           b M]
+    (= (op a b)
+       (op b a))))
+
+
+(let [M [1 2 3 4 5]
+      op (fn [x y] (- x y))]
+  (hb/+forall [a M
+               b M]
+    (= (op a b)
+       (op b a))))
 
 (hb/+exists [a (range 4 100)
              b (range (inc a) 100)
