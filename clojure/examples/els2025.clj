@@ -6,6 +6,14 @@
 
 (let [M [1 2 3 4 5]
       op (fn [x y] (- x y))]
+  (every? (fn [x]
+            (every? (fn [y] (= (op x y) (op y x)))
+                M))
+        M))
+
+
+(let [M [1 2 3 4 5]
+      op (fn [x y] (- x y))]
   (some (fn [x]
           (some (fn [y] (when (not= (op x y) (op y x))
                           [x y]))
@@ -26,6 +34,8 @@
                b M]
     (= (op a b)
        (op b a))))
+
+
 
 (hb/+exists [a (range 4 100)
              b (range (inc a) 100)
